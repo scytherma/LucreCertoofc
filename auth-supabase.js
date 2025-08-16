@@ -54,10 +54,9 @@ function formatPhone(phone) {
 }
 
 // Event listeners
-document.addEventListener("DOMContentLoaded", async function() {
-    await handleOAuthRedirect(); // Checa se voltou do login Google
-
+document.addEventListener("DOMContentLoaded", function() {
     checkAuthStatus();
+    handleOAuthRedirect(); // Verifica se vem de um login Google
 
     const loginForm = document.getElementById("loginForm");
     if (loginForm) loginForm.addEventListener("submit", handleLogin);
@@ -72,18 +71,6 @@ document.addEventListener("DOMContentLoaded", async function() {
     const googleButtons = document.querySelectorAll("[data-action='google-login']");
     googleButtons.forEach(button => button.addEventListener("click", handleGoogleLogin));
 });
-
-// Checa se o usuário voltou do login Google e finaliza o processo
-async function handleOAuthRedirect() {
-    const { data, error } = await supabase.auth.getSessionFromUrl({ storeSession: true });
-    if (error) {
-        console.error("Erro no redirecionamento do Google:", error);
-        return;
-    }
-    if (data?.session?.user) {
-        window.location.href = "./index.html";
-    }
-}
 
 // Verificar status de autenticação
 async function checkAuthStatus() {
@@ -185,7 +172,7 @@ async function handleRegister(e) {
 async function handleGoogleLogin() {
     setLoading(true);
     try {
-        const redirectUrl = `${window.location.origin}/index.html`; // redireciona para a calculadora local
+        const redirectUrl = `${window.location.origin}/index.html`; // força a calculadora local
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: { redirectTo: redirectUrl }
@@ -195,6 +182,22 @@ async function handleGoogleLogin() {
         console.error("Erro no login com Google:", error);
         showError("Erro ao fazer login com Google. Tente novamente.");
         setLoading(false);
+    }
+}
+
+// Tratamento do redirect do OAuth
+async function handleOAuthRedirect() {
+    try {
+        const { data, error } = await supabase.auth.getSessionFromUrl({ storeSession: true });
+        if (error) console.error("Erro no redirecionamento do Google:", error);
+
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+            updateUserInterface(user);
+            window.location.href = "./index.html"; // redireciona para calculadora
+        }
+    } catch (err) {
+        console.error("Erro finalizando login Google:", err);
     }
 }
 
