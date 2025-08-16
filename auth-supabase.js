@@ -28,13 +28,8 @@ function showSuccess(message) {
 function setLoading(isLoading) {
     const buttons = document.querySelectorAll("button[type='submit'], .auth-button, [data-action='google-login']");
     buttons.forEach(button => {
-        if (isLoading) {
-            button.disabled = true;
-            button.style.opacity = "0.6";
-        } else {
-            button.disabled = false;
-            button.style.opacity = "1";
-        }
+        button.disabled = isLoading;
+        button.style.opacity = isLoading ? "0.6" : "1";
     });
 }
 
@@ -56,7 +51,6 @@ function formatPhone(phone) {
 // Event listeners
 document.addEventListener("DOMContentLoaded", function() {
     checkAuthStatus();
-    handleOAuthRedirect(); // Verifica se vem de um login Google
 
     const loginForm = document.getElementById("loginForm");
     if (loginForm) loginForm.addEventListener("submit", handleLogin);
@@ -71,6 +65,23 @@ document.addEventListener("DOMContentLoaded", function() {
     const googleButtons = document.querySelectorAll("[data-action='google-login']");
     googleButtons.forEach(button => button.addEventListener("click", handleGoogleLogin));
 });
+
+// Login com Google - redireciona direto para a calculadora no Vercel
+async function handleGoogleLogin() {
+    setLoading(true);
+    try {
+        const redirectUrl = "https://lucre-certoofc-oy0einty2-scythermas-projects.vercel.app/index.html";
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+            options: { redirectTo: redirectUrl }
+        });
+        if (error) throw error;
+    } catch (error) {
+        console.error("Erro no login com Google:", error);
+        showError("Erro ao fazer login com Google. Tente novamente.");
+        setLoading(false);
+    }
+}
 
 // Verificar status de autenticação
 async function checkAuthStatus() {
@@ -147,7 +158,7 @@ async function handleRegister(e) {
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
-            options: { data: { name, phone, how_found_us: howFoundUs }, emailRedirectTo: `${window.location.origin}/login.html` }
+            options: { data: { name, phone, how_found_us: howFoundUs }, emailRedirectTo: "./login.html" }
         });
         if (error) throw error;
         if (data.user && !data.user.email_confirmed_at) {
@@ -165,39 +176,6 @@ async function handleRegister(e) {
         showError(msg);
     } finally {
         setLoading(false);
-    }
-}
-
-// Login com Google
-async function handleGoogleLogin() {
-    setLoading(true);
-    try {
-        const redirectUrl = `${window.location.origin}/index.html`; // força a calculadora local
-        const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: "google",
-            options: { redirectTo: redirectUrl }
-        });
-        if (error) throw error;
-    } catch (error) {
-        console.error("Erro no login com Google:", error);
-        showError("Erro ao fazer login com Google. Tente novamente.");
-        setLoading(false);
-    }
-}
-
-// Tratamento do redirect do OAuth
-async function handleOAuthRedirect() {
-    try {
-        const { data, error } = await supabase.auth.getSessionFromUrl({ storeSession: true });
-        if (error) console.error("Erro no redirecionamento do Google:", error);
-
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-            updateUserInterface(user);
-            window.location.href = "./index.html"; // redireciona para calculadora
-        }
-    } catch (err) {
-        console.error("Erro finalizando login Google:", err);
     }
 }
 
