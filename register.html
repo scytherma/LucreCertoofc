@@ -6,7 +6,6 @@
     <title>Cadastro - Lucro Certo</title>
     <link rel="icon" type="image/png" href="https://i.ibb.co/tyjmnjV/FAVCON-LUCRE-CERTO-FOGUETE.png">
     <link rel="stylesheet" href="./auth.css">
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div class="auth-container">
@@ -78,7 +77,8 @@
         </div>
     </div>
 
-    <script src="./supabase-config.js"></script>
-    <script src="./auth-supabase.js"></script>
+    <!-- Scripts como módulos ES6 -->
+    <script type="module" src="./supabase-config.js"></script>
+    <script type="module" src="./auth-supabase.js"></script>
 </body>
 </html>
