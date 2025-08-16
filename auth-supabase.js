@@ -4,7 +4,6 @@ import { supabase } from "./supabase-config.js";
 function showError(message) {
     const errorDiv = document.getElementById("errorMessage");
     const successDiv = document.getElementById("successMessage");
-    
     if (successDiv) successDiv.style.display = "none";
     if (errorDiv) {
         errorDiv.textContent = message;
@@ -16,7 +15,6 @@ function showError(message) {
 function showSuccess(message) {
     const errorDiv = document.getElementById("errorMessage");
     const successDiv = document.getElementById("successMessage");
-    
     if (errorDiv) errorDiv.style.display = "none";
     if (successDiv) {
         successDiv.textContent = message;
@@ -48,8 +46,28 @@ function formatPhone(phone) {
     return phone;
 }
 
-// Event listeners
-document.addEventListener("DOMContentLoaded", function() {
+// Verifica sessão ao carregar a página
+document.addEventListener("DOMContentLoaded", async function() {
+    setLoading(true);
+    try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+
+        if (session?.user) {
+            // Usuário já logado, redireciona para calculadora
+            if (window.location.pathname.includes("login.html") || window.location.pathname.includes("register.html")) {
+                window.location.href = "./index.html";
+            } else {
+                updateUserInterface(session.user);
+            }
+        }
+    } catch (err) {
+        console.error("Erro ao verificar sessão:", err);
+    } finally {
+        setLoading(false);
+    }
+
+    // Inicializa formulários e botões
     checkAuthStatus();
 
     const loginForm = document.getElementById("loginForm");
@@ -66,44 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
     googleButtons.forEach(button => button.addEventListener("click", handleGoogleLogin));
 });
 
-// Login com Google - redireciona direto para a calculadora no Vercel
-async function handleGoogleLogin() {
-    setLoading(true);
-    try {
-        const redirectUrl = "https://lucre-certoofc-oy0einty2-scythermas-projects.vercel.app/index.html";
-        const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: "google",
-            options: { redirectTo: redirectUrl }
-        });
-        if (error) throw error;
-    } catch (error) {
-        console.error("Erro no login com Google:", error);
-        showError("Erro ao fazer login com Google. Tente novamente.");
-        setLoading(false);
-    }
-}
-
-// Verificar status de autenticação
-async function checkAuthStatus() {
-    try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-            if (window.location.pathname.includes("login.html") || window.location.pathname.includes("register.html")) {
-                window.location.href = "./index.html";
-            } else updateUserInterface(user);
-        } else {
-            if (window.location.pathname === "/" || window.location.pathname.includes("index.html")) {
-                window.location.href = "./login.html";
-            }
-        }
-    } catch (error) {
-        console.error("Erro ao verificar autenticação:", error);
-        if (window.location.pathname === "/" || window.location.pathname.includes("index.html")) {
-            window.location.href = "./login.html";
-        }
-    }
-}
-
+// Atualiza interface com nome do usuário
 function updateUserInterface(user) {
     const userNameElement = document.getElementById("userName");
     if (userNameElement) {
@@ -117,7 +98,6 @@ async function handleLogin(e) {
     e.preventDefault();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
-
     if (!email || !password) return showError("Por favor, preencha todos os campos");
     if (!validateEmail(email)) return showError("Por favor, insira um e-mail válido");
 
@@ -158,7 +138,7 @@ async function handleRegister(e) {
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
-            options: { data: { name, phone, how_found_us: howFoundUs }, emailRedirectTo: "./login.html" }
+            options: { data: { name, phone, how_found_us: howFoundUs }, emailRedirectTo: `${window.location.origin}/login.html` }
         });
         if (error) throw error;
         if (data.user && !data.user.email_confirmed_at) {
@@ -175,6 +155,23 @@ async function handleRegister(e) {
         if (error.message.includes("Password should be at least")) msg = "A senha deve ter pelo menos 6 caracteres";
         showError(msg);
     } finally {
+        setLoading(false);
+    }
+}
+
+// Login com Google
+async function handleGoogleLogin() {
+    setLoading(true);
+    try {
+        const redirectUrl = `${window.location.origin}/index.html`; // força redirecionamento local
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+            options: { redirectTo: redirectUrl }
+        });
+        if (error) throw error;
+    } catch (error) {
+        console.error("Erro no login com Google:", error);
+        showError("Erro ao fazer login com Google. Tente novamente.");
         setLoading(false);
     }
 }
