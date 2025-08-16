@@ -1,4 +1,4 @@
-import { supabase } from "./supabase-config.js";
+import { supabase, getURL } from "./supabase-config.js";
 
 // Funções utilitárias
 function showError(message) {
@@ -26,7 +26,7 @@ function showSuccess(message) {
 }
 
 function setLoading(isLoading) {
-    const buttons = document.querySelectorAll("button[type='submit'], .auth-button, [data-action='google-login']");
+    const buttons = document.querySelectorAll("button[type=\'submit\'], .auth-button, [data-action=\'google-login\']");
     buttons.forEach(button => {
         button.disabled = isLoading;
         button.style.opacity = isLoading ? "0.6" : "1";
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async function() {
         if (phoneInput) phoneInput.addEventListener("input", e => e.target.value = formatPhone(e.target.value));
     }
 
-    const googleButtons = document.querySelectorAll("[data-action='google-login']");
+    const googleButtons = document.querySelectorAll("[data-action=\'google-login\']");
     googleButtons.forEach(button => button.addEventListener("click", handleGoogleLogin));
 });
 
@@ -81,19 +81,19 @@ async function checkAuthStatus() {
 
         if (session?.user) {
             if (window.location.pathname.includes("login.html") || window.location.pathname.includes("register.html")) {
-                window.location.href = "./index.html";
+                window.location.href = getURL() + "index.html";
             } else {
                 updateUserInterface(session.user);
             }
         } else {
             if (window.location.pathname === "/" || window.location.pathname.includes("index.html")) {
-                window.location.href = "./login.html";
+                window.location.href = getURL() + "login.html";
             }
         }
     } catch (error) {
         console.error("Erro ao verificar autenticação:", error);
         if (window.location.pathname === "/" || window.location.pathname.includes("index.html")) {
-            window.location.href = "./login.html";
+            window.location.href = getURL() + "login.html";
         }
     } finally {
         setLoading(false);
@@ -122,7 +122,7 @@ async function handleLogin(e) {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         showSuccess("Login realizado com sucesso!");
-        setTimeout(() => window.location.href = "./index.html", 1000);
+        setTimeout(() => window.location.href = getURL() + "index.html", 1000);
     } catch (error) {
         console.error("Erro no login:", error);
         let msg = "Erro no login. Tente novamente.";
@@ -154,15 +154,15 @@ async function handleRegister(e) {
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
-            options: { data: { name, phone, how_found_us: howFoundUs }, emailRedirectTo: "./login.html" }
+            options: { data: { name, phone, how_found_us: howFoundUs }, emailRedirectTo: getURL() + "login.html" }
         });
         if (error) throw error;
         if (data.user && !data.user.email_confirmed_at) {
             showSuccess("Cadastro realizado! Verifique seu e-mail para confirmar a conta.");
-            setTimeout(() => window.location.href = "./login.html", 3000);
+            setTimeout(() => window.location.href = getURL() + "login.html", 3000);
         } else {
             showSuccess("Cadastro realizado com sucesso!");
-            setTimeout(() => window.location.href = "./index.html", 1000);
+            setTimeout(() => window.location.href = getURL() + "index.html", 1000);
         }
     } catch (error) {
         console.error("Erro no cadastro:", error);
@@ -179,10 +179,9 @@ async function handleRegister(e) {
 async function handleGoogleLogin() {
     setLoading(true);
     try {
-        const redirectUrl = `${window.location.origin}/index.html`; // Força redirecionamento local
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "google",
-            options: { redirectTo: redirectUrl }
+            options: { redirectTo: getURL() }
         });
         if (error) throw error;
     } catch (error) {
@@ -197,10 +196,10 @@ async function logout() {
     try {
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
-        window.location.href = "./login.html";
+        window.location.href = getURL() + "login.html";
     } catch (error) {
         console.error("Erro no logout:", error);
-        window.location.href = "./login.html";
+        window.location.href = getURL() + "login.html";
     }
 }
 
@@ -209,11 +208,11 @@ async function checkAuth() {
     try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) { updateUserInterface(user); return true; }
-        window.location.href = "./login.html";
+        window.location.href = getURL() + "login.html";
         return false;
     } catch (error) {
         console.error("Erro ao verificar autenticação:", error);
-        window.location.href = "./login.html";
+        window.location.href = getURL() + "login.html";
         return false;
     }
 }
@@ -223,7 +222,7 @@ supabase.auth.onAuthStateChange((event, session) => {
     if (event === "SIGNED_IN") updateUserInterface(session.user);
     else if (event === "SIGNED_OUT") {
         if (!window.location.pathname.includes("login.html") && !window.location.pathname.includes("register.html")) {
-            window.location.href = "./login.html";
+            window.location.href = getURL() + "login.html";
         }
     }
 });
