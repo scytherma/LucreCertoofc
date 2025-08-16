@@ -163,7 +163,7 @@ async function handleRegister(e) {
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
-            options: { data: { name, phone, how_found_us: howFoundUs }, emailRedirectTo: "./" }
+            options: { data: { name, phone, how_found_us: howFoundUs }, emailRedirectTo: "./login.html" }
         });
         if (error) throw error;
         if (data.user && !data.user.email_confirmed_at) {
@@ -190,7 +190,7 @@ async function handleGoogleLogin() {
     try {
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "google",
-            options: { redirectTo: "./" }
+            options: { redirectTo: "https://<SEU-PROJETO>.vercel.app/index.html" } // <<== Substitua pela URL real do Vercel
         });
         if (error) throw error;
     } catch (error) {
