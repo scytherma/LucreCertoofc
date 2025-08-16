@@ -4,6 +4,7 @@ import { supabase } from "./supabase-config.js";
 function showError(message) {
     const errorDiv = document.getElementById("errorMessage");
     const successDiv = document.getElementById("successMessage");
+    
     if (successDiv) successDiv.style.display = "none";
     if (errorDiv) {
         errorDiv.textContent = message;
@@ -15,6 +16,7 @@ function showError(message) {
 function showSuccess(message) {
     const errorDiv = document.getElementById("errorMessage");
     const successDiv = document.getElementById("successMessage");
+    
     if (errorDiv) errorDiv.style.display = "none";
     if (successDiv) {
         successDiv.textContent = message;
@@ -46,29 +48,9 @@ function formatPhone(phone) {
     return phone;
 }
 
-// Verifica sessão ao carregar a página
+// Event listeners
 document.addEventListener("DOMContentLoaded", async function() {
-    setLoading(true);
-    try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        if (error) throw error;
-
-        if (session?.user) {
-            // Usuário já logado, redireciona para calculadora
-            if (window.location.pathname.includes("login.html") || window.location.pathname.includes("register.html")) {
-                window.location.href = "./index.html";
-            } else {
-                updateUserInterface(session.user);
-            }
-        }
-    } catch (err) {
-        console.error("Erro ao verificar sessão:", err);
-    } finally {
-        setLoading(false);
-    }
-
-    // Inicializa formulários e botões
-    checkAuthStatus();
+    await checkAuthStatus();
 
     const loginForm = document.getElementById("loginForm");
     if (loginForm) loginForm.addEventListener("submit", handleLogin);
@@ -84,7 +66,40 @@ document.addEventListener("DOMContentLoaded", async function() {
     googleButtons.forEach(button => button.addEventListener("click", handleGoogleLogin));
 });
 
-// Atualiza interface com nome do usuário
+// Verificar status de autenticação (corrigido para OAuth)
+async function checkAuthStatus() {
+    setLoading(true);
+    try {
+        // Finaliza login via OAuth se houver query params
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has("access_token") || urlParams.has("code")) {
+            await supabase.auth.getSessionFromUrl();
+        }
+
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+
+        if (session?.user) {
+            if (window.location.pathname.includes("login.html") || window.location.pathname.includes("register.html")) {
+                window.location.href = "./index.html";
+            } else {
+                updateUserInterface(session.user);
+            }
+        } else {
+            if (window.location.pathname === "/" || window.location.pathname.includes("index.html")) {
+                window.location.href = "./login.html";
+            }
+        }
+    } catch (error) {
+        console.error("Erro ao verificar autenticação:", error);
+        if (window.location.pathname === "/" || window.location.pathname.includes("index.html")) {
+            window.location.href = "./login.html";
+        }
+    } finally {
+        setLoading(false);
+    }
+}
+
 function updateUserInterface(user) {
     const userNameElement = document.getElementById("userName");
     if (userNameElement) {
@@ -98,6 +113,7 @@ async function handleLogin(e) {
     e.preventDefault();
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
+
     if (!email || !password) return showError("Por favor, preencha todos os campos");
     if (!validateEmail(email)) return showError("Por favor, insira um e-mail válido");
 
@@ -138,7 +154,7 @@ async function handleRegister(e) {
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
-            options: { data: { name, phone, how_found_us: howFoundUs }, emailRedirectTo: `${window.location.origin}/login.html` }
+            options: { data: { name, phone, how_found_us: howFoundUs }, emailRedirectTo: "./login.html" }
         });
         if (error) throw error;
         if (data.user && !data.user.email_confirmed_at) {
@@ -159,11 +175,11 @@ async function handleRegister(e) {
     }
 }
 
-// Login com Google
+// Login com Google - redireciona localmente
 async function handleGoogleLogin() {
     setLoading(true);
     try {
-        const redirectUrl = `${window.location.origin}/index.html`; // força redirecionamento local
+        const redirectUrl = `${window.location.origin}/index.html`; // Força redirecionamento local
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: { redirectTo: redirectUrl }
