@@ -54,7 +54,9 @@ function formatPhone(phone) {
 }
 
 // Event listeners
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", async function() {
+    await handleOAuthRedirect(); // Checa se voltou do login Google
+
     checkAuthStatus();
 
     const loginForm = document.getElementById("loginForm");
@@ -71,20 +73,44 @@ document.addEventListener("DOMContentLoaded", function() {
     googleButtons.forEach(button => button.addEventListener("click", handleGoogleLogin));
 });
 
-// Login com Google - redireciona localmente
-async function handleGoogleLogin() {
-    setLoading(true);
+// Checa se o usuário voltou do login Google e finaliza o processo
+async function handleOAuthRedirect() {
+    const { data, error } = await supabase.auth.getSessionFromUrl({ storeSession: true });
+    if (error) {
+        console.error("Erro no redirecionamento do Google:", error);
+        return;
+    }
+    if (data?.session?.user) {
+        window.location.href = "./index.html";
+    }
+}
+
+// Verificar status de autenticação
+async function checkAuthStatus() {
     try {
-        const redirectUrl = `${window.location.origin}/index.html`; // força a calculadora local
-        const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: "google",
-            options: { redirectTo: redirectUrl }
-        });
-        if (error) throw error;
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+            if (window.location.pathname.includes("login.html") || window.location.pathname.includes("register.html")) {
+                window.location.href = "./index.html";
+            } else updateUserInterface(user);
+        } else {
+            if (window.location.pathname === "/" || window.location.pathname.includes("index.html")) {
+                window.location.href = "./login.html";
+            }
+        }
     } catch (error) {
-        console.error("Erro no login com Google:", error);
-        showError("Erro ao fazer login com Google. Tente novamente.");
-        setLoading(false);
+        console.error("Erro ao verificar autenticação:", error);
+        if (window.location.pathname === "/" || window.location.pathname.includes("index.html")) {
+            window.location.href = "./login.html";
+        }
+    }
+}
+
+function updateUserInterface(user) {
+    const userNameElement = document.getElementById("userName");
+    if (userNameElement) {
+        const displayName = user.user_metadata?.name || user.email.split("@")[0];
+        userNameElement.textContent = `Olá, ${displayName}`;
     }
 }
 
@@ -134,7 +160,7 @@ async function handleRegister(e) {
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
-            options: { data: { name, phone, how_found_us: howFoundUs }, emailRedirectTo: "./login.html" }
+            options: { data: { name, phone, how_found_us: howFoundUs }, emailRedirectTo: `${window.location.origin}/login.html` }
         });
         if (error) throw error;
         if (data.user && !data.user.email_confirmed_at) {
@@ -151,6 +177,23 @@ async function handleRegister(e) {
         if (error.message.includes("Password should be at least")) msg = "A senha deve ter pelo menos 6 caracteres";
         showError(msg);
     } finally {
+        setLoading(false);
+    }
+}
+
+// Login com Google
+async function handleGoogleLogin() {
+    setLoading(true);
+    try {
+        const redirectUrl = `${window.location.origin}/index.html`; // redireciona para a calculadora local
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+            options: { redirectTo: redirectUrl }
+        });
+        if (error) throw error;
+    } catch (error) {
+        console.error("Erro no login com Google:", error);
+        showError("Erro ao fazer login com Google. Tente novamente.");
         setLoading(false);
     }
 }
@@ -178,15 +221,6 @@ async function checkAuth() {
         console.error("Erro ao verificar autenticação:", error);
         window.location.href = "./login.html";
         return false;
-    }
-}
-
-// Atualiza interface do usuário
-function updateUserInterface(user) {
-    const userNameElement = document.getElementById("userName");
-    if (userNameElement) {
-        const displayName = user.user_metadata?.name || user.email.split("@")[0];
-        userNameElement.textContent = `Olá, ${displayName}`;
     }
 }
 
