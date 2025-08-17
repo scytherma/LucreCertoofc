@@ -1,5 +1,5 @@
-import { supabase, getURL } from "./supabase-config.js";
 // Funções de autenticação com Supabase
+import { supabase, getURL } from "./supabase-config.js";
 
 // Funções utilitárias
 function showError(message) {
