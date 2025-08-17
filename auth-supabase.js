@@ -26,7 +26,9 @@ function showSuccess(message) {
 }
 
 function setLoading(isLoading) {
-    const buttons = document.querySelectorAll("button[type=\'submit\'], .auth-button, [data-action=\'google-login\']");
+    const buttons = document.querySelectorAll("button[type=\'submit\
+'], .auth-button, [data-action=\'google-login\
+']");
     buttons.forEach(button => {
         button.disabled = isLoading;
         button.style.opacity = isLoading ? "0.6" : "1";
@@ -62,7 +64,8 @@ document.addEventListener("DOMContentLoaded", async function() {
         if (phoneInput) phoneInput.addEventListener("input", e => e.target.value = formatPhone(e.target.value));
     }
 
-    const googleButtons = document.querySelectorAll("[data-action=\'google-login\']");
+    const googleButtons = document.querySelectorAll("[data-action=\'google-login\
+']");
     googleButtons.forEach(button => button.addEventListener("click", handleGoogleLogin));
 });
 
@@ -192,7 +195,7 @@ async function handleGoogleLogin() {
 }
 
 // Logout
-async function logout() {
+export async function logout() {
     try {
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
@@ -203,8 +206,8 @@ async function logout() {
     }
 }
 
-// Checagem de autenticação para a calculadora
-async function checkAuth() {
+// Função para verificar autenticação (para usar na calculadora)
+export async function checkAuth() {
     try {
         const { data: { user } } = await supabase.auth.getUser();
         if (user) { updateUserInterface(user); return true; }
