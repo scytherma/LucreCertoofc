@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Precificação - Lucre Certo</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Adicione type="module" para scripts que usam import/export -->
     <script type="module" src="./supabase-config.js"></script>
     <script type="module" src="./auth-supabase.js"></script>
     <script src="./script.js"></script>
@@ -49,8 +48,8 @@
     </style>
 
     <script type="module">
-        // Importe supabase diretamente aqui, já que este script é um módulo agora
         import { supabase } from './supabase-config.js';
+        import { logout } from './auth-supabase.js'; // Importar a função logout
 
         document.addEventListener('DOMContentLoaded', async () => {
             const { data: { user } } = await supabase.auth.getUser();
@@ -62,6 +61,15 @@
                 document.getElementById("main-content").style.display = "block";
                 document.getElementById("userName").textContent = user.email;
                 document.getElementById("dropdownUserName").textContent = user.email;
+                
+                // Adicionar event listener para o botão de logout
+                const logoutBtn = document.getElementById("logoutBtn");
+                if (logoutBtn) {
+                    logoutBtn.addEventListener("click", async function(e) {
+                        e.preventDefault();
+                        await logout(); // Chamar a função logout importada
+                    });
+                }
             }
         });
     </script>
@@ -88,7 +96,7 @@
                         <span>Tema:</span>
                         <label class="switch">
                             <input type="checkbox" id="themeToggle">
-                            <span class="slider"></span>
+                            <span class="slider round"></span>
                         </label>
                         <span>Claro/Escuro</span>
                     </div>
@@ -323,11 +331,23 @@
                         <div class="input-wrapper">
                             <span class="currency">R$</span>
                             <select id="taxaFreteSelect" class="select-input">
-                                <option value="0">Sem Frete</option>
-                                <option value="5">Até 500g</option>
-                                <option value="10">501g - 1kg</option>
-                                <option value="15">1.1kg - 2kg</option>
-                                <option value="20">2.1kg - 5kg</option>
+                                <option value="0">Frete Grátis (R$ 0,00)</option>
+                                <option value="5">Até 300g - Até R$ 50 (R$ 5,00)</option>
+                                <option value="7">Até 300g - R$ 51-100 (R$ 7,00)</option>
+                                <option value="9">Até 300g - R$ 101-200 (R$ 9,00)</option>
+                                <option value="11">Até 300g - Acima R$ 200 (R$ 11,00)</option>
+                                <option value="8">301g-1kg - Até R$ 50 (R$ 8,00)</option>
+                                <option value="10">301g-1kg - R$ 51-100 (R$ 10,00)</option>
+                                <option value="12">301g-1kg - R$ 101-200 (R$ 12,00)</option>
+                                <option value="14">301g-1kg - Acima R$ 200 (R$ 14,00)</option>
+                                <option value="12">1-3kg - Até R$ 50 (R$ 12,00)</option>
+                                <option value="15">1-3kg - R$ 51-100 (R$ 15,00)</option>
+                                <option value="18">1-3kg - R$ 101-200 (R$ 18,00)</option>
+                                <option value="20">1-3kg - Acima R$ 200 (R$ 20,00)</option>
+                                <option value="18">3-10kg - Até R$ 50 (R$ 18,00)</option>
+                                <option value="22">3-10kg - R$ 51-100 (R$ 22,00)</option>
+                                <option value="25">3-10kg - R$ 101-200 (R$ 25,00)</option>
+                                <option value="28">3-10kg - Acima R$ 200 (R$ 28,00)</option>
                             </select>
                         </div>
                     </div>
@@ -400,133 +420,52 @@
             </div>
         </div>
 
-        <!-- Conteúdo da Aba Shein -->
+        <!-- Conteúdo da Aba Shein (Desabilitada) -->
         <div class="tab-content" id="shein-tab">
-            <div class="calculator-wrapper">
-                <!-- Seção de Entrada de Dados -->
-                <div class="input-section">
-                    <!-- Custo do Produto -->
-                    <div class="input-group">
-                        <div class="label-container">
-                            <label for="custoProdutoShein">CUSTO DO PRODUTO</label>
-                            <span class="help-icon" title="Preço de custo do produto">?</span>
-                        </div>
-                        <div class="input-wrapper">
-                            <span class="currency">R$</span>
-                            <input type="text" id="custoProdutoShein" placeholder="0,00">
-                            <div class="multiplier-container">
-                                <span class="multiplier" id="multiplierShein">1x</span>
-                                <div class="multiplier-arrows">
-                                    <button type="button" class="arrow-up" data-target="Shein">▲</button>
-                                    <button type="button" class="arrow-down" data-target="Shein">▼</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Impostos -->
-                    <div class="input-group">
-                        <div class="label-container">
-                            <label for="impostosShein">IMPOSTOS</label>
-                            <span class="help-icon" title="Porcentagem de imposto">?</span>
-                        </div>
-                        <div class="input-wrapper">
-                            <span class="currency">%</span>
-                            <input type="text" id="impostosShein" placeholder="0">
-                        </div>
-                    </div>
-
-                    <!-- Despesas Variáveis -->
-                    <div class="input-group">
-                        <div class="label-container">
-                            <label for="despesasVariaveisShein">DESPESAS VARIÁVEIS</label>
-                            <span class="help-icon" title="Valor gasto com embalagem, etiqueta, etc.">?</span>
-                        </div>
-                        <div class="input-wrapper">
-                            <span class="currency">R$</span>
-                            <input type="text" id="despesasVariaveisShein" placeholder="0,00">
-                        </div>
-                    </div>
-
-                    <!-- Taxa da Shein -->
-                    <div class="input-group">
-                        <div class="label-container">
-                            <label for="taxaShein">TAXA DA SHEIN</label>
-                            <span class="help-icon" title="Porcentagem da taxa da Shein">?</span>
-                        </div>
-                        <div class="input-wrapper">
-                            <span class="currency">%</span>
-                            <input type="text" id="taxaShein" placeholder="0">
-                        </div>
-                    </div>
-
-                    <!-- Custos Extras Dinâmicos -->
-                    <div class="input-group">
-                        <div class="label-container">
-                            <label>CUSTOS EXTRAS</label>
-                            <span class="help-icon" title="Adicione valores que considerar importante para a precificação do anúncio clicando no +. Selecione entre R$ e %.">?</span>
-                            <button type="button" class="add-custo-extra-btn" data-target="Shein">+</button>
-                        </div>
-                        <div id="custosExtrasContainerShein">
-                            <!-- Campos de custo extra serão adicionados aqui via JavaScript -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Seção de Resultados -->
-                <div class="results-section">
-                    <!-- Resultados Principais -->
-                    <div class="main-results">
-                        <div class="result-item">
-                            <span class="result-label">Preço de Venda</span>
-                            <span class="result-value primary" id="precoVendaShein">R$ 5,00</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Lucro por Venda</span>
-                            <span class="result-value primary" id="lucroPorVendaShein">R$ 0,00</span>
-                        </div>
-                    </div>
-
-                    <!-- Grid de Resultados Secundários -->
-                    <div class="secondary-results">
-                        <div class="result-box">
-                            <span class="result-label">Taxa da Shein</span>
-                            <span class="result-value" id="taxaSheinDisplay">R$5,00</span>
-                        </div>
-                        <div class="result-box">
-                            <span class="result-label">Valor dos Impostos</span>
-                            <span class="result-value" id="valorImpostosShein">R$0,00</span>
-                        </div>
-                        <div class="result-box">
-                            <span class="result-label">Custo Total do Produto</span>
-                            <span class="result-value" id="custoTotalShein">R$0,00</span>
-                        </div>
-                        <div class="result-box">
-                            <span class="result-label">Retorno sobre Produto</span>
-                            <span class="result-value" id="retornoProdutoShein">0%</span>
-                        </div>
-                        <div class="result-box">
-                            <span class="result-label">Markup %</span>
-                            <span class="result-value" id="markupPercentShein">0%</span>
-                        </div>
-                        <div class="result-box">
-                            <span class="result-label">Markup X</span>
-                            <span class="result-value" id="markupXShein">0X</span>
-                        </div>
-                    </div>
-
-                    <!-- Margem de Lucro -->
-                    <div class="margin-section">
-                        <h3>MARGEM DE LUCRO</h3>
-                        <div class="margin-slider-container">
-                            <input type="range" id="margemLucroShein" min="0" max="70" value="0" class="margin-slider" step="0.5">
-                            <span class="margin-value" id="margemValueShein">0%</span>
-                        </div>
-                    </div>
-                    <button type="button" id="limparCamposBtnShein" class="limpar-campos-btn">Limpar Campos</button>
-                </div>
+            <div class="coming-soon">
+                <h2>Em Breve</h2>
+                <p>A calculadora para Shein estará disponível em breve!</p>
             </div>
         </div>
     </div>
+
+    <!-- Scripts para funcionalidades da interface -->
+    <script>
+        // Toggle do menu do usuário
+        document.addEventListener('DOMContentLoaded', function() {
+            const userIconBtn = document.getElementById('userIconBtn');
+            const userDropdownMenu = document.getElementById('userDropdownMenu');
+
+            if (userIconBtn && userDropdownMenu) {
+                userIconBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userDropdownMenu.classList.toggle('show');
+                });
+
+                // Fechar menu ao clicar fora
+                document.addEventListener('click', function(e) {
+                    if (!userDropdownMenu.contains(e.target) && !userIconBtn.contains(e.target)) {
+                        userDropdownMenu.classList.remove('show');
+                    }
+                });
+            }
+
+            // Toggle do tema
+            const themeToggle = document.getElementById('themeToggle');
+            if (themeToggle) {
+                themeToggle.addEventListener('change', function() {
+                    document.body.classList.toggle('dark-theme', this.checked);
+                    localStorage.setItem('darkTheme', this.checked);
+                });
+
+                // Carregar tema salvo
+                const savedTheme = localStorage.getItem('darkTheme');
+                if (savedTheme === 'true') {
+                    themeToggle.checked = true;
+                    document.body.classList.add('dark-theme');
+                }
+            }
+        });
+    </script>
 </body>
 </html>
