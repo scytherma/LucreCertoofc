@@ -1,3 +1,4 @@
+
 // Configurações da Shopee
 const SHOPEE_CONFIG = {
     taxaComissaoPadrao: 0.14, // 14%
