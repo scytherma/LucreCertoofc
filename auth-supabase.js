@@ -148,7 +148,7 @@ async function checkAuthStatus() {
         
         if (user) {
             // Usuário logado
-            if (window.location.pathname.includes("/login.html") || window.location.pathname.includes("/register.html")) {
+            if (window.location.pathname.includes("login.html") || window.location.pathname.includes("register.html")) {
                 window.location.href = getURL() + "index.html";
             } else {
                 // Atualizar interface do usuário
@@ -156,13 +156,15 @@ async function checkAuthStatus() {
             }
         } else {
             // Usuário não logado
-            if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+            // Redireciona apenas se não estiver já na página de login/registro
+            if (!window.location.pathname.includes("login.html") && !window.location.pathname.includes("register.html")) {
                 window.location.href = getURL() + "login.html";
             }
         }
     } catch (error) {
         console.error("Erro ao verificar autenticação:", error);
-        if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+        // Em caso de erro, redireciona para login apenas se não estiver já na página de login/registro
+        if (!window.location.pathname.includes("login.html") && !window.location.pathname.includes("register.html")) {
             window.location.href = getURL() + "login.html";
         }
     }
