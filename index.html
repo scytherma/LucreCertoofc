@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Precificação - Lucre Certo</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="./supabase-config.js"></script>
-    <script src="./auth-supabase.js"></script>
+    <!-- Adicione type="module" para scripts que usam import/export -->
+    <script type="module" src="./supabase-config.js"></script>
+    <script type="module" src="./auth-supabase.js"></script>
     <script src="./script.js"></script>
 </head>
 <body>
@@ -48,9 +48,12 @@
         }
     </style>
 
-    <script>
+    <script type="module">
+        // Importe supabase diretamente aqui, já que este script é um módulo agora
+        import { supabase } from './supabase-config.js';
+
         document.addEventListener('DOMContentLoaded', async () => {
-            const { data: { user } } = await supabaseClient.auth.getUser();
+            const { data: { user } } = await supabase.auth.getUser();
             if (!user) {
                 window.location.href = 'login.html';
             } else {
@@ -85,7 +88,7 @@
                         <span>Tema:</span>
                         <label class="switch">
                             <input type="checkbox" id="themeToggle">
-                            <span class="slider round"></span>
+                            <span class="slider"></span>
                         </label>
                         <span>Claro/Escuro</span>
                     </div>
@@ -320,59 +323,11 @@
                         <div class="input-wrapper">
                             <span class="currency">R$</span>
                             <select id="taxaFreteSelect" class="select-input">
-                                <optgroup label="Produtos < R$ 79, usados">
-                                    <option value="39.90">Até 300g (R$ 39,90)</option>
-                                    <option value="42.90">300g a 500g (R$ 42,90)</option>
-                                    <option value="44.90">500g a 1kg (R$ 44,90)</option>
-                                    <option value="46.90">1kg a 2kg (R$ 46,90)</option>
-                                    <option value="49.90">2kg a 3kg (R$ 49,90)</option>
-                                    <option value="53.90">3kg a 4kg (R$ 53,90)</option>
-                                    <option value="56.90">4kg a 5kg (R$ 56,90)</option>
-                                    <option value="88.90">5kg a 9kg (R$ 88,90)</option>
-                                </optgroup>
-                                <optgroup label="Produtos R$ 79 a R$ 99,99">
-                                    <option value="11.97">Até 300g (R$ 11,97)</option>
-                                    <option value="12.87">300g a 500g (R$ 12,87)</option>
-                                    <option value="13.47">500g a 1kg (R$ 13,47)</option>
-                                    <option value="14.07">1kg a 2kg (R$ 14,07)</option>
-                                    <option value="14.97">2kg a 3kg (R$ 14,97)</option>
-                                    <option value="16.17">3kg a 4kg (R$ 16,17)</option>
-                                    <option value="17.07">4kg a 5kg (R$ 17,07)</option>
-                                    <option value="26.67">5kg a 9kg (R$ 26,67)</option>
-                                </optgroup>
-                                <optgroup label="Produtos R$ 100 a R$ 119,99">
-                                    <option value="13.97">Até 300g (R$ 13,97)</option>
-                                    <option value="15.02">300g a 500g (R$ 15,02)</option>
-                                    <option value="15.72">500g a 1kg (R$ 15,72)</option>
-                                    <option value="16.42">1kg a 2kg (R$ 16,42)</option>
-                                    <option value="17.47">2kg a 3kg (R$ 17,47)</option>
-                                    <option value="18.87">3kg a 4kg (R$ 18,87)</option>
-                                    <option value="19.92">4kg a 5kg (R$ 19,92)</option>
-                                </optgroup>
-                                <optgroup label="Produtos R$ 120 a R$ 149,99">
-                                    <option value="15.96">Até 300g (R$ 15,96)</option>
-                                    <option value="17.16">300g a 500g (R$ 17,16)</option>
-                                    <option value="17.96">500g a 1kg (R$ 17,96)</option>
-                                    <option value="18.76">1kg a 2kg (R$ 18,76)</option>
-                                    <option value="19.96">2kg a 3kg (R$ 19,96)</option>
-                                </optgroup>
-                                <optgroup label="Produtos R$ 150 a R$ 199,99">
-                                    <option value="17.96">Até 300g (R$ 17,96)</option>
-                                    <option value="19.31">300g a 500g (R$ 19,31)</option>
-                                    <option value="20.21">500g a 1kg (R$ 20,21)</option>
-                                    <option value="21.11">1kg a 2kg (R$ 21,11)</option>
-                                    <option value="22.46">2kg a 3kg (R$ 22,46)</option>
-                                </optgroup>
-                                <optgroup label="Produtos > R$ 200">
-                                    <option value="19.95">Até 300g (R$ 19,95)</option>
-                                    <option value="21.45">300g a 500g (R$ 21,45)</option>
-                                    <option value="22.45">500g a 1kg (R$ 22,45)</option>
-                                    <option value="23.45">1kg a 2kg (R$ 23,45)</option>
-                                    <option value="24.95">2kg a 3kg (R$ 24,95)</option>
-                                </optgroup>
-                                <optgroup label="Frete Grátis (R$ 19 a R$ 78,99)">
-                                    <option value="0">Frete Grátis - ML paga (R$ 0,00)</option>
-                                </optgroup>
+                                <option value="0">Sem Frete</option>
+                                <option value="5">Até 500g</option>
+                                <option value="10">501g - 1kg</option>
+                                <option value="15">1.1kg - 2kg</option>
+                                <option value="20">2.1kg - 5kg</option>
                             </select>
                         </div>
                     </div>
@@ -380,8 +335,8 @@
                     <!-- Custos Extras Dinâmicos -->
                     <div class="input-group">
                         <div class="label-container">
-                            <label>CUSTO EXTRA</label>
-                            <span class="help-icon" title="Adicione valores extras para a precificação">?</span>
+                            <label>CUSTOS EXTRAS</label>
+                            <span class="help-icon" title="Adicione valores que considerar importante para a precificação do anúncio clicando no +. Selecione entre R$ e %.">?</span>
                             <button type="button" class="add-custo-extra-btn" data-target="ML">+</button>
                         </div>
                         <div id="custosExtrasContainerML">
@@ -396,7 +351,7 @@
                     <div class="main-results">
                         <div class="result-item">
                             <span class="result-label">Preço de Venda</span>
-                            <span class="result-value primary" id="precoVendaML">R$ 0,00</span>
+                            <span class="result-value primary" id="precoVendaML">R$ 5,00</span>
                         </div>
                         <div class="result-item">
                             <span class="result-label">Lucro por Venda</span>
@@ -407,8 +362,8 @@
                     <!-- Grid de Resultados Secundários -->
                     <div class="secondary-results">
                         <div class="result-box">
-                            <span class="result-label">Taxa da ML</span>
-                            <span class="result-value" id="taxaMercadoLivre">R$0,00</span>
+                            <span class="result-label">Taxa do Mercado Livre</span>
+                            <span class="result-value" id="taxaMercadoLivre">R$5,00</span>
                         </div>
                         <div class="result-box">
                             <span class="result-label">Valor dos Impostos</span>
@@ -440,23 +395,138 @@
                             <span class="margin-value" id="margemValueML">0%</span>
                         </div>
                     </div>
-
-
-
                     <button type="button" id="limparCamposBtnML" class="limpar-campos-btn">Limpar Campos</button>
                 </div>
             </div>
         </div>
 
-        <!-- Conteúdo da Aba Shein (Placeholder) -->
+        <!-- Conteúdo da Aba Shein -->
         <div class="tab-content" id="shein-tab">
-            <div class="coming-soon">
-                <h2>Calculadora Shein</h2>
-                <p>Em breve...</p>
+            <div class="calculator-wrapper">
+                <!-- Seção de Entrada de Dados -->
+                <div class="input-section">
+                    <!-- Custo do Produto -->
+                    <div class="input-group">
+                        <div class="label-container">
+                            <label for="custoProdutoShein">CUSTO DO PRODUTO</label>
+                            <span class="help-icon" title="Preço de custo do produto">?</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <span class="currency">R$</span>
+                            <input type="text" id="custoProdutoShein" placeholder="0,00">
+                            <div class="multiplier-container">
+                                <span class="multiplier" id="multiplierShein">1x</span>
+                                <div class="multiplier-arrows">
+                                    <button type="button" class="arrow-up" data-target="Shein">▲</button>
+                                    <button type="button" class="arrow-down" data-target="Shein">▼</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Impostos -->
+                    <div class="input-group">
+                        <div class="label-container">
+                            <label for="impostosShein">IMPOSTOS</label>
+                            <span class="help-icon" title="Porcentagem de imposto">?</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <span class="currency">%</span>
+                            <input type="text" id="impostosShein" placeholder="0">
+                        </div>
+                    </div>
+
+                    <!-- Despesas Variáveis -->
+                    <div class="input-group">
+                        <div class="label-container">
+                            <label for="despesasVariaveisShein">DESPESAS VARIÁVEIS</label>
+                            <span class="help-icon" title="Valor gasto com embalagem, etiqueta, etc.">?</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <span class="currency">R$</span>
+                            <input type="text" id="despesasVariaveisShein" placeholder="0,00">
+                        </div>
+                    </div>
+
+                    <!-- Taxa da Shein -->
+                    <div class="input-group">
+                        <div class="label-container">
+                            <label for="taxaShein">TAXA DA SHEIN</label>
+                            <span class="help-icon" title="Porcentagem da taxa da Shein">?</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <span class="currency">%</span>
+                            <input type="text" id="taxaShein" placeholder="0">
+                        </div>
+                    </div>
+
+                    <!-- Custos Extras Dinâmicos -->
+                    <div class="input-group">
+                        <div class="label-container">
+                            <label>CUSTOS EXTRAS</label>
+                            <span class="help-icon" title="Adicione valores que considerar importante para a precificação do anúncio clicando no +. Selecione entre R$ e %.">?</span>
+                            <button type="button" class="add-custo-extra-btn" data-target="Shein">+</button>
+                        </div>
+                        <div id="custosExtrasContainerShein">
+                            <!-- Campos de custo extra serão adicionados aqui via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção de Resultados -->
+                <div class="results-section">
+                    <!-- Resultados Principais -->
+                    <div class="main-results">
+                        <div class="result-item">
+                            <span class="result-label">Preço de Venda</span>
+                            <span class="result-value primary" id="precoVendaShein">R$ 5,00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Lucro por Venda</span>
+                            <span class="result-value primary" id="lucroPorVendaShein">R$ 0,00</span>
+                        </div>
+                    </div>
+
+                    <!-- Grid de Resultados Secundários -->
+                    <div class="secondary-results">
+                        <div class="result-box">
+                            <span class="result-label">Taxa da Shein</span>
+                            <span class="result-value" id="taxaSheinDisplay">R$5,00</span>
+                        </div>
+                        <div class="result-box">
+                            <span class="result-label">Valor dos Impostos</span>
+                            <span class="result-value" id="valorImpostosShein">R$0,00</span>
+                        </div>
+                        <div class="result-box">
+                            <span class="result-label">Custo Total do Produto</span>
+                            <span class="result-value" id="custoTotalShein">R$0,00</span>
+                        </div>
+                        <div class="result-box">
+                            <span class="result-label">Retorno sobre Produto</span>
+                            <span class="result-value" id="retornoProdutoShein">0%</span>
+                        </div>
+                        <div class="result-box">
+                            <span class="result-label">Markup %</span>
+                            <span class="result-value" id="markupPercentShein">0%</span>
+                        </div>
+                        <div class="result-box">
+                            <span class="result-label">Markup X</span>
+                            <span class="result-value" id="markupXShein">0X</span>
+                        </div>
+                    </div>
+
+                    <!-- Margem de Lucro -->
+                    <div class="margin-section">
+                        <h3>MARGEM DE LUCRO</h3>
+                        <div class="margin-slider-container">
+                            <input type="range" id="margemLucroShein" min="0" max="70" value="0" class="margin-slider" step="0.5">
+                            <span class="margin-value" id="margemValueShein">0%</span>
+                        </div>
+                    </div>
+                    <button type="button" id="limparCamposBtnShein" class="limpar-campos-btn">Limpar Campos</button>
+                </div>
             </div>
         </div>
     </div>
-
-    <script src="script.js"></script>
 </body>
 </html>
