@@ -1,4 +1,5 @@
 // Funções de autenticação com Supabase
+import { supabase, getURL } from "./supabase-config.js";
 
 // Funções utilitárias
 function showError(message) {
@@ -143,7 +144,7 @@ export const getURL = () => {
 // Verificar status de autenticação
 async function checkAuthStatus() {
     try {
-        const { data: { user } } = await supabaseClient.auth.getUser();
+        const { data: { user } } = await supabase.auth.getUser();
         
         if (user) {
             // Usuário logado
@@ -207,7 +208,7 @@ async function handleLogin(e) {
     setLoading(true);
     
     try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
             email: email,
             password: password
         });
@@ -273,7 +274,7 @@ async function handleRegister(e) {
     setLoading(true);
     
     try {
-        const { data, error } = await supabaseClient.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
             email: email,
             password: password,
             options: {
@@ -325,7 +326,7 @@ async function handleGoogleLogin() {
     setLoading(true);
     
     try {
-        const { data, error } = await supabaseClient.auth.signInWithOAuth({
+        const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
                 redirectTo: getURL()
@@ -348,7 +349,7 @@ async function handleGoogleLogin() {
 // Função para logout
 export async function logout() {
     try {
-        const { error } = await supabaseClient.auth.signOut();
+        const { error } = await supabase.auth.signOut();
         
         if (error) {
             throw error;
@@ -367,7 +368,7 @@ export async function logout() {
 export function checkAuth() {
     return new Promise(async (resolve) => {
         try {
-            const { data: { user } } = await supabaseClient.auth.getUser();
+            const { data: { user } } = await supabase.auth.getUser();
             
             if (user) {
                 updateUserInterface(user);
@@ -376,7 +377,8 @@ export function checkAuth() {
                 window.location.href = getURL() + "login.html";
                 resolve(false);
             }
-        } catch (error) {
+        }
+        catch (error) {
             console.error("Erro ao verificar autenticação:", error);
             window.location.href = getURL() + "login.html";
             resolve(false);
@@ -385,7 +387,7 @@ export function checkAuth() {
 }
 
 // Listener para mudanças de autenticação
-supabaseClient.auth.onAuthStateChange((event, session) => {
+supabase.auth.onAuthStateChange((event, session) => {
     if (event === "SIGNED_IN") {
         console.log("Usuário logado:", session.user);
         updateUserInterface(session.user);
