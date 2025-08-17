@@ -49,10 +49,9 @@
 
     <script type="module">
         import { supabase } from './supabase-config.js';
-        import { logout, checkAuthStatus, updateUserInterface } from './auth-supabase.js'; // Importar as funções necessárias
+        import { logout, checkAuthStatus } from './auth-supabase.js'; // Importar a função logout e checkAuthStatus
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // A tela de carregamento será escondida pela função updateUserInterface ou pelo redirecionamento
             await checkAuthStatus(); // Chamar checkAuthStatus para verificar o estado de autenticação
 
             // Adicionar event listener para o botão de logout
@@ -64,7 +63,7 @@
                 });
             }
 
-            // Adicionar event listener para o ícone do usuário para mostrar/esconder o dropdown
+            // Adicionar event listener para o ícone do usuário para mostrar/esconder o menu dropdown
             const userIconBtn = document.getElementById("userIconBtn");
             const userDropdownMenu = document.getElementById("userDropdownMenu");
             if (userIconBtn && userDropdownMenu) {
@@ -74,9 +73,9 @@
 
                 // Fechar o dropdown se o usuário clicar fora dele
                 window.addEventListener("click", function(event) {
-                    if (!event.target.matches("#userIconBtn") && !event.target.closest(".user-dropdown-menu")) {
-                        if (userDropdownMenu.classList.contains("show")) {
-                            userDropdownMenu.classList.remove("show");
+                    if (!event.target.matches('.user-icon-btn') && !event.target.matches('.user-icon-btn *')) {
+                        if (userDropdownMenu.classList.contains('show')) {
+                            userDropdownMenu.classList.remove('show');
                         }
                     }
                 });
@@ -324,12 +323,10 @@
                                 <option value="19">Moda e Beleza - Premium (19%)</option>
                                 <option value="12">Casa e Jardim - Clássico (12%)</option>
                                 <option value="15">Casa e Jardim - Premium (15%)</option>
-                                <option value="11">Livros - Clássico (11%)</option>
-                                <option value="14">Livros - Premium (14%)</option>
-                                <option value="13">Brinquedos - Clássico (13%)</option>
-                                <option value="16">Brinquedos - Premium (16%)</option>
-                                <option value="10">Outros - Clássico (10%)</option>
-                                <option value="13">Outros - Premium (13%)</option>
+                                <option value="13">Esportes - Clássico (13%)</option>
+                                <option value="16">Esportes - Premium (16%)</option>
+                                <option value="10">Livros - Clássico (10%)</option>
+                                <option value="13">Livros - Premium (13%)</option>
                             </select>
                         </div>
                     </div>
@@ -373,7 +370,7 @@
                         <div class="label-container">
                             <label>CUSTOS EXTRAS</label>
                             <span class="help-icon" title="Adicione valores que considerar importante para a precificação do anúncio clicando no +. Selecione entre R$ e %.">?</span>
-                            <button type="button" class="add-custo-extra-btn">+</button>
+                            <button type="button" class="add-custo-extra-btn" data-target="ML">+</button>
                         </div>
                         <div id="custosExtrasContainerML">
                             <!-- Campos de custo extra serão adicionados aqui via JavaScript -->
@@ -399,7 +396,7 @@
                     <div class="secondary-results">
                         <div class="result-box">
                             <span class="result-label">Taxa do Mercado Livre</span>
-                            <span class="result-value" id="valorTaxaMercadoLivre">R$5,00</span>
+                            <span class="result-value" id="valorTaxaML">R$5,00</span>
                         </div>
                         <div class="result-box">
                             <span class="result-label">Valor do Frete</span>
@@ -443,7 +440,128 @@
         <!-- Conteúdo da Aba Shein -->
         <div class="tab-content" id="shein-tab">
             <div class="calculator-wrapper">
-                <p>Calculadora Shein em breve!</p>
+                <!-- Seção de Entrada de Dados -->
+                <div class="input-section">
+                    <!-- Custo do Produto -->
+                    <div class="input-group">
+                        <div class="label-container">
+                            <label for="custoProdutoShein">CUSTO DO PRODUTO</label>
+                            <span class="help-icon" title="Preço de custo do produto">?</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <span class="currency">R$</span>
+                            <input type="text" id="custoProdutoShein" placeholder="0,00">
+                            <div class="multiplier-container">
+                                <span class="multiplier" id="multiplierShein">1x</span>
+                                <div class="multiplier-arrows">
+                                    <button type="button" class="arrow-up" data-target="Shein">▲</button>
+                                    <button type="button" class="arrow-down" data-target="Shein">▼</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Impostos -->
+                    <div class="input-group">
+                        <div class="label-container">
+                            <label for="impostosShein">IMPOSTOS</label>
+                            <span class="help-icon" title="Porcentagem de imposto">?</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <span class="currency">%</span>
+                            <input type="text" id="impostosShein" placeholder="0">
+                        </div>
+                    </div>
+
+                    <!-- Despesas Variáveis -->
+                    <div class="input-group">
+                        <div class="label-container">
+                            <label for="despesasVariaveisShein">DESPESAS VARIÁVEIS</label>
+                            <span class="help-icon" title="Valor gasto com embalagem, etiqueta, etc.">?</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <span class="currency">R$</span>
+                            <input type="text" id="despesasVariaveisShein" placeholder="0,00">
+                        </div>
+                    </div>
+
+                    <!-- Taxa da Shein -->
+                    <div class="input-group">
+                        <div class="label-container">
+                            <label for="taxaShein">TAXA DA SHEIN</label>
+                            <span class="help-icon" title="Porcentagem da taxa da Shein">?</span>
+                        </div>
+                        <div class="input-wrapper">
+                            <span class="currency">%</span>
+                            <input type="text" id="taxaShein" placeholder="0">
+                        </div>
+                    </div>
+
+                    <!-- Custos Extras Dinâmicos -->
+                    <div class="input-group">
+                        <div class="label-container">
+                            <label>CUSTOS EXTRAS</label>
+                            <span class="help-icon" title="Adicione valores que considerar importante para a precificação do anúncio clicando no +. Selecione entre R$ e %.">?</span>
+                            <button type="button" class="add-custo-extra-btn" data-target="Shein">+</button>
+                        </div>
+                        <div id="custosExtrasContainerShein">
+                            <!-- Campos de custo extra serão adicionados aqui via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seção de Resultados -->
+                <div class="results-section">
+                    <!-- Resultados Principais -->
+                    <div class="main-results">
+                        <div class="result-item">
+                            <span class="result-label">Preço de Venda</span>
+                            <span class="result-value primary" id="precoVendaShein">R$ 5,00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Lucro por Venda</span>
+                            <span class="result-value primary" id="lucroPorVendaShein">R$ 0,00</span>
+                        </div>
+                    </div>
+
+                    <!-- Grid de Resultados Secundários -->
+                    <div class="secondary-results">
+                        <div class="result-box">
+                            <span class="result-label">Taxa da Shein</span>
+                            <span class="result-value" id="valorTaxaShein">R$5,00</span>
+                        </div>
+                        <div class="result-box">
+                            <span class="result-label">Valor dos Impostos</span>
+                            <span class="result-value" id="valorImpostosShein">R$0,00</span>
+                        </div>
+                        <div class="result-box">
+                            <span class="result-label">Custo Total do Produto</span>
+                            <span class="result-value" id="custoTotalShein">R$0,00</span>
+                        </div>
+                        <div class="result-box">
+                            <span class="result-label">Retorno sobre Produto</span>
+                            <span class="result-value" id="retornoProdutoShein">0%</span>
+                        </div>
+                        <div class="result-box">
+                            <span class="result-label">Markup %</span>
+                            <span class="result-value" id="markupPercentShein">0%</span>
+                        </div>
+                        <div class="result-box">
+                            <span class="result-label">Markup X</span>
+                            <span class="result-value" id="markupXShein">0X</span>
+                        </div>
+                    </div>
+
+                    <!-- Margem de Lucro -->
+                    <div class="margin-section">
+                        <h3>MARGEM DE LUCRO</h3>
+                        <div class="margin-slider-container">
+                            <input type="range" id="margemLucroShein" min="0" max="70" value="0" class="margin-slider" step="0.5">
+                            <span class="margin-value" id="margemValueShein">0%</span>
+                        </div>
+                    </div>
+                    <button type="button" id="limparCamposBtnShein" class="limpar-campos-btn">Limpar Campos</button>
+                </div>
             </div>
         </div>
     </div>
