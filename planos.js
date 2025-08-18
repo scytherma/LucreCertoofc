@@ -8,28 +8,28 @@ const PLANS_CONFIG = {
         name: "Teste Grátis",
         price: 0,
         period: "3 dias",
-        priceId: "price_1RxIhmRzgVcmLmJHdLVgSww7", // ID real da Stripe para o teste grátis
+        priceId: "", // Será configurado com trial_period_days no backend
         description: "Acesso completo por 3 dias"
     },
     monthly: {
         name: "Plano Mensal",
-        price: 29.90,
+        price: 49.90,
         period: "mês",
-        priceId: "price_1RxEH3RzgVcmLmJHGGMdsJuj", // ID real da Stripe
+        priceId: "price_mensal_id", // Substitua pelo ID real da Stripe
         description: "Cobrança mensal"
     },
     quarterly: {
         name: "Plano Trimestral", 
-        price: 72.00,
+        price: 129.90,
         period: "trimestre",
-        priceId: "price_1RxEJyRzgVcmLmJH5W2B9hJC", // ID real da Stripe
+        priceId: "price_trimestral_id", // Substitua pelo ID real da Stripe
         description: "Cobrança trimestral"
     },
     annual: {
         name: "Plano Anual",
-        price: 229.00,
+        price: 399.90,
         period: "ano", 
-        priceId: "price_1RxER7RzgVcmLmJH26Ntu89K", // ID real da Stripe
+        priceId: "price_anual_id", // Substitua pelo ID real da Stripe
         description: "Cobrança anual"
     }
 };
@@ -223,7 +223,7 @@ async function finalizePurchase() {
         }
 
         // Chamar backend para criar sessão de checkout da Stripe
-        const response = await fetch("https://lucre-certoofc-29rr7lbij-scythermas-projects.vercel.app/create-checkout-session", {
+        const response = await fetch("SEU_ENDPOINT_BACKEND/create-checkout-session", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
