@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerClient } from '@/lib/supabase' // Importe createServerClient
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-07-30.basil',
@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
 
 export async function POST(req: NextRequest) {
-  const supabase = createServerSupabaseClient()
+  const supabase = createServerClient() // Use createServerClient aqui
   const buf = await req.text()
   const sig = req.headers.get('stripe-signature') as string
 
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ received: true }, { status: 200 })
 }
 
-async function handleSubscriptionCreated(subscription: Stripe.Subscription, supabase: ReturnType<typeof createServerSupabaseClient>) {
+async function handleSubscriptionCreated(subscription: Stripe.Subscription, supabase: ReturnType<typeof createServerClient>) { // Tipo ajustado
   try {
     const userId = subscription.metadata.userId
     const planType = subscription.metadata.planType
@@ -96,7 +96,7 @@ async function handleSubscriptionCreated(subscription: Stripe.Subscription, supa
   }
 }
 
-async function handleSubscriptionUpdated(subscription: Stripe.Subscription, supabase: ReturnType<typeof createServerSupabaseClient>) {
+async function handleSubscriptionUpdated(subscription: Stripe.Subscription, supabase: ReturnType<typeof createServerClient>) { // Tipo ajustado
   try {
     const currentPeriodStart = new Date(subscription.current_period_start * 1000)
     const currentPeriodEnd = new Date(subscription.current_period_end * 1000)
@@ -119,7 +119,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription, supa
   }
 }
 
-async function handleSubscriptionDeleted(subscription: Stripe.Subscription, supabase: ReturnType<typeof createServerSupabaseClient>) {
+async function handleSubscriptionDeleted(subscription: Stripe.Subscription, supabase: ReturnType<typeof createServerClient>) { // Tipo ajustado
   try {
     // Marcar assinatura como cancelada
     const { error } = await supabase
