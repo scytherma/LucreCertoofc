@@ -1,18 +1,10 @@
 {
-  "name": "lucro-certo-backend",
+  "name": "lucro-certo-frontend",
   "version": "1.0.0",
-  "description": "Backend para sistema de assinaturas Lucro Certo",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "dev": "node index.js"
-  },
+  "description": "Frontend para sistema de assinaturas Lucro Certo",
+  "private": true,
   "dependencies": {
-    "express": "^4.18.2",
-    "stripe": "^14.0.0",
-    "dotenv": "^16.3.1",
-    "cors": "^2.8.5",
-    "@supabase/supabase-js": "^2.38.0"
+    "@supabase/supabase-js": "^2.38.0",
+    "stripe": "^14.0.0"
   }
 }
-
