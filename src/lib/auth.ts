@@ -1,4 +1,4 @@
-import { supabase } from './supabase'
+import { supabase, createClientSupabaseClient } from './supabase'
 import { User } from '@supabase/supabase-js'
 
 export interface AuthError {
@@ -58,17 +58,17 @@ export async function signInWithGoogle(): Promise<AuthResponse> {
 
 // Função para obter o usuário logado
 export async function getCurrentUser(): Promise<User | null> {
-  const { data: { user } } = await supabase.auth.getUser()
+  const supabaseClient = createClientSupabaseClient() // Usar o cliente de cookies
+  const { data: { user } } = await supabaseClient.auth.getUser()
   return user
 }
 
 // Função para fazer logout
 export async function signOut(): Promise<{ success: boolean; error?: AuthError }> {
-  const { error } = await supabase.auth.signOut()
+  const supabaseClient = createClientSupabaseClient() // Usar o cliente de cookies
+  const { error } = await supabaseClient.auth.signOut()
   if (error) {
     return { success: false, error: { message: error.message } }
   }
   return { success: true }
 }
-
-
