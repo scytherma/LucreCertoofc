@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalize sua assinatura - Lucro Certo</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/tyjmnjV/FAVCON-LUCRE-CERTO-FOGUETE.png">
+    <link rel="stylesheet" href="planos.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="./supabase-config.js"></script>
+    <script src="./auth-supabase.js"></script>
+</head>
+<body>
+    <!-- Sidebar (similar ao FaciliteMax) -->
+    <div class="sidebar">
+        <div class="logo">
+            <img src="https://i.postimg.cc/KYqk4xX2/LOGO-LUCRE-CERTO-FOGUETE.png" alt="Lucro Certo" class="logo-img">
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">
+                <span class="nav-icon">🏠</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📊</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📋</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">📄</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">🔍</span>
+            </a>
+            <a href="#" class="nav-item">
+                <span class="nav-icon">⭐</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <h1>Finalize sua assinatura</h1>
+            <p>Desbloqueie todos os recursos premium e venda mais com a Calculadora Lucro Certo!</p>
+        </div>
+
+        <!-- Campo de Cupom -->
+        <div class="coupon-section">
+            <input type="text" id="couponInput" placeholder="Cupom de desconto (opcional)" class="coupon-input">
+            <button type="button" id="applyCouponBtn" class="apply-btn">Aplicar</button>
+        </div>
+
+        <!-- Cards de Planos -->
+        <div class="plans-container">
+            <!-- Plano de Teste -->
+            <div class="plan-card trial-card">
+                <div class="plan-header">
+                    <h3>Teste Grátis</h3>
+                    <div class="price">
+                        <span class="currency">R$</span>
+                        <span class="amount">0,00</span>
+                        <span class="period">/3 dias</span>
+                    </div>
+                </div>
+                <ul class="features">
+                    <li>✓ Acesso completo por 3 dias</li>
+                    <li>✓ Todas as calculadoras</li>
+                    <li>✓ Suporte básico</li>
+                    <li>✓ Sem compromisso</li>
+                </ul>
+                <button class="select-plan-btn" data-plan="trial" data-price-id="">Iniciar Teste Grátis</button>
+            </div>
+
+            <!-- Plano Mensal -->
+            <div class="plan-card">
+                <div class="plan-header">
+                    <h3>Plano Mensal</h3>
+                    <div class="price">
+                        <span class="currency">R$</span>
+                        <span class="amount">49,90</span>
+                        <span class="period">/mês</span>
+                    </div>
+                </div>
+                <ul class="features">
+                    <li>✓ Acesso ilimitado às calculadoras</li>
+                    <li>✓ Suporte prioritário</li>
+                    <li>✓ Relatórios avançados</li>
+                    <li>✓ Cancelamento fácil e sem burocracia</li>
+                </ul>
+                <button class="select-plan-btn" data-plan="monthly" data-price-id="price_mensal_id">Escolher Mensal</button>
+            </div>
+
+            <!-- Plano Trimestral -->
+            <div class="plan-card">
+                <div class="plan-header">
+                    <h3>Plano Trimestral</h3>
+                    <div class="price">
+                        <span class="currency">R$</span>
+                        <span class="amount">129,90</span>
+                        <span class="period">/trimestre</span>
+                    </div>
+                    <div class="savings">Economia de 13%</div>
+                </div>
+                <ul class="features">
+                    <li>✓ Todos os benefícios do mensal</li>
+                    <li>✓ Economia de 13%</li>
+                    <li>✓ Prioridade máxima no suporte</li>
+                    <li>✓ Acesso antecipado a novos recursos</li>
+                </ul>
+                <button class="select-plan-btn" data-plan="quarterly" data-price-id="price_trimestral_id">Escolher Trimestral</button>
+            </div>
+
+            <!-- Plano Anual (Mais Vantajoso) -->
+            <div class="plan-card featured-card">
+                <div class="badge">⭐ Mais Vantajoso</div>
+                <div class="plan-header">
+                    <h3>Plano Anual</h3>
+                    <div class="price">
+                        <span class="currency">R$</span>
+                        <span class="amount">399,90</span>
+                        <span class="period">/ano</span>
+                    </div>
+                    <div class="original-price">Cobrança anual: R$ 599,40/ano</div>
+                    <div class="savings">Economia de 33%</div>
+                </div>
+                <ul class="features">
+                    <li>✓ Todos os benefícios do mensal</li>
+                    <li>✓ Economia de 33%</li>
+                    <li>✓ Prioridade máxima no suporte</li>
+                    <li>✓ Garantia estendida de 30 dias</li>
+                    <li>✓ Acesso exclusivo a novos módulos</li>
+                </ul>
+                <button class="select-plan-btn featured-btn" data-plan="annual" data-price-id="price_anual_id">Escolher Anual</button>
+            </div>
+        </div>
+
+        <!-- Botões de Pagamento -->
+        <div class="payment-buttons">
+            <button class="payment-btn cartao-btn" id="cartaoBtn">
+                <span class="payment-icon">💳</span>
+                Cartão
+            </button>
+            <button class="payment-btn pix-btn" id="pixBtn">
+                <span class="payment-icon">📱</span>
+                Pix
+            </button>
+        </div>
+
+        <!-- Formulário de Pagamento (inicialmente oculto) -->
+        <div class="payment-form" id="paymentForm" style="display: none;">
+            <div class="form-group">
+                <input type="text" id="cardholderName" placeholder="Nome do titular do cartão" class="form-input">
+            </div>
+            <div class="form-group">
+                <input type="email" id="cardholderEmail" placeholder="Email do titular do cartão" class="form-input">
+            </div>
+            <div class="form-group">
+                <input type="text" id="cardholderDocument" placeholder="CPF ou CNPJ do titular do cartão" class="form-input">
+            </div>
+            <div class="form-group">
+                <input type="text" id="cep" placeholder="CEP" class="form-input">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" id="addressNumber" placeholder="Número" class="form-input">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="addressComplement" placeholder="Complemento (opcional)" class="form-input">
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" id="phone" placeholder="Telefone com DDD" class="form-input">
+            </div>
+            <div class="form-group">
+                <input type="text" id="cardNumber" placeholder="Número do cartão" class="form-input">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <input type="text" id="cardExpiry" placeholder="Validade (MM/AA)" class="form-input">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="cardCvv" placeholder="CVV" class="form-input">
+                </div>
+            </div>
+            
+            <button class="finalize-btn" id="finalizeBtn">
+                <span class="btn-icon">💳</span>
+                Assinar agora
+            </button>
+        </div>
+
+        <!-- Selos de Segurança -->
+        <div class="security-badges">
+            <div class="security-item">
+                <span class="security-icon">🔒</span>
+                <span>Pagamento 100% seguro e criptografado</span>
+            </div>
+            <div class="security-item">
+                <span class="security-icon">🛡️</span>
+                <span>Compra protegida por criptografia SSL</span>
+            </div>
+        </div>
+
+        <!-- Área de Mensagens -->
+        <div class="message-area" id="messageArea" style="display: none;"></div>
+    </div>
+
+    <script src="planos.js"></script>
+</body>
+</html>
+
