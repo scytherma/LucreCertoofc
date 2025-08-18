@@ -136,21 +136,59 @@ async function checkAuthStatus() {
         
         if (user) {
             // Usuário logado
+            // Verificar o status da assinatura do usuário
+            const { data: subscriptionData, error: subscriptionError } = await supabaseClient
+                .from("subscriptions")
+                .select("status, trial_end, current_period_end")
+                .eq("user_id", user.id)
+                .single();
+
+            let hasActiveSubscription = false;
+            if (subscriptionData && !subscriptionError) {
+                const now = new Date();
+                if (subscriptionData.status === "active") {
+                    hasActiveSubscription = true;
+                } else if (subscriptionData.status === "trialing" && new Date(subscriptionData.trial_end) > now) {
+                    hasActiveSubscription = true;
+                }
+            }
+
+            // Redirecionamento baseado no status da assinatura
             if (window.location.pathname.includes("/login.html") || window.location.pathname.includes("/register.html")) {
-                window.location.href = "./index.html";
+                if (hasActiveSubscription) {
+                    window.location.href = "./index.html";
+                } else {
+                    // Se logou mas não tem assinatura ativa, vai para a página de planos
+                    window.location.href = "./planos.html";
+                }
+            } else if (window.location.pathname.includes("/index.html")) {
+                if (!hasActiveSubscription) {
+                    // Se está na index.html mas não tem assinatura ativa, redireciona para planos
+                    window.location.href = "./planos.html";
+                } else {
+                    updateUserInterface(user);
+                }
+            } else if (window.location.pathname.includes("/planos.html")) {
+                if (hasActiveSubscription) {
+                    // Se já tem assinatura ativa e está na página de planos, redireciona para index
+                    window.location.href = "./index.html";
+                } else {
+                    updateUserInterface(user);
+                }
             } else {
-                // Atualizar interface do usuário
+                // Para outras páginas, apenas atualiza a interface se logado
                 updateUserInterface(user);
             }
         } else {
             // Usuário não logado
-            if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+            if (window.location.pathname !== "/login.html" && window.location.pathname !== "/register.html") {
                 window.location.href = "./login.html";
             }
         }
     } catch (error) {
-        console.error("Erro ao verificar autenticação:", error);
-        if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+        console.error("Erro ao verificar autenticação ou assinatura:", error);
+        // Em caso de erro, redireciona para login para evitar loop ou acesso indevido
+        if (window.location.pathname !== "/login.html" && window.location.pathname !== "/register.html") {
             window.location.href = "./login.html";
         }
     }
