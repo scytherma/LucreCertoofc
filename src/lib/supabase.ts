@@ -1,15 +1,15 @@
-import { createClient } from "@supabase/supabase-js"
-import { headers } from "next/headers"
-import { cache } from "react"
+import { createClient } from '@supabase/supabase-js'
+import { headers } from 'next/headers'
+import { cache } from 'react'
 
-// Função para criar o cliente Supabase para uso no lado do cliente (browser)
+// Cliente Supabase para uso no lado do CLIENTE (browser)
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
-// Função para criar o cliente Supabase para uso no lado do servidor (API Routes, Server Components)
-// Isso é necessário para lidar com a autenticação de sessão no servidor
+// Cliente Supabase para uso no lado do SERVIDOR (API Routes, Server Components)
+// Usa cache e headers, que são específicos do servidor
 export const createServerSupabaseClient = cache(() => {
   const heads = headers()
   return createClient(
@@ -23,4 +23,24 @@ export const createServerSupabaseClient = cache(() => {
   )
 })
 
-
+// Cliente Supabase para uso em Server Actions ou API Routes que precisam de autenticação de usuário
+// Usa cookies para manter a sessão do usuário
+export const createClientSupabaseClient = cache(() => {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return eval(`typeof window !== 'undefined' ? document.cookie.split('; ').find(row => row.startsWith(name + '='))?.split('=')[1] : undefined`);
+        },
+        set(name: string, value: string, options: any) {
+          eval(`typeof window !== 'undefined' ? document.cookie = name + '=' + value + '; Path=/;' + options.expires + ';' + options.secure : undefined`);
+        },
+        remove(name: string) {
+          eval(`typeof window !== 'undefined' ? document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;' : undefined`);
+        },
+      },
+    }
+  )
+})
