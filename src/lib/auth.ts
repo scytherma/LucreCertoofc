@@ -1,4 +1,4 @@
-import { supabase, createClientSupabaseClient } from './supabase'
+import { createBrowserClient, createServerAuthClient } from './supabase'
 import { User } from '@supabase/supabase-js'
 
 export interface AuthError {
@@ -11,8 +11,9 @@ export interface AuthResponse {
   user?: User
 }
 
-// Função para fazer login
+// Função para fazer login (usando cliente de browser)
 export async function signIn(email: string, password: string): Promise<AuthResponse> {
+  const supabase = createBrowserClient()
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -24,8 +25,9 @@ export async function signIn(email: string, password: string): Promise<AuthRespo
   return { success: true, user: data.user }
 }
 
-// Função para registrar um novo usuário
+// Função para registrar um novo usuário (usando cliente de browser)
 export async function signUp(email: string, password: string, name: string): Promise<AuthResponse> {
+  const supabase = createBrowserClient()
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -40,8 +42,9 @@ export async function signUp(email: string, password: string, name: string): Pro
   return { success: true, user: data.user }
 }
 
-// Função para login com Google
+// Função para login com Google (usando cliente de browser)
 export async function signInWithGoogle(): Promise<AuthResponse> {
+  const supabase = createBrowserClient()
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
@@ -56,17 +59,17 @@ export async function signInWithGoogle(): Promise<AuthResponse> {
   return { success: true }
 }
 
-// Função para obter o usuário logado
+// Função para obter o usuário logado (usando cliente de browser)
 export async function getCurrentUser(): Promise<User | null> {
-  const supabaseClient = createClientSupabaseClient() // Usar o cliente de cookies
-  const { data: { user } } = await supabaseClient.auth.getUser()
+  const supabase = createBrowserClient()
+  const { data: { user } } = await supabase.auth.getUser()
   return user
 }
 
-// Função para fazer logout
+// Função para fazer logout (usando cliente de browser)
 export async function signOut(): Promise<{ success: boolean; error?: AuthError }> {
-  const supabaseClient = createClientSupabaseClient() // Usar o cliente de cookies
-  const { error } = await supabaseClient.auth.signOut()
+  const supabase = createBrowserClient()
+  const { error } = await supabase.auth.signOut()
   if (error) {
     return { success: false, error: { message: error.message } }
   }
