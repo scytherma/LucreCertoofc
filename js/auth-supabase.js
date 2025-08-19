@@ -169,14 +169,16 @@ async function checkAuthStatus() {
             }
         } else {
             // Usuário não logado
-            if (window.location.pathname !== "/login.html" && window.location.pathname !== "/register.html") {
+            const currentPath = window.location.pathname;
+            if (!currentPath.includes("/login.html") && !currentPath.includes("/register.html")) {
                 window.location.href = "./login.html";
             }
         }
     } catch (error) {
         console.error("Erro ao verificar autenticação ou assinatura:", error);
         // Em caso de erro, redireciona para login para evitar loop ou acesso indevido
-        if (window.location.pathname !== "/login.html" && window.location.pathname !== "/register.html") {
+        const currentPath = window.location.pathname;
+        if (!currentPath.includes("/login.html") && !currentPath.includes("/register.html")) {
             window.location.href = "./login.html";
         }
     }
@@ -223,9 +225,12 @@ async function handleLogin(e) {
         
         showSuccess("Login realizado com sucesso!");
         
-        setTimeout(() => {
-            window.location.href = "./index.html";
-        }, 1000);
+        // Após o login, a função checkAuthStatus será chamada automaticamente pelo DOMContentLoaded
+        // ou pelo listener onAuthStateChange, que fará o redirecionamento correto.
+        // Removendo o redirecionamento direto aqui para evitar conflitos.
+        // setTimeout(() => {
+        //     window.location.href = "./index.html";
+        // }, 1000);
         
     } catch (error) {
         console.error("Erro no login:", error);
@@ -393,7 +398,9 @@ function checkAuth() {
 supabaseClient.auth.onAuthStateChange((event, session) => {
     if (event === "SIGNED_IN") {
         console.log("Usuário logado:", session.user);
-        updateUserInterface(session.user);
+        // A função checkAuthStatus já lida com o redirecionamento após o login
+        // updateUserInterface(session.user);
+        checkAuthStatus();
     } else if (event === "SIGNED_OUT") {
         console.log("Usuário deslogado");
         if (window.location.pathname !== "/login.html" && window.location.pathname !== "/register.html") {
