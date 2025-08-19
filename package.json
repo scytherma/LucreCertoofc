@@ -1,10 +1,11 @@
 {
-  "name": "lucro-certo-frontend",
+  "name": "api-routes",
   "version": "1.0.0",
-  "description": "Frontend para sistema de assinaturas Lucro Certo",
-  "private": true,
+  "description": "Dependencies for Vercel API Routes",
+  "main": "",
+  "scripts": {},
   "dependencies": {
-    "@supabase/supabase-js": "^2.38.0",
-    "stripe": "^14.0.0"
+    "stripe": "^14.0.0",
+    "@supabase/supabase-js": "^2.38.0"
   }
 }
