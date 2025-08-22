@@ -473,10 +473,6 @@ function getCalculadoraContent() {
                                 <span class="result-value" id="taxaMercadoLivre">R$5,00</span>
                             </div>
                             <div class="result-box">
-                                <span class="result-label">Taxa de Frete</span>
-                                <span class="result-value" id="taxaFrete">R$0,00</span>
-                            </div>
-                            <div class="result-box">
                                 <span class="result-label">Valor dos Impostos</span>
                                 <span class="result-value" id="valorImpostosML">R$0,00</span>
                             </div>
