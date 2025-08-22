@@ -439,75 +439,76 @@ function getCalculadoraContent() {
                         </div>
 
                         <!-- Custos Extras Dinâmicos -->
-                    <div class="input-group">
-                        <div class="label-container">
-                            <label>CUSTO EXTRA</label>
-                            <span class="help-icon" title="Adicione valores extras para a precificação">?</span>
-                            <button type="button" class="add-custo-extra-btn" data-target="ML">+</button>
-                        </div>
-                        <div id="custosExtrasContainerML">
-                            <!-- Campos de custo extra serão adicionados aqui via JavaScript -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Seção de Resultados -->
-                <div class="results-section">
-                    <!-- Resultados Principais -->
-                    <div class="main-results">
-                        <div class="result-item">
-                            <span class="result-label">Preço de Venda</span>
-                            <span class="result-value primary" id="precoVendaML">R$ 0,00</span>
-                        </div>
-                        <div class="result-item">
-                            <span class="result-label">Lucro por Venda</span>
-                            <span class="result-value primary" id="lucroPorVendaML">R$ 0,00</span>
+                        <div class="input-group">
+                            <div class="label-container">
+                                <label>CUSTOS EXTRAS</label>
+                                <span class="help-icon" title="Adicione valores que considerar importante para a precificação do anúncio clicando no +. Selecione entre R$ e %.">?</span>
+                                <button type="button" class="add-custo-extra-btn-ml">+</button>
+                            </div>
+                            <div id="custosExtrasContainerML">
+                                <!-- Campos de custo extra serão adicionados aqui via JavaScript -->
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Grid de Resultados Secundários -->
-                    <div class="secondary-results">
-                        <div class="result-box">
-                            <span class="result-label">Taxa da ML</span>
-                            <span class="result-value" id="taxaMercadoLivre">R$0,00</span>
+                    <!-- Seção de Resultados -->
+                    <div class="results-section">
+                        <!-- Resultados Principais -->
+                        <div class="main-results">
+                            <div class="result-item">
+                                <span class="result-label">Preço de Venda</span>
+                                <span class="result-value primary" id="precoVendaML">R$ 5,00</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Lucro por Venda</span>
+                                <span class="result-value primary" id="lucroPorVendaML">R$ 0,00</span>
+                            </div>
                         </div>
-                        <div class="result-box">
-                            <span class="result-label">Valor dos Impostos</span>
-                            <span class="result-value" id="valorImpostosML">R$0,00</span>
+
+                        <!-- Grid de Resultados Secundários -->
+                        <div class="secondary-results">
+                            <div class="result-box">
+                                <span class="result-label">Taxa do Mercado Livre</span>
+                                <span class="result-value" id="taxaMercadoLivre">R$5,00</span>
+                            </div>
+                            <div class="result-box">
+                                <span class="result-label">Taxa de Frete</span>
+                                <span class="result-value" id="taxaFrete">R$0,00</span>
+                            </div>
+                            <div class="result-box">
+                                <span class="result-label">Valor dos Impostos</span>
+                                <span class="result-value" id="valorImpostosML">R$0,00</span>
+                            </div>
+                            <div class="result-box">
+                                <span class="result-label">Custo Total do Produto</span>
+                                <span class="result-value" id="custoTotalML">R$0,00</span>
+                            </div>
+                            <div class="result-box">
+                                <span class="result-label">Retorno sobre Produto</span>
+                                <span class="result-value" id="retornoProdutoML">0%</span>
+                            </div>
+                            <div class="result-box">
+                                <span class="result-label">Markup %</span>
+                                <span class="result-value" id="markupPercentML">0%</span>
+                            </div>
+                            <div class="result-box">
+                                <span class="result-label">Markup X</span>
+                                <span class="result-value" id="markupXML">0X</span>
+                            </div>
                         </div>
-                        <div class="result-box">
-                            <span class="result-label">Custo Total do Produto</span>
-                            <span class="result-value" id="custoTotalML">R$0,00</span>
+
+                        <!-- Margem de Lucro -->
+                        <div class="margin-section">
+                            <h3>MARGEM DE LUCRO</h3>
+                            <div class="margin-slider-container">
+                                <input type="range" id="margemLucroML" min="0" max="70" value="0" class="margin-slider" step="0.5">
+                                <span class="margin-value" id="margemValueML">0%</span>
+                            </div>
                         </div>
-                        <div class="result-box">
-                            <span class="result-label">Retorno sobre Produto</span>
-                            <span class="result-value" id="retornoProdutoML">0%</span>
-                        </div>
-                        <div class="result-box">
-                            <span class="result-label">Markup %</span>
-                            <span class="result-value" id="markupPercentML">0%</span>
-                        </div>
-                        <div class="result-box">
-                            <span class="result-label">Markup X</span>
-                            <span class="result-value" id="markupXML">0X</span>
-                        </div>
+                        <button type="button" id="limparCamposBtnML" class="limpar-campos-btn">Limpar Campos</button>
                     </div>
-
-                    <!-- Margem de Lucro -->
-                    <div class="margin-section">
-                        <h3>MARGEM DE LUCRO</h3>
-                        <div class="margin-slider-container">
-                            <input type="range" id="margemLucroML" min="0" max="70" value="0" class="margin-slider" step="0.5">
-                            <span class="margin-value" id="margemValueML">0%</span>
-                        </div>
-                    </div>
-
-
-
-                    <button type="button" id="limparCamposBtnML" class="limpar-campos-btn">Limpar Campos</button>
                 </div>
             </div>
-        </div>
 
             <!-- Conteúdo da Aba Shein -->
             <div class="tab-content" id="shein-tab">
@@ -646,4 +647,3 @@ function initCalculatorEvents() {
         });
     });
 }
-
