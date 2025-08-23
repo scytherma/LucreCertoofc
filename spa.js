@@ -469,7 +469,7 @@ function getCalculadoraContent() {
                         <!-- Grid de Resultados Secundários -->
                         <div class="secondary-results">
                             <div class="result-box">
-                                <span class="result-label">Taxa do Mercado Livre</span>
+                                <span class="result-label">Taxa do ML</span>
                                 <span class="result-value" id="taxaMercadoLivre">R$5,00</span>
                             </div>
                             <div class="result-box">
