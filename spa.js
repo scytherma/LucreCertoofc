@@ -1205,10 +1205,6 @@ function adicionarCustoExtra(tipo) {
 
     const custoExtraHTML = `
         <div class="input-group custo-extra-item" id="${custoExtraId}">
-            <div class="label-container">
-                <label>CUSTO EXTRA</label>
-                <button type="button" class="remove-custo-extra-btn" onclick="removerCustoExtra('${custoExtraId}', '${tipo}')">×</button>
-            </div>
             <div class="input-wrapper">
                 <span class="currency">R$</span>
                 <input type="text" class="custo-extra-value" placeholder="0,00">
@@ -1216,8 +1212,8 @@ function adicionarCustoExtra(tipo) {
                     <option value="real">R$</option>
                     <option value="percent">%</option>
                 </select>
-                <button type="button" class="remove-custo-extra-btn" onclick="removerCustoExtra(\'${custoExtraId}\', \'${tipo}\')">×</button>
             </div>
+            <button type="button" class="remove-custo-extra-btn" onclick="removerCustoExtra(\'${custoExtraId}\', \'${tipo}\')">×</button>
         </div>
     `;
 
