@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.querySelectorAll('.nav__item');
 
     // Função para carregar o conteúdo da página
-    function loadPage(route) {
+    window.loadPage = function(route) {
         let pageContent = '';
         
         switch (route) {
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Função para atualizar a classe 'active' nos links da navegação
-    function updateActiveClass(route) {
+    window.updateActiveClass = function(route) {
         navLinks.forEach(link => {
             if (link.getAttribute('data-route') === route) {
                 link.classList.add('active');
@@ -58,12 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loadPage(route);
             updateActiveClass(route);
         });
-    });
-
-    // Carrega a página inicial (Home)
-    loadPage('home');
-    updateActiveClass('home');
-});
+    }););
 
 // Conteúdo da página Home
 function getHomeContent() {
@@ -1296,3 +1291,4 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
