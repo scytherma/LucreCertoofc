@@ -1601,17 +1601,7 @@ body.dark-theme select option {
     .update-version {
         margin-right: 0;
         margin-bottom: 1rem;
-        width: fit-content;
-    }
-}
-
-
-
-
-
-
-
-.custo-extra-item {
+        wid.input-wrapper {
     position: relative;
     display: flex;
     align-items: center;
@@ -1620,7 +1610,7 @@ body.dark-theme select option {
     border-radius: 8px;
     overflow: hidden;
     transition: border-color 0.2s;
-    margin-bottom: 15px;
+}: 15px;
 }
 
 .custo-extra-item:focus-within {
@@ -1722,127 +1712,6 @@ body.dark-theme select option {
 
 .input-group .add-custo-extra-btn:hover {
     background: #45a049;
-}
-
-/* Tema escuro para o novo custo extra */
-body.dark-theme .custo-extra-item {
-    background: #4a4a4a;
-    border-color: #4a4a4a;
-}
-
-body.dark-theme .custo-extra-item:focus-within {
-    border-color: #4a4a4a;
-}
-
-body.dark-theme .custo-extra-item .currency {
-    background: #5a5a5a;
-    border-right-color: #5a5a5a;
-    color: #f5f5f5;
-}
-
-body.dark-theme .custo-extra-item .custo-extra-value {
-    color: #f5f5f5;
-}
-
-body.dark-theme .custo-extra-item .custo-extra-type-selector {
-    background: #5a5a5a;
-    border-left-color: #5a5a5a;
-    color: #f5f5f5;
-}
-
-body.dark-theme .custo-extra-item .remove-custo-extra-btn {
-    background: #ff6b35;
-    color: white;
-}
-
-body.dark-theme .custo-extra-item .remove-custo-extra-btn:hover {
-    background: #e55a2b;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-/* Estilos para o Custo Extra, similar ao Custo do Produto */
-    overflow: visible; /* Permite que o botão 'X' saia do contêiner */
-
-.custo-extra-item:focus-within {
-    border-color: rgb(222, 222, 222);
-}
-
-.custo-extra-item .input-wrapper {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    background: transparent;
-    border: none;
-    overflow: hidden;
-}
-
-.custo-extra-item .currency {
-    padding: 12px 15px;
-    background: rgb(250, 250, 250);
-    font-weight: 600;
-    color: rgb(10, 10, 10);
-    border-right: 1px solid rgb(250, 250, 250);
-}
-
-.custo-extra-item .custo-extra-value {
-    flex: 1;
-    padding: 12px 15px;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    background: transparent;
-}
-
-.custo-extra-item .custo-extra-type-selector {
-    padding: 12px 15px;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    background: transparent;
-    cursor: pointer;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-image: url("data:image/svg+xml;utf8,<svg fill=\"%23666666\" height=\"24\" viewBox=\"0 0 24 24\" width=\"24\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M7 10l5 5 5-5z\"/><path d=\"M0 0h24v24H0z\" fill=\"none\"/></svg>");
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 16px;
-    padding-right: 40px;
-    border-left: 1px solid rgb(250, 250, 250);
-}
-
-.custo-extra-item .remove-custo-extra-btn {
-    background: #ff6b35;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    font-size: 14px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    position: absolute;
-    right: -12px; /* Metade da largura do botão para fora do contêiner */
-    top: 50%;
-    transform: translateY(-50%);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-}
-
-.custo-extra-item .remove-custo-extra-btn:hover {
-    background: #e55a2b;
 }
 
 /* Tema escuro para o novo custo extra */
