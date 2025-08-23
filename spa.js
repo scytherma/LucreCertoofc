@@ -1273,3 +1273,26 @@ function removerCustoExtra(custoExtraId, tipo) {
         }
     }
 }
+
+
+
+
+// Lógica para o botão de usuário e dropdown
+document.addEventListener("DOMContentLoaded", () => {
+    const userIconBtn = document.getElementById("userIconBtn");
+    const userDropdownMenu = document.getElementById("userDropdownMenu");
+
+    if (userIconBtn && userDropdownMenu) {
+        userIconBtn.addEventListener("click", (event) => {
+            event.stopPropagation(); // Impede que o clique se propague para o documento
+            userDropdownMenu.classList.toggle("show");
+        });
+
+        // Fechar o dropdown se o usuário clicar fora dele
+        document.addEventListener("click", (event) => {
+            if (!userDropdownMenu.contains(event.target) && !userIconBtn.contains(event.target)) {
+                userDropdownMenu.classList.remove("show");
+            }
+        });
+    }
+});
