@@ -816,7 +816,7 @@ function calcularPrecoVendaShopee() {
 
     const valorImpostos = precoVenda * (impostosPercent / 100);
     const valorCustosExtrasPercentuais = precoVenda * custosExtrasPercentuais;
-    const taxaShopeeValor = precoVenda * taxaShopee;
+    const taxaShopeeValor = (precoVenda * taxaShopee) + SHOPEE_CONFIG.taxaFixaPorItem;
     
     const lucroLiquido = precoVenda - custoTotalProduto - despesasVariaveis - taxaShopeeValor - valorImpostos - valorCustosExtrasPercentuais - SHOPEE_CONFIG.taxaFixaPorItem;
     
@@ -1051,9 +1051,7 @@ function calcularPrecoVendaML() {
     
     const denominador = (1 - taxaML - (margemDesejada / 100) - (impostosPercent / 100) - custosExtrasPercentuais);
     let precoVenda = 0;
-    if (denominador > 0) {
-        precoVenda = (custoTotalProduto + despesasVariaveis + taxaFrete) / denominador;
-    }
+    if (d        precoVenda = (custoTotalProduto + despesasVariaveis) / denominador;   }
 
     const valorImpostos = precoVenda * (impostosPercent / 100);
     const valorCustosExtrasPercentuais = precoVenda * custosExtrasPercentuais;
@@ -1156,14 +1154,29 @@ function atualizarCorMargem(slider, valor) {
     if (!slider) return;
     
     const percentage = (valor - slider.min) / (slider.max - slider.min) * 100;
-    
-    if (valor <= 10) {
-        slider.style.background = `linear-gradient(to right, #f44336 0%, #f44336 ${percentage}%, #ddd ${percentage}%, #ddd 100%)`;
-    } else if (valor <= 30) {
-        slider.style.background = `linear-gradient(to right, #ff6b35 0%, #ff6b35 ${percentage}%, #ddd ${percentage}%, #ddd 100%)`;
-    } else {
-        slider.style.background = `linear-gradient(to right, #4CAF50 0%, #4CAF50 ${percentage}%, #ddd ${percentage}%, #ddd 100%)`;
+    let color = "#ddd"; // Cor padrão
+
+    if (valor <= 5) {
+        color = "#ff0000"; // Vermelho
+    } else if (valor <= 7) {
+        color = "#ff8c00"; // Laranja escuro
+    } else if (valor <= 12) {
+        color = "#ffa500"; // Laranja claro
+    } else if (valor <= 17) {
+        color = "#ffff00"; // Amarelo
+    } else if (valor <= 25.5) {
+        color = "#adff2f"; // Verde lima
+    } else if (valor <= 35) {
+        color = "#90ee90"; // Verde claro
+    } else if (valor <= 40) {
+        color = "#00ffff"; // Ciano
+    } else if (valor <= 51) {
+        color = "#87ceeb"; // Azul claro
+    } else if (valor <= 70) {
+        color = "#0000ff"; // Azul escuro
     }
+
+    slider.style.setProperty("background", `linear-gradient(to right, ${color} 0%, ${color} ${percentage}%, #ddd ${percentage}%, #ddd 100%)`, "important");
 }
 
 function validarEntradaNumerica(input) {
@@ -1203,19 +1216,15 @@ function adicionarCustoExtra(tipo) {
     const custoExtraId = `custo-extra-${Date.now()}`;
     
     const custoExtraHTML = `
-        <div class="input-group custo-extra-item" id="${custoExtraId}">
-            <div class="label-container">
-                <label>CUSTO EXTRA</label>
-                <button type="button" class="remove-custo-extra-btn" onclick="removerCustoExtra('${custoExtraId}', '${tipo}')">×</button>
-            </div>
+        <div class="custo-extra-item" id="${custoExtraId}">
             <div class="input-wrapper">
-                <span class="currency">R$</span>
-                <input type="text" class="custo-extra-value" placeholder="0,00">
                 <select class="custo-extra-type-selector">
                     <option value="real">R$</option>
                     <option value="percent">%</option>
                 </select>
+                <input type="text" class="custo-extra-value" placeholder="0,00">
             </div>
+            <button type="button" class="remove-custo-extra-btn" onclick="removerCustoExtra(\'${custoExtraId}\', \'${tipo}\')">×</button>
         </div>
     `;
     
