@@ -380,18 +380,64 @@ function getCalculadoraContent() {
                                 <span class="help-icon" title="Selecione baseado no peso e valor do produto">?</span>
                             </div>
                             <div class="input-wrapper">
-                                <span class="currency">R$</span>
-                                <select id="taxaFreteSelect" class="select-input">
-                                    <option value="0">Frete Grátis (R$ 0,00)</option>
-                                    <option value="8.99">Até 300g - Padrão (R$ 8,99)</option>
-                                    <option value="12.99">301g a 1kg - Padrão (R$ 12,99)</option>
-                                    <option value="16.99">1kg a 3kg - Padrão (R$ 16,99)</option>
-                                    <option value="24.99">3kg a 8kg - Padrão (R$ 24,99)</option>
-                                    <option value="34.99">8kg a 15kg - Padrão (R$ 34,99)</option>
-                                    <option value="49.99">15kg a 30kg - Padrão (R$ 49,99)</option>
-                                </select>
-                            </div>
+                            <span class="currency">R$</span>
+                            <select id="taxaFreteSelect" class="select-input">
+                                <optgroup label="Produtos < R$ 79, usados">
+                                    <option value="39.90">Até 300g (R$ 39,90)</option>
+                                    <option value="42.90">300g a 500g (R$ 42,90)</option>
+                                    <option value="44.90">500g a 1kg (R$ 44,90)</option>
+                                    <option value="46.90">1kg a 2kg (R$ 46,90)</option>
+                                    <option value="49.90">2kg a 3kg (R$ 49,90)</option>
+                                    <option value="53.90">3kg a 4kg (R$ 53,90)</option>
+                                    <option value="56.90">4kg a 5kg (R$ 56,90)</option>
+                                    <option value="88.90">5kg a 9kg (R$ 88,90)</option>
+                                </optgroup>
+                                <optgroup label="Produtos R$ 79 a R$ 99,99">
+                                    <option value="11.97">Até 300g (R$ 11,97)</option>
+                                    <option value="12.87">300g a 500g (R$ 12,87)</option>
+                                    <option value="13.47">500g a 1kg (R$ 13,47)</option>
+                                    <option value="14.07">1kg a 2kg (R$ 14,07)</option>
+                                    <option value="14.97">2kg a 3kg (R$ 14,97)</option>
+                                    <option value="16.17">3kg a 4kg (R$ 16,17)</option>
+                                    <option value="17.07">4kg a 5kg (R$ 17,07)</option>
+                                    <option value="26.67">5kg a 9kg (R$ 26,67)</option>
+                                </optgroup>
+                                <optgroup label="Produtos R$ 100 a R$ 119,99">
+                                    <option value="13.97">Até 300g (R$ 13,97)</option>
+                                    <option value="15.02">300g a 500g (R$ 15,02)</option>
+                                    <option value="15.72">500g a 1kg (R$ 15,72)</option>
+                                    <option value="16.42">1kg a 2kg (R$ 16,42)</option>
+                                    <option value="17.47">2kg a 3kg (R$ 17,47)</option>
+                                    <option value="18.87">3kg a 4kg (R$ 18,87)</option>
+                                    <option value="19.92">4kg a 5kg (R$ 19,92)</option>
+                                </optgroup>
+                                <optgroup label="Produtos R$ 120 a R$ 149,99">
+                                    <option value="15.96">Até 300g (R$ 15,96)</option>
+                                    <option value="17.16">300g a 500g (R$ 17,16)</option>
+                                    <option value="17.96">500g a 1kg (R$ 17,96)</option>
+                                    <option value="18.76">1kg a 2kg (R$ 18,76)</option>
+                                    <option value="19.96">2kg a 3kg (R$ 19,96)</option>
+                                </optgroup>
+                                <optgroup label="Produtos R$ 150 a R$ 199,99">
+                                    <option value="17.96">Até 300g (R$ 17,96)</option>
+                                    <option value="19.31">300g a 500g (R$ 19,31)</option>
+                                    <option value="20.21">500g a 1kg (R$ 20,21)</option>
+                                    <option value="21.11">1kg a 2kg (R$ 21,11)</option>
+                                    <option value="22.46">2kg a 3kg (R$ 22,46)</option>
+                                </optgroup>
+                                <optgroup label="Produtos > R$ 200">
+                                    <option value="19.95">Até 300g (R$ 19,95)</option>
+                                    <option value="21.45">300g a 500g (R$ 21,45)</option>
+                                    <option value="22.45">500g a 1kg (R$ 22,45)</option>
+                                    <option value="23.45">1kg a 2kg (R$ 23,45)</option>
+                                    <option value="24.95">2kg a 3kg (R$ 24,95)</option>
+                                </optgroup>
+                                <optgroup label="Frete Grátis (R$ 19 a R$ 78,99)">
+                                    <option value="0">Frete Grátis - ML paga (R$ 0,00)</option>
+                                </optgroup>
+                            </select>
                         </div>
+                    </div>
 
                         <!-- Custos Extras Dinâmicos -->
                         <div class="input-group">
