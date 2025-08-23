@@ -1296,4 +1296,3 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-
