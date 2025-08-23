@@ -472,7 +472,7 @@ function getCalculadoraContent() {
                                 <span class="result-label">Taxa do ML</span>
                                 <span class="result-value" id="taxaMercadoLivre">R$5,00</span>
                             </div>
-
+                            
                             <div class="result-box">
                                 <span class="result-label">Valor dos Impostos</span>
                                 <span class="result-value" id="valorImpostosML">R$0,00</span>
