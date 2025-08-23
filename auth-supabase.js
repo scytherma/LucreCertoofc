@@ -138,16 +138,21 @@ async function checkAuthStatus() {
             // Usuário logado
             if (window.location.pathname.includes("/login.html") || window.location.pathname.includes("/register.html")) {
                 window.location.href = "./index.html";
-            } else {
-                // Atualizar interface do usuário
+            } else if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+                // Usuário logado e na página principal, exibir o app
+                document.getElementById("loading-screen").style.display = "none";
+                document.getElementById("app").style.display = "flex";
                 updateUserInterface(user);
             }
-        } else {
-            // Usuário não logado
-            if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
-                window.location.href = "./login.html";
+            } else {
+                // Usuário não logado
+                if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+                    window.location.href = "./login.html";
+                } else {
+                    // Esconder a tela de carregamento em outras páginas (login, register)
+                    document.getElementById("loading-screen").style.display = "none";
+                }
             }
-        }
     } catch (error) {
         console.error("Erro ao verificar autenticação:", error);
         if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
