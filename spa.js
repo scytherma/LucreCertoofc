@@ -1205,6 +1205,10 @@ function adicionarCustoExtra(tipo) {
 
     const custoExtraHTML = `
         <div class="input-group custo-extra-item" id="${custoExtraId}">
+            <div class="label-container">
+                <label>CUSTO EXTRA</label>
+                <span class="help-icon" title="Valor extra adicionado ao custo.">?</span>
+            </div>
             <div class="input-wrapper">
                 <span class="currency">R$</span>
                 <input type="text" class="custo-extra-value" placeholder="0,00">
