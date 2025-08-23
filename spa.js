@@ -472,10 +472,7 @@ function getCalculadoraContent() {
                                 <span class="result-label">Taxa do ML</span>
                                 <span class="result-value" id="taxaMercadoLivre">R$5,00</span>
                             </div>
-                            <div class="result-box">
-                                <span class="result-label">Taxa de Frete</span>
-                                <span class="result-value" id="taxaFreteML">R$0,00</span>
-                            </div>
+
                             <div class="result-box">
                                 <span class="result-label">Valor dos Impostos</span>
                                 <span class="result-value" id="valorImpostosML">R$0,00</span>
@@ -1060,9 +1057,9 @@ function calcularPrecoVendaML() {
 
     const valorImpostos = precoVenda * (impostosPercent / 100);
     const valorCustosExtrasPercentuais = precoVenda * custosExtrasPercentuais;
-    const taxaMLValor = precoVenda * taxaML;
+    const taxaMLValor = (precoVenda * taxaML) + taxaFrete;
     
-    const lucroLiquido = precoVenda - custoTotalProduto - despesasVariaveis - taxaMLValor - valorImpostos - valorCustosExtrasPercentuais - taxaFrete;
+    const lucroLiquido = precoVenda - custoTotalProduto - despesasVariaveis - taxaMLValor - valorImpostos - valorCustosExtrasPercentuais;
     
     const retornoProduto = custoTotalProduto > 0 ? (lucroLiquido / custoTotalProduto) * 100 : 0;
     const markupPercent = custoTotalProduto > 0 ? ((precoVenda - custoTotalProduto) / custoTotalProduto) * 100 : 0;
@@ -1077,8 +1074,7 @@ function calcularPrecoVendaML() {
         custoTotalProduto,
         retornoProduto,
         markupPercent,
-        markupX,
-        taxaFrete
+
     });
 }
 
@@ -1091,7 +1087,7 @@ function atualizarResultadosML(resultados) {
     const retornoProdutoEl = document.getElementById("retornoProdutoML");
     const markupPercentEl = document.getElementById("markupPercentML");
     const markupXEl = document.getElementById("markupXML");
-    const taxaFreteEl = document.getElementById("taxaFreteML");
+
 
     if (precoVendaEl) precoVendaEl.textContent = formatarReal(resultados.precoVenda);
     if (lucroPorVendaEl) lucroPorVendaEl.textContent = formatarReal(resultados.lucroLiquido);
@@ -1101,7 +1097,7 @@ function atualizarResultadosML(resultados) {
     if (retornoProdutoEl) retornoProdutoEl.textContent = formatarPercentual(resultados.retornoProduto);
     if (markupPercentEl) markupPercentEl.textContent = formatarPercentual(resultados.markupPercent);
     if (markupXEl) markupXEl.textContent = `${resultados.markupX.toFixed(2)}X`;
-    if (taxaFreteEl) taxaFreteEl.textContent = formatarReal(resultados.taxaFrete);
+
     
     // Atualizar cor do lucro
     if (lucroPorVendaEl) {
@@ -1207,14 +1203,15 @@ function adicionarCustoExtra(tipo) {
     const custoExtraId = `custo-extra-${Date.now()}`;
     
     const custoExtraHTML = `
-        <div class="custo-extra-item" id="${custoExtraId}">
-            <div class="custo-extra-input-group">
+        <div class="input-group custo-extra-item" id="${custoExtraId}">
+            <div class="input-wrapper">
+                <span class="currency">R$</span>
                 <input type="text" class="custo-extra-value" placeholder="0,00">
                 <select class="custo-extra-type-selector">
                     <option value="real">R$</option>
                     <option value="percent">%</option>
                 </select>
-                <button type="button" class="remove-custo-extra-btn" onclick="removerCustoExtra('${custoExtraId}', '${tipo}')">×</button>
+                <button type="button" class="remove-custo-extra-btn" onclick="removerCustoExtra(\'${custoExtraId}\', \'${tipo}\')">×</button>
             </div>
         </div>
     `;
