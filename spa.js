@@ -818,7 +818,7 @@ function calcularPrecoVendaShopee() {
     const valorCustosExtrasPercentuais = precoVenda * custosExtrasPercentuais;
     const taxaShopeeValor = precoVenda * taxaShopee + SHOPEE_CONFIG.taxaFixaPorItem;
 
-    const lucroLiquido = precoVenda - custoTotalProduto - despesasVariaveis - taxaShopeeValor - valorImpostos - valorCustosExtrasPercentuais - SHOPEE_CONFIG.taxaFixaPorItem;
+    const lucroLiquido = precoVenda - custoTotalProduto - despesasVariaveis - taxaShopeeValor - valorImpostos - valorCustosExtrasPercentuais;
 
     const retornoProduto = custoTotalProduto > 0 ? (lucroLiquido / custoTotalProduto) * 100 : 0;
     const markupPercent = custoTotalProduto > 0 ? ((precoVenda - custoTotalProduto) / custoTotalProduto) * 100 : 0;
