@@ -143,6 +143,20 @@ async function checkAuthStatus() {
                 document.getElementById("loading-screen").style.display = "none";
                 document.getElementById("app").style.display = "flex";
                 updateUserInterface(user);
+                // Chamar a função de carregamento da página inicial do SPA
+                // Garantir que loadPage e updateActiveClass estejam disponíveis
+                if (typeof window.loadPage === 'function' && typeof window.updateActiveClass === 'function') {
+                    window.loadPage('home');
+                    window.updateActiveClass('home');
+                } else {
+                    // Se loadPage ainda não estiver disponível, aguardar e tentar novamente
+                    document.addEventListener('DOMContentLoaded', () => {
+                        if (typeof window.loadPage === 'function' && typeof window.updateActiveClass === 'function') {
+                            window.loadPage('home');
+                            window.updateActiveClass('home');
+                        }
+                    });
+                }
             }
             } else {
                 // Usuário não logado
