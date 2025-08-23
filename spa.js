@@ -472,6 +472,7 @@ function getCalculadoraContent() {
                                 <span class="result-label">Taxa do ML</span>
                                 <span class="result-value" id="taxaMercadoLivre">R$5,00</span>
                             </div>
+
                             <div class="result-box">
                                 <span class="result-label">Valor dos Impostos</span>
                                 <span class="result-value" id="valorImpostosML">R$0,00</span>
@@ -829,7 +830,8 @@ function calcularPrecoVendaShopee() {
         custoTotalProduto,
         retornoProduto,
         markupPercent,
-        markupX
+        markupX,
+        taxaFrete
     });
 }
 
@@ -1070,7 +1072,8 @@ function calcularPrecoVendaML() {
         custoTotalProduto,
         retornoProduto,
         markupPercent,
-        markupX
+        markupX,
+        taxaFrete
     });
 }
 
@@ -1092,6 +1095,8 @@ function atualizarResultadosML(resultados) {
     if (retornoProdutoEl) retornoProdutoEl.textContent = formatarPercentual(resultados.retornoProduto);
     if (markupPercentEl) markupPercentEl.textContent = formatarPercentual(resultados.markupPercent);
     if (markupXEl) markupXEl.textContent = `${resultados.markupX.toFixed(2)}X`;
+    const taxaFreteEl = document.getElementById("taxaFreteML");
+    if (taxaFreteEl) taxaFreteEl.textContent = formatarReal(resultados.taxaFrete);
     
     // Atualizar cor do lucro
     if (lucroPorVendaEl) {
