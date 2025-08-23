@@ -1157,14 +1157,35 @@ function atualizarCorMargem(slider, valor) {
     if (!slider) return;
 
     const percentage = (valor - slider.min) / (slider.max - slider.min) * 100;
+    let cor = '#ddd'; // cor padrão
 
-    if (valor <= 10) {
-        slider.style.background = `linear-gradient(to right, #f44336 0%, #f44336 ${percentage}%, #ddd ${percentage}%, #ddd 100%)`;
-    } else if (valor <= 30) {
-        slider.style.background = `linear-gradient(to right, #ff6b35 0%, #ff6b35 ${percentage}%, #ddd ${percentage}%, #ddd 100%)`;
-    } else {
-        slider.style.background = `linear-gradient(to right, #4CAF50 0%, #4CAF50 ${percentage}%, #ddd ${percentage}%, #ddd 100%)`;
+    // Definir cor baseada nas faixas especificadas pelo usuário
+    if (valor >= 0 && valor <= 5) {
+        cor = '#ff0000'; // vermelho
+    } else if (valor >= 5.5 && valor <= 7) {
+        cor = '#ff8c00'; // laranja escuro
+    } else if (valor >= 7.5 && valor <= 12) {
+        cor = '#ffa500'; // laranja claro
+    } else if (valor >= 12.5 && valor <= 17) {
+        cor = '#ffff00'; // amarelo
+    } else if (valor >= 17.5 && valor <= 25.5) {
+        cor = '#32cd32'; // verde lima
+    } else if (valor >= 26 && valor <= 35) {
+        cor = '#90ee90'; // verde claro
+    } else if (valor >= 35.5 && valor <= 40) {
+        cor = '#00ffff'; // ciano
+    } else if (valor >= 40.5 && valor <= 51) {
+        cor = '#87ceeb'; // azul claro
+    } else if (valor >= 51.5 && valor <= 70) {
+        cor = '#0000cd'; // azul escuro
     }
+
+    // Aplicar o gradiente com a cor determinada
+    slider.style.background = `linear-gradient(to right, ${cor} 0%, ${cor} ${percentage}%, #ddd ${percentage}%, #ddd 100%)`;
+    
+    // Atualizar também as variáveis CSS customizadas para o thumb
+    slider.style.setProperty('--track-color', cor);
+    slider.style.setProperty('--track-fill', `${percentage}%`);
 }
 
 function validarEntradaNumerica(input) {
