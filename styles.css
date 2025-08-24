@@ -343,11 +343,11 @@ input:checked + .slider:before {
 }
 
 .result-box {
-    background: #f8f9fa;
+    background: rgb(222, 222, 222);
     padding: 15px;
     border-radius: 8px;
     text-align: center;
-    border: 1px solid #e0e0e0;
+    border: 1px solid rgb(222, 222, 222);
 }
 
 .result-box .result-label {
@@ -592,11 +592,11 @@ body.dark-theme .margin-section {
 
 .custo-extra-type-selector {
     padding: 12px 15px;
-    background: #f8f9fa;
+    background: rgb(250, 250, 250);
     font-weight: 600;
-    color: #666;
+    color: rgb(10, 10, 10);
     border: none;
-    border-right: 1px solid #e0e0e0;
+    border-right: 1px solid rgb(250, 250, 250);
     outline: none;
     cursor: pointer;
     -webkit-appearance: none;
@@ -615,7 +615,7 @@ body.dark-theme .margin-section {
     border: none;
     outline: none;
     font-size: 16px;
-    background: transparent;
+    background: rgb(222, 222, 222);
 }
 
 .remove-custo-extra-btn {
@@ -1613,4 +1613,3 @@ body.dark-theme select option {
         width: fit-content;
     }
 }
-
