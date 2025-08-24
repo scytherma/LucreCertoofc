@@ -1216,74 +1216,65 @@ function formatarCampo(input) {
     input.value = valor.toFixed(2).replace(".", ",");
 }
 
-function adicionarCustoExtra(tipo) {
-    const containerId = tipo === "ML" ? "custosExtrasContainerML" : "custosExtrasContainer";
-    const container = document.getElementById(containerId);
-
-    if (!container) return;
-
-    const custoExtraId = `custo-extra-${Date.now()}`;
-
-    const custoExtraHTML = `
-        <div class="input-group custo-extra-item" id="${custoExtraId}">
-            <div class="label-container">
-                <label>CUSTO EXTRA</label>
-                <button type="button" class="remove-custo-extra-btn" onclick="removerCustoExtra('${custoExtraId}', '${tipo}')">×</button>
-            </div>
-            <div class="input-wrapper">
-                <span class="currency">R$</span>
-                <input type="text" class="custo-extra-value" placeholder="0,00">
-                <select class="custo-extra-type-selector">
-                    <option value="real">R$</option>
-                    <option value="percent">%</option>
-                </select>
-                <button type="button" class="remove-custo-extra-btn" onclick="removerCustoExtra(\'${custoExtraId}\', \'${tipo}\')">×</button>
-            </div>
+function adicionarCustoExtra(target) {
+    const id = `custoExtra-${Date.now()}`;
+    const custoExtraWrapper = document.createElement("div");
+    custoExtraWrapper.classList.add("custo-extra-wrapper");
+    custoExtraWrapper.dataset.id = id;
+    custoExtraWrapper.innerHTML = `
+        <div class="custo-extra-item">
+            <select class="custo-extra-type-selector">
+                <option value="real">R$</option>
+                <option value="percent">%</option>
+            </select>
+            <input type="text" class="custo-extra-value" placeholder="0,00">
         </div>
+        <button type="button" class="remove-custo-extra-btn">X</button>
     `;
 
-    container.insertAdjacentHTML('beforeend', custoExtraHTML);
+    const container = target === "ML" ? 
+        document.getElementById("custosExtrasContainerML") : 
+        document.getElementById("custosExtrasContainer");
+    
+    container.appendChild(custoExtraWrapper);
 
-    // Adicionar event listeners para o novo campo
-    const novoItem = document.getElementById(custoExtraId);
-    const valueInput = novoItem.querySelector('.custo-extra-value');
+    // Adicionar listeners para o novo campo
+    const inputElement = custoExtraWrapper.querySelector(".custo-extra-value");
+    const typeSelector = custoExtraWrapper.querySelector(".custo-extra-type-selector");
+    const removeButton = custoExtraWrapper.querySelector(".remove-custo-extra-btn");
 
-    valueInput.addEventListener('input', function() {
+    inputElement.addEventListener("input", function() {
         validarEntradaNumerica(this);
-        if (tipo === "ML") {
+        if (target === "ML") {
             calcularPrecoVendaML();
         } else {
             calcularPrecoVendaShopee();
         }
     });
-
-    valueInput.addEventListener('blur', function() {
+    
+    inputElement.addEventListener("blur", function() {
         formatarCampo(this);
-        if (tipo === "ML") {
+        if (target === "ML") {
+            calcularPrecoVendaML();
+        } else {
+            calcularPrecoVendaShopee();
+        }
+    });
+    
+    typeSelector.addEventListener("change", function() {
+        if (target === "ML") {
             calcularPrecoVendaML();
         } else {
             calcularPrecoVendaShopee();
         }
     });
 
-    const typeSelector = novoItem.querySelector('.custo-extra-type-selector');
-    typeSelector.addEventListener('change', function() {
-        if (tipo === "ML") {
+    removeButton.addEventListener("click", function() {
+        custoExtraWrapper.remove();
+        if (target === "ML") {
             calcularPrecoVendaML();
         } else {
             calcularPrecoVendaShopee();
         }
     });
-}
-
-function removerCustoExtra(custoExtraId, tipo) {
-    const elemento = document.getElementById(custoExtraId);
-    if (elemento) {
-        elemento.remove();
-        if (tipo === "ML") {
-            calcularPrecoVendaML();
-        } else {
-            calcularPrecoVendaShopee();
-        }
-    }
 }
