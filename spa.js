@@ -1330,7 +1330,7 @@ function getPlanosContent() {
                                 <li><i class="fas fa-check"></i> Suporte prioritário</li>
                             </ul>
                         </div>
-                        <button class="plan-btn-page primary" onclick="selectPlanPage('mensal', 27.90)">Escolher Mensal</button>
+                        <button class="plan-btn-page primary"onclick="selectPlanPage(\'monthly\')"Escolher Mensal</button>
                     </div>
 
                     <div class="plan-card-page">
@@ -1350,7 +1350,7 @@ function getPlanosContent() {
                                 <li><i class="fas fa-check"></i> Suporte prioritário</li>
                             </ul>
                         </div>
-                        <button class="plan-btn-page primary" onclick="selectPlanPage('trimestral', 72.00)">Escolher Trimestral</button>
+                        <button class="plan-btn-page primaryonclick="selectPlanPage(\'quarterly\')">Escolher Trimestral</button>
                     </div>
 
                     <div class="plan-card-page best-value">
@@ -1372,7 +1372,7 @@ function getPlanosContent() {
                                 <li><i class="fas fa-star" style="color: #ffd700;"></i> Acesso antecipado a novas funcionalidades</li>
                             </ul>
                         </div>
-                        <button class="plan-btn-page primary" onclick="selectPlanPage('anual', 229.00)">Escolher Anual</button>
+                        <button class="plan-btn-page primary" onclick="selectPlanPage(\'yearly\')"scolher Anual</button>
                     </div>
                 </div>
 
@@ -1473,4 +1473,3 @@ function selectPlanPage(planType, price) {
         alert(`Você selecionou o plano ${planType.toUpperCase()}!\n\nPreço: R$ ${price.toFixed(2)}\n\nRedirecionando para o pagamento...\n\nEm breve você terá acesso a:\n• Todas as ferramentas liberadas\n• Precificação ilimitada\n• Suporte prioritário`);
     }
 }
-
