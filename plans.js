@@ -1,7 +1,7 @@
 // plans.js - Gerenciamento de planos e integração com Mercado Pago
 
 // Configuração do Mercado Pago
-const MP_PUBLIC_KEY = 'APP_USR-92baae64-2c52-487a-8689-70b62c648cd7';
+const MP_PUBLIC_KEY = 'APP_USR-851d3932-1b61-4a60-9b44-257d18cba073';
 
 // URL base para as Edge Functions do Supabase
 const SUPABASE_FUNCTIONS_BASE_URL = 'https://waixxytscfwwumzowejg.supabase.co/functions/v1';
