@@ -3,6 +3,9 @@
 // Configuração do Mercado Pago
 const MP_PUBLIC_KEY = 'TEST-833a4bd1-f5ea-49a8-befb-c2ba32951946';
 
+// URL base para as Edge Functions do Supabase
+const SUPABASE_FUNCTIONS_BASE_URL = 'https://waixxytscfwwumzowejg.supabase.co/functions/v1';
+
 // Inicializar Mercado Pago
 const mp = new MercadoPago(MP_PUBLIC_KEY, {
     locale: 'pt-BR'
@@ -65,7 +68,7 @@ async function createPaymentPreference(planId) {
     }
 
     try {
-        const response = await fetch('/api/create-preference', {
+        const response = await fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/create-preference`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -108,7 +111,7 @@ async function processCardPayment(planId, cardData) {
         });
 
         // Processar pagamento
-        const response = await fetch('/api/process-payment', {
+        const response = await fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/process-payment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -143,7 +146,7 @@ async function processPixPayment(planId, email) {
     const plan = PLANS[planId];
     
     try {
-        const response = await fetch('/api/process-pix-payment', {
+        const response = await fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/process-pix-payment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -449,7 +452,13 @@ function copyPixCode() {
 async function startPaymentStatusCheck(paymentId) {
     const checkInterval = setInterval(async () => {
         try {
-            const response = await fetch(`/api/payment-status/${paymentId}`);
+            const response = await fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/payment-status`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ paymentId: paymentId })
+            });
             const payment = await response.json();
             
             if (payment.status === 'approved') {
@@ -472,34 +481,33 @@ async function startPaymentStatusCheck(paymentId) {
 // Função para atualizar assinatura do usuário no Supabase
 async function updateUserSubscription(planId, paymentId) {
     try {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user) {
-            throw new Error('Usuário não autenticado');
+        const user = await supabase.auth.getUser(); // Obter usuário logado
+        if (!user || !user.data || !user.data.user) {
+            console.error('Usuário não logado ou dados de usuário inválidos.');
+            return;
         }
 
-        const plan = PLANS[planId];
-        const expirationDate = new Date();
-        
-        // Calcular data de expiração baseada no plano
-        switch (plan.period) {
-            case 'month':
-                expirationDate.setMonth(expirationDate.getMonth() + 1);
-                break;
-            case 'quarter':
-                expirationDate.setMonth(expirationDate.getMonth() + 3);
-                break;
-            case 'year':
-                expirationDate.setFullYear(expirationDate.getFullYear() + 1);
-                break;
+        const userId = user.data.user.id;
+        const userEmail = user.data.user.email;
+
+        // Determinar data de expiração baseada no plano
+        let expirationDate = new Date();
+        if (planId === 'monthly') {
+            expirationDate.setMonth(expirationDate.getMonth() + 1);
+        } else if (planId === 'quarterly') {
+            expirationDate.setMonth(expirationDate.getMonth() + 3);
+        } else if (planId === 'yearly') {
+            expirationDate.setFullYear(expirationDate.getFullYear() + 1);
         }
 
-        // Atualizar dados do usuário no Supabase
-        const { error } = await supabaseClient
+        // Inserir ou atualizar a assinatura no banco de dados
+        const { data, error } = await supabase
             .from('user_subscriptions')
             .upsert({
-                user_id: user.id,
+                user_id: userId,
+                user_email: userEmail,
                 plan_id: planId,
-                plan_name: plan.name,
+                plan_name: planId, // Pode ser ajustado para um nome mais amigável
                 payment_id: paymentId,
                 status: 'active',
                 expires_at: expirationDate.toISOString(),
