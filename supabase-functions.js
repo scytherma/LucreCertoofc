@@ -1,7 +1,7 @@
 // supabase-functions.js - Funções para integração com Mercado Pago via Supabase Edge Functions
 
 // Configuração do Mercado Pago
-const MP_ACCESS_TOKEN = 'TEST-6442150651828861-082422-6bdc9274c0ba1313860b5267b82f13e0-1057395835';
+const MP_ACCESS_TOKEN = 'APP_USR-6442150651828861-082422-a0941c4b8afaa6a4a646f9ce792e22ce-1057395835';
 const MP_BASE_URL = 'https://api.mercadopago.com';
 
 // Função para criar preferência de pagamento
