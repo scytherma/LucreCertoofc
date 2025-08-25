@@ -1,7 +1,7 @@
 // plans.js - Gerenciamento de planos e integração com Mercado Pago
 
 // Configuração do Mercado Pago
-const MP_PUBLIC_KEY = 'TEST-833a4bd1-f5ea-49a8-befb-c2ba32951946';
+const MP_PUBLIC_KEY = 'APP_USR-92baae64-2c52-487a-8689-70b62c648cd7';
 
 // URL base para as Edge Functions do Supabase
 const SUPABASE_FUNCTIONS_BASE_URL = 'https://waixxytscfwwumzowejg.supabase.co/functions/v1';
@@ -16,7 +16,7 @@ const PLANS = {
     monthly: {
         id: 'monthly',
         name: 'Mensal',
-        price: 29.90,
+        price: 27.90,
         period: 'month',
         description: 'Acesso completo por 1 mês',
         features: [
@@ -29,7 +29,7 @@ const PLANS = {
     quarterly: {
         id: 'quarterly',
         name: 'Trimestral',
-        price: 79.90,
+        price: 72.00,
         period: 'quarter',
         description: 'Acesso completo por 3 meses',
         features: [
@@ -44,7 +44,7 @@ const PLANS = {
     yearly: {
         id: 'yearly',
         name: 'Anual',
-        price: 299.90,
+        price: 229.00,
         period: 'year',
         description: 'Acesso completo por 12 meses',
         features: [
@@ -466,79 +466,83 @@ async function startPaymentStatusCheck(paymentId) {
                 showPaymentSuccess(payment);
                 // Atualizar status do usuário no Supabase
                 await updateUserSubscription(payment.metadata.plan_id, payment.id);
+            } else if (payment.status === 'rejected' || payment.status === 'cancelled') {
+                clearInterval(checkInterval);
+                showPaymentError(`Pagamento ${payment.status}.`);
             }
         } catch (error) {
             console.error('Erro ao verificar status do pagamento:', error);
+            clearInterval(checkInterval);
+            showPaymentError('Erro ao verificar status do pagamento.');
         }
-    }, 3000); // Verificar a cada 3 segundos
-    
-    // Parar verificação após 10 minutos
-    setTimeout(() => {
-        clearInterval(checkInterval);
-    }, 600000);
+    }, 5000); // Verifica a cada 5 segundos
 }
 
-// Função para atualizar assinatura do usuário no Supabase
+// Função para atualizar a assinatura do usuário no Supabase
 async function updateUserSubscription(planId, paymentId) {
     try {
-        const user = await supabase.auth.getUser(); // Obter usuário logado
-        if (!user || !user.data || !user.data.user) {
-            console.error('Usuário não logado ou dados de usuário inválidos.');
-            return;
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            throw new Error('Usuário não autenticado.');
         }
 
-        const userId = user.data.user.id;
-        const userEmail = user.data.user.email;
-
-        // Determinar data de expiração baseada no plano
-        let expirationDate = new Date();
-        if (planId === 'monthly') {
-            expirationDate.setMonth(expirationDate.getMonth() + 1);
-        } else if (planId === 'quarterly') {
-            expirationDate.setMonth(expirationDate.getMonth() + 3);
-        } else if (planId === 'yearly') {
-            expirationDate.setFullYear(expirationDate.getFullYear() + 1);
-        }
-
-        // Inserir ou atualizar a assinatura no banco de dados
         const { data, error } = await supabase
             .from('user_subscriptions')
             .upsert({
-                user_id: userId,
-                user_email: userEmail,
+                user_id: user.id,
+                user_email: user.email,
                 plan_id: planId,
-                plan_name: planId, // Pode ser ajustado para um nome mais amigável
                 payment_id: paymentId,
                 status: 'active',
-                expires_at: expirationDate.toISOString(),
-                created_at: new Date().toISOString()
-            });
+                expires_at: getExpirationDate(planId)
+            }, { onConflict: 'user_id, plan_id' });
 
         if (error) {
-            throw error;
+            throw new Error(error.message);
         }
-
-        console.log('Assinatura atualizada com sucesso');
+        console.log('Assinatura do usuário atualizada no Supabase:', data);
     } catch (error) {
-        console.error('Erro ao atualizar assinatura:', error);
+        console.error('Erro ao atualizar assinatura do usuário no Supabase:', error);
     }
 }
 
-// Funções auxiliares para UI
-function switchPaymentMethod(method) {
-    // Remover classe active de todas as tabs
-    document.querySelectorAll('.payment-tab').forEach(tab => {
-        tab.classList.remove('active');
-    });
-    
-    // Esconder todos os formulários
-    document.querySelectorAll('.payment-form').forEach(form => {
-        form.classList.remove('active');
-    });
-    
-    // Ativar tab e formulário selecionados
-    document.querySelector(`[onclick="switchPaymentMethod('${method}')"]`).classList.add('active');
-    document.getElementById(`${method}-payment`).classList.add('active');
+// Função auxiliar para calcular a data de expiração
+function getExpirationDate(planId) {
+    const now = new Date();
+    switch (planId) {
+        case 'monthly':
+            now.setMonth(now.getMonth() + 1);
+            break;
+        case 'quarterly':
+            now.setMonth(now.getMonth() + 3);
+            break;
+        case 'yearly':
+            now.setFullYear(now.getFullYear() + 1);
+            break;
+    }
+    return now.toISOString();
+}
+
+// Funções de UI para feedback ao usuário
+function showPaymentLoading() {
+    // Implementar lógica para mostrar um spinner ou mensagem de carregamento
+    console.log('Mostrando carregamento...');
+}
+
+function hidePaymentLoading() {
+    // Implementar lógica para esconder o spinner ou mensagem de carregamento
+    console.log('Escondendo carregamento...');
+}
+
+function showPaymentSuccess(payment) {
+    alert(`Pagamento aprovado! ID: ${payment.id}`);
+    closePaymentModal();
+    // Redirecionar ou atualizar UI para refletir o novo plano
+}
+
+function showPaymentError(message) {
+    alert(`Erro no pagamento: ${message}`);
+    hidePaymentLoading();
 }
 
 function closePaymentModal() {
@@ -548,46 +552,26 @@ function closePaymentModal() {
     }
 }
 
-function showPaymentLoading() {
-    // Implementar loading spinner
-    console.log('Processando pagamento...');
-}
+function switchPaymentMethod(method) {
+    const cardTab = document.getElementById('card-payment');
+    const pixTab = document.getElementById('pix-payment');
+    const cardButton = document.querySelector('.payment-tab[onclick="switchPaymentMethod(\'card\')"]');
+    const pixButton = document.querySelector('.payment-tab[onclick="switchPaymentMethod(\'pix\')"]');
 
-function hidePaymentLoading() {
-    // Remover loading spinner
-    console.log('Loading removido');
-}
-
-function showPaymentSuccess(payment) {
-    alert('Pagamento aprovado com sucesso! Sua assinatura foi ativada.');
-    closePaymentModal();
-    // Recarregar página para atualizar status
-    window.location.reload();
-}
-
-function showPaymentError(message) {
-    alert('Erro: ' + message);
-}
-
-// Função para alternar FAQ dos planos (mantida do código original)
-function toggleFaqPlans(element) {
-    const faqItem = element.parentElement;
-    const answer = faqItem.querySelector('.faq-answer-plans');
-    const icon = element.querySelector('i');
-    
-    faqItem.classList.toggle('active');
-    
-    if (faqItem.classList.contains('active')) {
-        answer.style.display = 'block';
-        icon.style.transform = 'rotate(180deg)';
-    } else {
-        answer.style.display = 'none';
-        icon.style.transform = 'rotate(0deg)';
+    if (method === 'card') {
+        cardTab.classList.add('active');
+        pixTab.classList.remove('active');
+        cardButton.classList.add('active');
+        pixButton.classList.remove('active');
+    } else if (method === 'pix') {
+        cardTab.classList.remove('active');
+        pixTab.classList.add('active');
+        cardButton.classList.remove('active');
+        pixButton.classList.add('active');
     }
 }
 
-// Função para selecionar um plano na página (atualizada)
-function selectPlanPage(planType, price) {
-    selectPlan(planType);
-}
-
+// Expor a função selectPlanPage globalmente para ser acessível do HTML/SPA
+window.selectPlanPage = function(planId) {
+    selectPlan(planId);
+};
