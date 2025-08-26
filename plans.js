@@ -97,7 +97,7 @@ async function createPaymentPreference(planId) {
 // Função para processar pagamento com cartão
 async function processCardPayment(planId, cardData) {
     const plan = PLANS[planId];
-    
+
     try {
         // Criar token do cartão
         const cardToken = await mp.createCardToken({
@@ -144,12 +144,14 @@ async function processCardPayment(planId, cardData) {
 // Função para processar pagamento via PIX
 async function processPixPayment(planId, email) {
     const plan = PLANS[planId];
-    
+    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await supabaseClient.auth.getSession();
     try {
         const response = await fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/process-pix-payment`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session.access_token}`
             },
             body: JSON.stringify({
                 planId: planId,
@@ -284,7 +286,7 @@ function showPaymentModal(plan) {
     `;
 
     document.body.appendChild(modal);
-    
+
     // Adicionar event listeners
     setupPaymentFormListeners(plan);
 }
@@ -369,7 +371,7 @@ async function handleCardPayment(plan) {
 
         // Processar pagamento
         const result = await processCardPayment(plan.id, cardData);
-        
+
         if (result.status === 'approved') {
             showPaymentSuccess(result);
             // Atualizar status do usuário no Supabase
@@ -395,7 +397,7 @@ async function handlePixPayment(plan) {
 
         // Gerar PIX
         const result = await processPixPayment(plan.id, email);
-        
+
         if (result.status === 'pending') {
             showPixQRCode(result);
         } else {
@@ -413,16 +415,16 @@ async function handlePixPayment(plan) {
 function showPixQRCode(paymentResult) {
     const pixResult = document.getElementById('pix-result');
     const pixForm = document.getElementById('pix-form');
-    
+
     if (pixResult && pixForm) {
         // Esconder formulário e mostrar resultado
         pixForm.style.display = 'none';
         pixResult.style.display = 'block';
-        
+
         // Definir QR Code e código PIX
         document.getElementById('pix-qr-image').src = paymentResult.point_of_interaction.transaction_data.qr_code_base64;
         document.getElementById('pix-code-text').value = paymentResult.point_of_interaction.transaction_data.qr_code;
-        
+
         // Iniciar verificação de status do pagamento
         startPaymentStatusCheck(paymentResult.id);
     }
@@ -434,13 +436,13 @@ function copyPixCode() {
     if (pixCodeText) {
         pixCodeText.select();
         document.execCommand('copy');
-        
+
         // Mostrar feedback
         const copyButton = document.querySelector('.copy-button');
         const originalText = copyButton.innerHTML;
         copyButton.innerHTML = '<i class="fas fa-check"></i> Copiado!';
         copyButton.style.backgroundColor = '#28a745';
-        
+
         setTimeout(() => {
             copyButton.innerHTML = originalText;
             copyButton.style.backgroundColor = '';
@@ -460,7 +462,7 @@ async function startPaymentStatusCheck(paymentId) {
                 body: JSON.stringify({ paymentId: paymentId })
             });
             const payment = await response.json();
-            
+
             if (payment.status === 'approved') {
                 clearInterval(checkInterval);
                 showPaymentSuccess(payment);
