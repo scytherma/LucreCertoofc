@@ -144,13 +144,12 @@ async function processCardPayment(planId, cardData) {
 // Função para processar pagamento via PIX
 async function processPixPayment(planId, email) {
     const plan = PLANS[planId];
-    const { data: { session } } = await supabaseClient.auth.getSession();
+    
     try {
         const response = await fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/process-pix-payment`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${session.access_token}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 planId: planId,
@@ -268,7 +267,11 @@ function showPaymentModal(plan) {
                     
                     <div id="pix-result" class="pix-result" style="display: none;">
                         <div class="pix-qr-code">
-                            <img id="pix-qr-image" src="" alt="QR Code PIX">
+                            <img id="pix-qr-image" src="" alt="QR Code PIX" style="display: none;">
+                            <div id="pix-qr-placeholder" style="display: none; text-align: center; padding: 20px; border: 2px dashed #ccc; border-radius: 8px;">
+                                <i class="fas fa-qrcode" style="font-size: 48px; color: #ccc; margin-bottom: 10px;"></i>
+                                <p style="color: #666;">QR Code não disponível</p>
+                            </div>
                         </div>
                         <div class="pix-code">
                             <label>Código PIX Copia e Cola:</label>
@@ -410,7 +413,7 @@ async function handlePixPayment(plan) {
     }
 }
 
-// Função para mostrar QR Code do PIX
+// Função para mostrar QR Code do PIX - VERSÃO CORRIGIDA
 function showPixQRCode(paymentResult) {
     const pixResult = document.getElementById('pix-result');
     const pixForm = document.getElementById('pix-form');
@@ -420,12 +423,56 @@ function showPixQRCode(paymentResult) {
         pixForm.style.display = 'none';
         pixResult.style.display = 'block';
         
-        // Definir QR Code e código PIX
-        document.getElementById('pix-qr-image').src = paymentResult.point_of_interaction.transaction_data.qr_code_base64;
-        document.getElementById('pix-code-text').value = paymentResult.point_of_interaction.transaction_data.qr_code;
+        // Definir código PIX (sempre funciona)
+        const pixCodeElement = document.getElementById('pix-code-text');
+        if (pixCodeElement && paymentResult.point_of_interaction && paymentResult.point_of_interaction.transaction_data) {
+            pixCodeElement.value = paymentResult.point_of_interaction.transaction_data.qr_code;
+        }
+        
+        // Tentar definir QR Code com tratamento de erro
+        const pixQrImage = document.getElementById('pix-qr-image');
+        const pixQrPlaceholder = document.getElementById('pix-qr-placeholder');
+        
+        if (pixQrImage && pixQrPlaceholder) {
+            // Verificar se existe qr_code_base64 e se é válido
+            if (paymentResult.point_of_interaction && 
+                paymentResult.point_of_interaction.transaction_data && 
+                paymentResult.point_of_interaction.transaction_data.qr_code_base64) {
+                
+                let qrCodeBase64 = paymentResult.point_of_interaction.transaction_data.qr_code_base64;
+                
+                // Verificar se já tem o prefixo data:image
+                if (!qrCodeBase64.startsWith('data:image/')) {
+                    qrCodeBase64 = 'data:image/png;base64,' + qrCodeBase64;
+                }
+                
+                // Tentar carregar a imagem
+                const testImage = new Image();
+                testImage.onload = function() {
+                    // Imagem carregou com sucesso
+                    pixQrImage.src = qrCodeBase64;
+                    pixQrImage.style.display = 'block';
+                    pixQrPlaceholder.style.display = 'none';
+                };
+                testImage.onerror = function() {
+                    // Erro ao carregar a imagem, mostrar placeholder
+                    console.warn('Erro ao carregar QR Code base64, mostrando placeholder');
+                    pixQrImage.style.display = 'none';
+                    pixQrPlaceholder.style.display = 'block';
+                };
+                testImage.src = qrCodeBase64;
+            } else {
+                // Não há qr_code_base64, mostrar placeholder
+                console.warn('QR Code base64 não encontrado na resposta do Mercado Pago');
+                pixQrImage.style.display = 'none';
+                pixQrPlaceholder.style.display = 'block';
+            }
+        }
         
         // Iniciar verificação de status do pagamento
-        startPaymentStatusCheck(paymentResult.id);
+        if (paymentResult.id) {
+            startPaymentStatusCheck(paymentResult.id);
+        }
     }
 }
 
@@ -479,71 +526,46 @@ async function startPaymentStatusCheck(paymentId) {
     }, 5000); // Verifica a cada 5 segundos
 }
 
-// Função para atualizar a assinatura do usuário no Supabase
+// Função para atualizar assinatura do usuário
 async function updateUserSubscription(planId, paymentId) {
     try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) {
-            throw new Error('Usuário não autenticado.');
-        }
+        const response = await fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/update-subscription`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                planId: planId,
+                paymentId: paymentId,
+                status: 'active'
+            })
+        });
 
-        const { data, error } = await supabase
-            .from('user_subscriptions')
-            .upsert({
-                user_id: user.id,
-                user_email: user.email,
-                plan_id: planId,
-                payment_id: paymentId,
-                status: 'active',
-                expires_at: getExpirationDate(planId)
-            }, { onConflict: 'user_id, plan_id' });
-
-        if (error) {
-            throw new Error(error.message);
+        if (!response.ok) {
+            console.error('Erro ao atualizar assinatura do usuário');
         }
-        console.log('Assinatura do usuário atualizada no Supabase:', data);
     } catch (error) {
-        console.error('Erro ao atualizar assinatura do usuário no Supabase:', error);
+        console.error('Erro ao atualizar assinatura:', error);
     }
 }
 
-// Função auxiliar para calcular a data de expiração
-function getExpirationDate(planId) {
-    const now = new Date();
-    switch (planId) {
-        case 'monthly':
-            now.setMonth(now.getMonth() + 1);
-            break;
-        case 'quarterly':
-            now.setMonth(now.getMonth() + 3);
-            break;
-        case 'yearly':
-            now.setFullYear(now.getFullYear() + 1);
-            break;
+// Funções auxiliares para UI
+function switchPaymentMethod(method) {
+    const cardPayment = document.getElementById('card-payment');
+    const pixPayment = document.getElementById('pix-payment');
+    const tabs = document.querySelectorAll('.payment-tab');
+
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    if (method === 'card') {
+        cardPayment.classList.add('active');
+        pixPayment.classList.remove('active');
+        document.querySelector('[onclick="switchPaymentMethod(\'card\')"]').classList.add('active');
+    } else if (method === 'pix') {
+        pixPayment.classList.add('active');
+        cardPayment.classList.remove('active');
+        document.querySelector('[onclick="switchPaymentMethod(\'pix\')"]').classList.add('active');
     }
-    return now.toISOString();
-}
-
-// Funções de UI para feedback ao usuário
-function showPaymentLoading() {
-    // Implementar lógica para mostrar um spinner ou mensagem de carregamento
-    console.log('Mostrando carregamento...');
-}
-
-function hidePaymentLoading() {
-    // Implementar lógica para esconder o spinner ou mensagem de carregamento
-    console.log('Escondendo carregamento...');
-}
-
-function showPaymentSuccess(payment) {
-    alert(`Pagamento aprovado! ID: ${payment.id}`);
-    closePaymentModal();
-    // Redirecionar ou atualizar UI para refletir o novo plano
-}
-
-function showPaymentError(message) {
-    alert(`Erro no pagamento: ${message}`);
-    hidePaymentLoading();
 }
 
 function closePaymentModal() {
@@ -553,26 +575,21 @@ function closePaymentModal() {
     }
 }
 
-function switchPaymentMethod(method) {
-    const cardTab = document.getElementById('card-payment');
-    const pixTab = document.getElementById('pix-payment');
-    const cardButton = document.querySelector('.payment-tab[onclick="switchPaymentMethod(\'card\')"]');
-    const pixButton = document.querySelector('.payment-tab[onclick="switchPaymentMethod(\'pix\')"]');
-
-    if (method === 'card') {
-        cardTab.classList.add('active');
-        pixTab.classList.remove('active');
-        cardButton.classList.add('active');
-        pixButton.classList.remove('active');
-    } else if (method === 'pix') {
-        cardTab.classList.remove('active');
-        pixTab.classList.add('active');
-        cardButton.classList.remove('active');
-        pixButton.classList.add('active');
-    }
+function showPaymentLoading() {
+    // Implementar loading state
+    console.log('Processando pagamento...');
 }
 
-// Expor a função selectPlanPage globalmente para ser acessível do HTML/SPA
-window.selectPlanPage = function(planId) {
-    selectPlan(planId);
-};
+function hidePaymentLoading() {
+    // Remover loading state
+    console.log('Pagamento processado.');
+}
+
+function showPaymentSuccess(result) {
+    alert('Pagamento aprovado com sucesso!');
+    closePaymentModal();
+}
+
+function showPaymentError(message) {
+    alert('Erro: ' + message);
+}
