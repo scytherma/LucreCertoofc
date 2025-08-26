@@ -1350,7 +1350,7 @@ function getPlanosContent() {
                                 <li><i class="fas fa-check"></i> Suporte prioritário</li>
                             </ul>
                         </div>
-                        <button class="plan-btn-page primaryonclick="selectPlanPage(\'quarterly\')">Escolher Trimestral</button>
+                        <button class="plan-btn-page primary"onclick="selectPlanPage(\'quarterly\')">Escolher Trimestral</button>
                     </div>
 
                     <div class="plan-card-page best-value">
