@@ -1330,7 +1330,7 @@ function getPlanosContent() {
                                 <li><i class="fas fa-check"></i> Suporte prioritário</li>
                             </ul>
                         </div>
-                        <button class="plan-btn-page primary"onclick="selectPlanPage(\'monthly\')">Escolher Mensal</button>
+                        <button class="plan-btn-page primary"onclick="selectPlan(\'monthly\')">Escolher Mensal</button>
                     </div>
 
                     <div class="plan-card-page">
@@ -1350,7 +1350,7 @@ function getPlanosContent() {
                                 <li><i class="fas fa-check"></i> Suporte prioritário</li>
                             </ul>
                         </div>
-                        <button class="plan-btn-page primary"onclick="selectPlanPage(\'quarterly\')">Escolher Trimestral</button>
+                        <button class="plan-btn-page primary"onclick="selectPlan(\'quarterly\')">Escolher Trimestral</button>
                     </div>
 
                     <div class="plan-card-page best-value">
@@ -1372,7 +1372,7 @@ function getPlanosContent() {
                                 <li><i class="fas fa-star" style="color: #ffd700;"></i> Acesso antecipado a novas funcionalidades</li>
                             </ul>
                         </div>
-                        <button class="plan-btn-page primary" onclick="selectPlanPage(\'yearly\')">Escolher Anual</button>
+                        <button class="plan-btn-page primary" onclick="selectPlan(\'yearly\')">Escolher Anual</button>
                     </div>
                 </div>
 
