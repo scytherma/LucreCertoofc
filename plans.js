@@ -144,7 +144,7 @@ async function processCardPayment(planId, cardData) {
 // Função para processar pagamento via PIX
 async function processPixPayment(planId, email) {
     const plan = PLANS[planId];
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await supabaseClient.auth.getSession();
     try {
         const response = await fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/process-pix-payment`, {
             method: 'POST',
