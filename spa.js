@@ -1185,7 +1185,7 @@ function atualizarCorMargem(slider, valor) {
 
     // Aplicar o gradiente com a cor determinada
     slider.style.background = `linear-gradient(to right, ${cor} 0%, ${cor} ${percentage}%, #ddd ${percentage}%, #ddd 100%)`;
-    
+
     // Atualizar também as variáveis CSS customizadas para o thumb
     slider.style.setProperty('--track-color', cor);
     slider.style.setProperty('--track-fill', `${percentage}%`);
@@ -1238,7 +1238,7 @@ function adicionarCustoExtra(target) {
     const container = target === "ML" ? 
         document.getElementById("custosExtrasContainerML") : 
         document.getElementById("custosExtrasContainer");
-    
+
     container.appendChild(custoExtraWrapper);
 
     // Adicionar listeners para o novo campo
@@ -1254,7 +1254,7 @@ function adicionarCustoExtra(target) {
             calcularPrecoVendaShopee();
         }
     });
-    
+
     inputElement.addEventListener("blur", function() {
         formatarCampo(this);
         if (target === "ML") {
@@ -1263,7 +1263,7 @@ function adicionarCustoExtra(target) {
             calcularPrecoVendaShopee();
         }
     });
-    
+
     typeSelector.addEventListener("change", function() {
         if (target === "ML") {
             calcularPrecoVendaML();
@@ -1330,6 +1330,7 @@ function getPlanosContent() {
                                 <li><i class="fas fa-check"></i> Suporte prioritário</li>
                             </ul>
                         </div>
+                        <button class="plan-btn-page primary"onclick="selectPlanPage(\'monthly\')"Escolher Mensal</button>
                         <button class="plan-btn-page primary"onclick="selectPlanPage(\'monthly\')">Escolher Mensal</button>
                     </div>
 
@@ -1372,6 +1373,7 @@ function getPlanosContent() {
                                 <li><i class="fas fa-star" style="color: #ffd700;"></i> Acesso antecipado a novas funcionalidades</li>
                             </ul>
                         </div>
+                        <button class="plan-btn-page primary" onclick="selectPlanPage(\'yearly\')"scolher Anual</button>
                         <button class="plan-btn-page primary" onclick="selectPlanPage(\'yearly\')">Escolher Anual</button>
                     </div>
                 </div>
@@ -1444,9 +1446,9 @@ function toggleFaqPlans(element) {
     const faqItem = element.parentElement;
     const answer = faqItem.querySelector('.faq-answer-plans');
     const icon = element.querySelector('i');
-    
+
     faqItem.classList.toggle('active');
-    
+
     if (faqItem.classList.contains('active')) {
         answer.style.display = 'block';
         icon.style.transform = 'rotate(180deg)';
@@ -1464,7 +1466,7 @@ function selectPlanPage(planType, price) {
         'trimestral': 'quarterly', 
         'anual': 'yearly'
     };
-    
+
     const planId = planMapping[planType];
     if (planId && typeof selectPlan === 'function') {
         selectPlan(planId);
