@@ -302,7 +302,7 @@ function addSubscriptionModalStyles() {
         }
         
         .subscription-header, .follow-up-header {
-            background: #3483FA;
+            background: rgb(255, 60, 0);
             color: white;
             padding: 20px;
             border-radius: 12px 12px 0 0;
@@ -344,7 +344,7 @@ function addSubscriptionModalStyles() {
         .plan-price {
             font-size: 2rem;
             font-weight: bold;
-            color: #3483FA;
+            color: rgb(255, 60, 0);
             margin: 10px 0;
         }
         
@@ -402,14 +402,14 @@ function addSubscriptionModalStyles() {
         }
         
         .info-item i {
-            color: #3483FA;
+            color: rgb(255, 60, 0);
             margin-right: 10px;
             margin-top: 2px;
         }
         
         .info-item p {
             margin: 0;
-            color: #666;
+            color: #333;
             font-size: 0.9rem;
         }
         
