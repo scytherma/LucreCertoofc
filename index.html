@@ -13,8 +13,9 @@
     <script src="./supabase-config.js"></script>
     <script src="./auth-supabase.js"></script>
     <script src="./subscription_control.js"></script>
-    <script src="./spa.js"></script>
     <script src="./user-dropdown.js"></script>
+    <script src="./spa.js"></script>
+    <!-- Carregando plans.js por último para garantir que todas as dependências estejam disponíveis -->
     <script src="./plans.js"></script>
 </head>
 <body>
@@ -153,3 +154,43 @@
     </div>
 </body>
 </html>
+
+    <!-- Script de verificação e fallback para plans.js -->
+    <script>
+        // Verificar se plans.js foi carregado corretamente
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                if (typeof window.selectPlan !== 'function') {
+                    console.warn('plans.js não foi carregado corretamente, tentando carregar novamente...');
+                    
+                    // Tentar carregar plans.js novamente
+                    fetch('./plans.js')
+                        .then(response => response.text())
+                        .then(scriptContent => {
+                            // Executar o script
+                            eval(scriptContent);
+                            console.log('plans.js carregado com sucesso via fallback');
+                            
+                            // Reconfigurar os event listeners dos botões de plano
+                            const planButtons = document.querySelectorAll(".plan-btn-page");
+                            planButtons.forEach(button => {
+                                const planId = button.getAttribute("data-plan");
+                                if (planId && typeof window.selectPlan === 'function') {
+                                    // Remover listeners antigos se existirem
+                                    button.replaceWith(button.cloneNode(true));
+                                    const newButton = document.querySelector(`[data-plan="${planId}"]`);
+                                    newButton.addEventListener('click', () => {
+                                        window.selectPlan(planId);
+                                    });
+                                }
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Erro ao carregar plans.js via fallback:', error);
+                        });
+                } else {
+                    console.log('plans.js carregado corretamente');
+                }
+            }, 1000); // Aguardar 1 segundo para garantir que todos os scripts foram carregados
+        });
+    </script>
