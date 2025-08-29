@@ -1228,7 +1228,7 @@ body.dark-theme .faq-item-plans {
 .plan-summary {
     padding: 25px 30px;
     text-align: center;
-    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    background: linear-gradient(135deg, rgb(255 255 255) 0%, rgb(255 255 255) 100%);
     color: white;
 }
 
