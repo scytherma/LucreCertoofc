@@ -870,7 +870,7 @@ body.dark-theme .plan-features li {
 .plan-price {
     font-size: 3rem;
     font-weight: 800;
-    color: #ff6b35;
+    color: rgb(255, 60, 0);
     margin-bottom: 5px;
 }
 
