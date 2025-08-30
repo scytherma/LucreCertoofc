@@ -77,7 +77,7 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     display: flex; /* Adicionado: Usar flexbox */
     flex-direction: column; /* Adicionado: Organizar itens em coluna */
-    max-height: 80vh; /* Altura máxima para a seção de resultados */
+    max-height: 1000vh; /* Altura máxima para a seção de resultados */
     overflow-y: auto; /* Rolagem interna se o conteúdo exceder a altura máxima */
 }
 
