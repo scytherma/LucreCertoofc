@@ -1228,7 +1228,7 @@ body.dark-theme select option {
 /* Sidebar */
 .sidebar {
     width: 60px;
-    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    background: linear-gradient(135deg, rgb(255, 60, 0) 0%, #f7931e 100%);
     color: white;
     padding: 1rem 0.5rem;
     display: flex;
