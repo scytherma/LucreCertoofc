@@ -64,7 +64,7 @@ body {
 .auth-header h2 {
     font-size: 24px;
     font-weight: 600;
-    color: #4c1d95;
+    color: rgb(0 0 0);
     margin-bottom: 0;
 }
 
@@ -125,7 +125,7 @@ body {
     display: block;
     font-size: 14px;
     font-weight: 600;
-    color: #4c1d95;
+    color: rgb(255, 60, 0);
     margin-bottom: 8px;
 }
 
