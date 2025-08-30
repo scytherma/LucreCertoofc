@@ -75,6 +75,10 @@
     border-radius: 12px;
     padding: 30px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: flex; /* Adicionado: Usar flexbox */
+    flex-direction: column; /* Adicionado: Organizar itens em coluna */
+    max-height: 80vh; /* Altura máxima para a seção de resultados */
+    overflow-y: auto; /* Rolagem interna se o conteúdo exceder a altura máxima */
 }
 
 .dre-results-section h2 {
@@ -172,17 +176,11 @@
     font-size: 12px;
     font-weight: 500;
     margin-bottom: 8px;
-    opacity: 0.9;
-.dre-table {
-    background: #f8f9fa;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 15px; /* Reduzido de 30px para 15px */
 }
 
-/* Indicadores */
-.dre-indicators {
-    margin-bottom: 15px; /* Reduzido de 30px para 15px */
+.indicator-value {
+    font-size: 24px;
+    font-weight: 700;
 }
 
 /* Gráficos */
@@ -294,4 +292,3 @@ body.dark-theme .dre-row.subtotal {
 body.dark-theme .dre-row.final-result {
     background: rgba(255, 107, 53, 0.3);
 }
-
