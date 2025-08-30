@@ -194,16 +194,16 @@
 .charts-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 15px;
     align-items: start;
 }
 
 .chart-wrapper {
     background: #f8f9fa;
-    padding: 15px;
+    padding: 5px;
     border-radius: 8px;
     text-align: center;
-    height: 200px; /* Altura fixa para o wrapper do gráfico */
+    height: 300px; /* Altura fixa para o wrapper do gráfico */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
