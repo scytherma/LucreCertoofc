@@ -1374,7 +1374,7 @@ body.dark-theme select option {
 }
 
 .welcome-section {
-    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    background: linear-gradient(135deg, rgb(255, 60, 0) 0%, #f7931e 100%);
     color: white;
     padding: 3rem 2rem;
     text-align: center;
