@@ -1633,3 +1633,282 @@ body.dark-theme select option {
 .sidebar:hover + .main-content {
     margin-left: 220px;
 }
+
+
+/* ===== CORREÇÕES PARA O TEMA ESCURO ===== */
+
+/* Tema escuro para o conteúdo principal */
+body.dark-theme .main-content {
+    background-color: #1a1a1a !important;
+}
+
+/* Tema escuro para a seção de boas-vindas */
+body.dark-theme .welcome-section {
+    background: linear-gradient(135deg, rgb(255, 60, 0) 0%, #f7931e 100%) !important;
+    color: white !important;
+}
+
+body.dark-theme .welcome-section h1 {
+    color: white !important;
+}
+
+body.dark-theme .welcome-section p {
+    color: white !important;
+    opacity: 0.9;
+}
+
+/* Tema escuro para a seção de atualizações */
+body.dark-theme .updates-section {
+    background-color: #2d3748 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .updates-section h2 {
+    color: #ff6b35 !important;
+}
+
+body.dark-theme .update-item {
+    border-bottom-color: #4a5568 !important;
+}
+
+body.dark-theme .update-version {
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%) !important;
+    color: white !important;
+}
+
+body.dark-theme .update-content {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .update-content ul {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .update-content li {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .update-content li::before {
+    color: #28a745 !important;
+}
+
+/* Tema escuro para a seção de funcionalidades futuras */
+body.dark-theme .future-features-section {
+    background-color: #2d3748 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .future-features-section h2 {
+    color: #ff6b35 !important;
+}
+
+body.dark-theme .feature-card {
+    background-color: #4a5568 !important;
+    color: #e2e8f0 !important;
+    border: 1px solid #4a5568 !important;
+}
+
+body.dark-theme .feature-card:hover {
+    background-color: #5a6578 !important;
+    transform: translateY(-2px);
+}
+
+body.dark-theme .feature-card i {
+    color: #ff6b35 !important;
+}
+
+body.dark-theme .feature-card h3 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .feature-card p {
+    color: #a0aec0 !important;
+}
+
+body.dark-theme .status.coming-soon {
+    background: #ffc107 !important;
+    color: #856404 !important;
+}
+
+/* Tema escuro para o container da página */
+body.dark-theme .page-container {
+    background-color: #2d3748 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Tema escuro para páginas "Em breve" */
+body.dark-theme .coming-soon-page {
+    background-color: #2d3748 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .coming-soon-content {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .coming-soon-content h1 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .coming-soon-content p {
+    color: #a0aec0 !important;
+}
+
+body.dark-theme .coming-soon-content i {
+    color: #ff6b35 !important;
+}
+
+body.dark-theme .features-preview {
+    background-color: #4a5568 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .features-preview h3 {
+    color: #ff6b35 !important;
+}
+
+body.dark-theme .features-preview li {
+    color: #e2e8f0 !important;
+}
+
+/* Tema escuro para container "Em breve" */
+body.dark-theme .coming-soon-container {
+    background-color: #2d3748 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Garantir que todos os textos tenham contraste adequado */
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme p {
+    color: #a0aec0 !important;
+}
+
+/* Tema escuro para elementos específicos que podem ter sido perdidos */
+body.dark-theme .content-container {
+    background-color: transparent !important;
+}
+
+/* Melhorar a visibilidade dos links no tema escuro */
+body.dark-theme a {
+    color: #ff6b35 !important;
+}
+
+body.dark-theme a:hover {
+    color: #e55a2b !important;
+}
+
+/* Tema escuro para elementos de lista */
+body.dark-theme ul,
+body.dark-theme ol {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme li {
+    color: #e2e8f0 !important;
+}
+
+/* Garantir que os ícones mantenham a cor correta */
+body.dark-theme .fa,
+body.dark-theme .fas,
+body.dark-theme .far,
+body.dark-theme .fab {
+    color: inherit;
+}
+
+/* Tema escuro para elementos de destaque */
+body.dark-theme .highlight {
+    background-color: #4a5568 !important;
+    color: #e2e8f0 !important;
+}
+
+/* Tema escuro para separadores */
+body.dark-theme hr {
+    border-color: #4a5568 !important;
+}
+
+/* Tema escuro para elementos de código (se houver) */
+body.dark-theme code,
+body.dark-theme pre {
+    background-color: #4a5568 !important;
+    color: #e2e8f0 !important;
+    border: 1px solid #4a5568 !important;
+}
+
+/* Tema escuro para tabelas (se houver) */
+body.dark-theme table {
+    background-color: #2d3748 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme th,
+body.dark-theme td {
+    border-color: #4a5568 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme th {
+    background-color: #4a5568 !important;
+}
+
+/* Tema escuro para elementos de formulário adicionais */
+body.dark-theme textarea {
+    background-color: #4a5568 !important;
+    color: #e2e8f0 !important;
+    border-color: #4a5568 !important;
+}
+
+body.dark-theme textarea:focus {
+    border-color: #ff6b35 !important;
+}
+
+/* Tema escuro para elementos de navegação breadcrumb (se houver) */
+body.dark-theme .breadcrumb {
+    background-color: #4a5568 !important;
+}
+
+body.dark-theme .breadcrumb-item {
+    color: #a0aec0 !important;
+}
+
+body.dark-theme .breadcrumb-item.active {
+    color: #e2e8f0 !important;
+}
+
+/* Tema escuro para alertas e notificações (se houver) */
+body.dark-theme .alert {
+    background-color: #4a5568 !important;
+    color: #e2e8f0 !important;
+    border-color: #4a5568 !important;
+}
+
+body.dark-theme .alert-success {
+    background-color: #2d5a3d !important;
+    color: #a3d9a5 !important;
+    border-color: #2d5a3d !important;
+}
+
+body.dark-theme .alert-warning {
+    background-color: #5d4e37 !important;
+    color: #f4d03f !important;
+    border-color: #5d4e37 !important;
+}
+
+body.dark-theme .alert-danger {
+    background-color: #5d2d2d !important;
+    color: #f1948a !important;
+    border-color: #5d2d2d !important;
+}
+
+body.dark-theme .alert-info {
+    background-color: #2d4a5d !important;
+    color: #85c1e9 !important;
+    border-color: #2d4a5d !important;
+}
