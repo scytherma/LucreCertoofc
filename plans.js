@@ -1,10 +1,11 @@
+
 // plans_subscriptions.js - Gerenciamento de planos com API de Assinaturas do Mercado Pago
 
 // Configuração do Mercado Pago
 const MP_PUBLIC_KEY = 'APP_USR-851d3932-1b61-4a60-9b44-257d18cba073';
 
 // URL base para as Edge Functions do Supabase
-
+const SUPABASE_FUNCTIONS_BASE_URL = 'https://waixxytscfwwumzowejg.supabase.co/functions/v1';
 
 // Configuração dos planos disponíveis com códigos de assinatura do Mercado Pago
 const SUBSCRIPTION_PLANS = {
