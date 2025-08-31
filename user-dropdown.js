@@ -63,6 +63,7 @@ function initThemeToggle() {
         if (savedTheme === 'dark') {
             document.body.classList.add('dark-theme');
             themeToggle.checked = true;
+            updateLogo(true); // Atualizar logo para tema escuro
         }
 
         // Event listener para mudança de tema
@@ -70,11 +71,30 @@ function initThemeToggle() {
             if (themeToggle.checked) {
                 document.body.classList.add('dark-theme');
                 localStorage.setItem('theme', 'dark');
+                updateLogo(true); // Trocar para logo do tema escuro
             } else {
                 document.body.classList.remove('dark-theme');
                 localStorage.setItem('theme', 'light');
+                updateLogo(false); // Trocar para logo do tema claro
             }
         });
+    }
+}
+
+// Função para atualizar a logo baseada no tema
+function updateLogo(isDarkTheme) {
+    const logoElement = document.querySelector('.logo');
+    
+    if (logoElement) {
+        if (isDarkTheme) {
+            // Logo para tema escuro (branca)
+            logoElement.src = 'https://i.ibb.co/mV2PP6bG/LOGO-LUCRE-CERTO-FOGUETE-TEMA-BRANCO.png';
+            logoElement.alt = 'Logo Lucre Certo - Tema Escuro';
+        } else {
+            // Logo para tema claro (original)
+            logoElement.src = 'https://i.postimg.cc/KYqk4xX2/LOGO-LUCRE-CERTO-FOGUETE.png';
+            logoElement.alt = 'Logo Lucre Certo - Tema Claro';
+        }
     }
 }
 
@@ -493,4 +513,3 @@ function loadUserSettings() {
     if (autoSaveEl) autoSaveEl.checked = autoSave;
     if (userNameEl) userNameEl.value = userName;
 }
-
