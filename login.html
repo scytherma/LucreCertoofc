@@ -1,207 +1,71 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head> 
-    <link rel="icon" type="image/png" href="https://i.ibb.co/tyjmnjV/FAVCON-LUCRE-CERTO-FOGUETE.png">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Precificação - Lucre Certo</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="new-pages.css">
-    <link rel="stylesheet" href="dre-styles.css">
-    <link rel="stylesheet" href="market-research.css">
-    <!-- Font Awesome para ícones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js para gráficos -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Login - Lucro Certo</title>
+    <link rel="icon" type="image/png" href="https://i.ibb.co/tyjmnjV/FAVCON-LUCRE-CERTO-FOGUETE.png">
+    <link rel="stylesheet" href="./auth.css">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="./supabase-config.js"></script>
-    <script src="./spa.js"></script>
-    <script src="./dre-calculator.js"></script>
-    <script src="./market-research.js"></script>
-    <script src="./auth-supabase.js"></script>
-    <script src="./subscription_control.js"></script>
-    <script src="./user-dropdown.js"></script>
-    <!-- Carregando plans.js por último para garantir que todas as dependências estejam disponíveis -->
-    <script src="./plans.js"></script>
 </head>
 <body>
-    <!-- Loading screen -->
-    <div id="loading-screen" style="
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100% );
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        color: white;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    ">
-        <div style="text-align: center;">
-            <div style="
-                width: 50px;
-                height: 50px;
-                border: 3px solid rgba(255,255,255,0.3);
-                border-top: 3px solid white;
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-                margin: 0 auto 20px;
-            "></div>
-            <p>Carregando...</p>
+    <div class="auth-container">
+        <div class="logo-section">
+            <div class="logo">
+                <img src="https://i.postimg.cc/KYqk4xX2/LOGO-LUCRE-CERTO-FOGUETE.png" alt="Lucro Certo" class="logo-image">
+            </div>
+        </div>
+        
+        <div class="auth-card">
+            <div class="auth-header">
+                <h2>Acesse sua conta</h2>
+            </div>
+
+            <div class="security-notice">
+                <div class="security-icon">🔒</div>
+                <div class="security-text">
+                    <strong>Atualizações de Segurança</strong>
+                    <p>Melhoramos nossa segurança! Algumas senhas podem precisar ser redefinidas. Caso tenha dificuldades para entrar, use <a href="#" class="forgot-link">Esqueci a Senha</a> - é rápido e fácil! ⚡</p>
+                </div>
+            </div>
+
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="E-mail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" placeholder="Senha" required>
+                </div>
+
+                <button type="button" class="google-btn" data-action="google-login">
+                    <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                        <g fill="none" fill-rule="evenodd">
+                            <path d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
+                            <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
+                            <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+                            <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+                        </g>
+                    </svg>
+                    Sign in with Google
+                </button>
+
+                <button type="submit" class="auth-button">Entrar</button>
+
+                <div class="error-message" id="errorMessage" style="display: none;"></div>
+                <div class="success-message" id="successMessage" style="display: none;"></div>
+            </form>
+
+            <div class="auth-footer">
+                <p>Não tem uma conta? <a href="register.html">Cadastre-se</a></p>
+                <a href="#" class="forgot-link">Esqueci a Senha</a>
+            </div>
         </div>
     </div>
 
-    <style>
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const { data: { user } } = await supabaseClient.auth.getUser();
-            if (!user) {
-                window.location.href = 'login.html';
-            } else {
-                document.getElementById('loading-screen').style.display = 'none';
-                document.getElementById('app').style.display = 'flex';
-                document.getElementById("userName").textContent = user.email;
-                document.getElementById("dropdownUserName").textContent = user.email;
-            }
-        });
-    </script>
-
-    <!-- App Container com Sidebar e Conteúdo -->
-    <div id="app" style="display: none;">
-        <!-- Sidebar -->
-        <aside class="sidebar" aria-label="Navegação principal">
-            <nav class="nav">
-                <a class="nav__item active" href="#" data-route="home">
-                    <i class="fas fa-home"></i>
-                    <span>Início</span>
-                </a>
-                <a class="nav__item" href="#" data-route="calculadora">
-                    <i class="fas fa-calculator"></i>
-                    <span>Calculadora</span>
-                </a>
-                <a class="nav__item" href="#" data-route="gerenciar">
-                    <i class="fas fa-list-check"></i>
-                    <span>Gerenciar Anúncios</span>
-                </a>
-                <a class="nav__item" href="#" data-route="fechamento">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Fechamento de mês</span>
-                </a>
-                <a class="nav__item" href="#" data-route="pesquisa">
-                    <i class="fas fa-search"></i>
-                    <span>Pesquisa de Mercado</span>
-                </a>
-                <a class="nav__item" href="#" data-route="dre">
-                    <i class="fas fa-chart-line"></i>
-                    <span>DRE</span>
-                </a>
-                <a class="nav__item" href="#" data-route="conexoes">
-                    <i class="fas fa-plug"></i>
-                    <span>Conexões</span>
-                </a>
-                <a class="nav__item" href="#" data-route="planos">
-                    <i class="fas fa-crown"></i>
-                    <span>Planos</span>
-                </a>
-            </nav>
-        </aside>
-
-        <!-- Conteúdo Principal -->
-        <main class="main-content">
-            <!-- Header com informações do usuário -->
-            <div class="user-header">
-                <div class="logo-container">
-                    <img src="https://i.postimg.cc/KYqk4xX2/LOGO-LUCRE-CERTO-FOGUETE.png" class="logo" alt="Logo Lucre Certo">
-                </div>
-
-
-                <div class="user-info">
-                    <span id="userName">Carregando...</span>
-                    <div class="user-menu-container">
-                        <button class="user-icon-btn" id="userIconBtn">
-                            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12" cy="12" r="10" stroke="#ff6b35" stroke-width="2" fill="#f8f9fa"/>
-                                <circle cx="12" cy="8" r="3" stroke="#ff6b35" stroke-width="2" fill="none"/>
-                                <path d="M6 20c0-4 3-6 6-6s6 2 6 6" stroke="#ff6b35" stroke-width="2" fill="none"/>
-                            </svg>
-                        </button>
-                        <div class="user-dropdown-menu" id="userDropdownMenu">
-                            <div class="dropdown-header">
-                                <span id="dropdownUserName"></span>
-                            </div>
-                            <div class="dropdown-item theme-toggle-item">
-                                <span>Tema:</span>
-                                <label class="switch">
-                                    <input type="checkbox" id="themeToggle">
-                                    <span class="slider round"></span>
-                                </label>
-                                <span>Claro/Escuro</span>
-                            </div>
-                            <a href="#" class="dropdown-item">Configurações</a>
-                            <a href="#" class="dropdown-item">Ajuda</a>
-                            <a href="#" class="dropdown-item">Termos de Uso</a>
-                            <a href="#" class="dropdown-item logout-btn" id="logoutBtn">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-           <!-- Conteúdo Principal -->
-        <main class="main-content">
-            <div id="content-container">
-                <!-- Conteúdo será carregado aqui via JavaScript -->
-            </div>
-        </main>
-    </div>
+    <script src="./supabase-config.js"></script>
+    <script src="./auth-supabase.js"></script>
 </body>
 </html>
-
-    <!-- Script de verificação e fallback para plans.js -->
-    <script>
-        // Verificar se plans.js foi carregado corretamente
-        document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(function() {
-                if (typeof window.selectPlan !== 'function') {
-                    console.warn('plans.js não foi carregado corretamente, tentando carregar novamente...');
-                    
-                    // Tentar carregar plans.js novamente
-                    fetch('./plans.js')
-                        .then(response => response.text())
-                        .then(scriptContent => {
-                            // Executar o script
-                            eval(scriptContent);
-                            console.log('plans.js carregado com sucesso via fallback');
-                            
-                            // Reconfigurar os event listeners dos botões de plano
-                            const planButtons = document.querySelectorAll(".plan-btn-page");
-                            planButtons.forEach(button => {
-                                const planId = button.getAttribute("data-plan");
-                                if (planId && typeof window.selectPlan === 'function') {
-                                    // Remover listeners antigos se existirem
-                                    button.replaceWith(button.cloneNode(true));
-                                    const newButton = document.querySelector(`[data-plan="${planId}"]`);
-                                    newButton.addEventListener('click', () => {
-                                        window.selectPlan(planId);
-                                    });
-                                }
-                            });
-                        })
-                        .catch(error => {
-                            console.error('Erro ao carregar plans.js via fallback:', error);
-                        });
-                } else {
-                    console.log('plans.js carregado corretamente');
-                }
-            }, 1000); // Aguardar 1 segundo para garantir que todos os scripts foram carregados
-        });
-    </script>
-
