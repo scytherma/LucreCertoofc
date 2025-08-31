@@ -1,3 +1,6 @@
+// Pega o cliente Supabase global
+const supabaseClient = window.supabaseClient;
+
 // Funções de autenticação com Supabase
 
 // Funções utilitárias
@@ -34,8 +37,7 @@ function showSuccess(message) {
 }
 
 function setLoading(isLoading) {
-    const form = document.querySelector(".auth-form");
-    const buttons = document.querySelectorAll("button[type=\"submit\"], .auth-button");
+    const buttons = document.querySelectorAll("button[type=\"submit\"], .auth-button, [data-action=\"google-login\"]");
     
     buttons.forEach(button => {
         if (isLoading) {
@@ -72,10 +74,7 @@ function validatePassword(password) {
 }
 
 function formatPhone(phone) {
-    // Remove tudo que não é número
     const numbers = phone.replace(/\D/g, "");
-    
-    // Aplica a máscara (xx) xxxxx-xxxx
     if (numbers.length <= 11) {
         return numbers.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
     }
@@ -87,29 +86,22 @@ document.addEventListener("DOMContentLoaded", function() {
     // Verificar se usuário já está logado
     checkAuthStatus();
 
-    // Formulário de login
     const loginForm = document.getElementById("loginForm");
-    if (loginForm) {
-        loginForm.addEventListener("submit", handleLogin);
-    }
+    if (loginForm) loginForm.addEventListener("submit", handleLogin);
 
-    // Formulário de cadastro
     const registerForm = document.getElementById("registerForm");
     if (registerForm) {
         registerForm.addEventListener("submit", handleRegister);
-        
-        // Máscara para telefone
+
         const phoneInput = document.getElementById("phone");
         if (phoneInput) {
-            phoneInput.addEventListener("input", function(e) {
+            phoneInput.addEventListener("input", e => {
                 e.target.value = formatPhone(e.target.value);
             });
         }
-        
-        // Validação de confirmação de senha
+
         const passwordInput = document.getElementById("password");
         const confirmPasswordInput = document.getElementById("confirmPassword");
-        
         if (confirmPasswordInput) {
             confirmPasswordInput.addEventListener("blur", function() {
                 if (passwordInput.value && confirmPasswordInput.value) {
@@ -122,11 +114,8 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Botões do Google
     const googleButtons = document.querySelectorAll("[data-action=\"google-login\"]");
-    googleButtons.forEach(button => {
-        button.addEventListener("click", handleGoogleLogin);
-    });
+    googleButtons.forEach(button => button.addEventListener("click", handleGoogleLogin));
 });
 
 // Verificar status de autenticação
@@ -138,22 +127,16 @@ async function checkAuthStatus() {
         const app = document.getElementById("app");
 
         if (user) {
-            // Usuário logado
             if (window.location.pathname.includes("/login.html") || window.location.pathname.includes("/register.html")) {
                 window.location.href = "./index.html";
             } else if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
-                // Usuário logado e na página principal, exibir o app
                 if (loadingScreen) loadingScreen.style.display = "none";
                 if (app) app.style.display = "flex";
                 updateUserInterface(user);
-                // Chamar a função de carregamento da página inicial do SPA
-                // Garantir que loadPage e updateActiveClass estejam disponíveis
                 if (typeof window.loadPage === 'function' && typeof window.updateActiveClass === 'function') {
                     window.loadPage('home');
                     window.updateActiveClass('home');
                 } else {
-                    // Se loadPage ainda não estiver disponível, aguardar e tentar novamente
-                    // Isso pode acontecer se auth-supabase.js for carregado antes de spa.js
                     window.addEventListener('load', () => {
                         if (typeof window.loadPage === 'function' && typeof window.updateActiveClass === 'function') {
                             window.loadPage('home');
@@ -162,15 +145,13 @@ async function checkAuthStatus() {
                     });
                 }
             }
-            } else {
-                // Usuário não logado
-                if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
-                    window.location.href = "./login.html";
-                } else {
-                    // Esconder a tela de carregamento em outras páginas (login, register)
-                    if (loadingScreen) loadingScreen.style.display = "none";
-                }
+        } else {
+            if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
+                window.location.href = "./login.html";
+            } else if (loadingScreen) {
+                loadingScreen.style.display = "none";
             }
+        }
     } catch (error) {
         console.error("Erro ao verificar autenticação:", error);
         if (window.location.pathname === "/" || window.location.pathname === "/index.html") {
@@ -183,14 +164,10 @@ async function checkAuthStatus() {
 function updateUserInterface(user) {
     const userNameElement = document.getElementById("userName");
     const dropdownUserNameElement = document.getElementById("dropdownUserName");
-    if (userNameElement) {
-        const displayName = user.user_metadata?.name || user.email.split("@")[0];
-        userNameElement.textContent = `Olá, ${displayName}`;
-    }
-    if (dropdownUserNameElement) {
-        const displayName = user.user_metadata?.name || user.email.split("@")[0];
-        dropdownUserNameElement.textContent = displayName;
-    }
+    const displayName = user.user_metadata?.name || user.email.split("@")[0];
+
+    if (userNameElement) userNameElement.textContent = `Olá, ${displayName}`;
+    if (dropdownUserNameElement) dropdownUserNameElement.textContent = displayName;
 }
 
 // Handler para login
@@ -200,46 +177,30 @@ async function handleLogin(e) {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
     
-    // Validações
-    if (!email || !password) {
-        showError("Por favor, preencha todos os campos");
-        return;
-    }
-    
-    if (!validateEmail(email)) {
-        showError("Por favor, insira um e-mail válido");
-        return;
-    }
+    if (!email || !password) return showError("Por favor, preencha todos os campos");
+    if (!validateEmail(email)) return showError("Por favor, insira um e-mail válido");
     
     setLoading(true);
     
     try {
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-        
-        if (error) {
-            throw error;
-        }
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
         
         showSuccess("Login realizado com sucesso!");
-        
         setTimeout(() => {
             window.location.href = "./index.html";
-            checkUserSubscriptionStatus();
+            if (typeof checkUserSubscriptionStatus === 'function') {
+                checkUserSubscriptionStatus();
+            }
         }, 1000);
-        
     } catch (error) {
         console.error("Erro no login:", error);
-        
         let errorMessage = "Erro no login. Tente novamente.";
         if (error.message.includes("Invalid login credentials")) {
             errorMessage = "E-mail ou senha incorretos";
         } else if (error.message.includes("Email not confirmed")) {
             errorMessage = "Por favor, confirme seu e-mail antes de fazer login";
         }
-        
         showError(errorMessage);
     } finally {
         setLoading(false);
@@ -257,75 +218,45 @@ async function handleRegister(e) {
     const phone = document.getElementById("phone").value.trim();
     const howFoundUs = document.getElementById("howFoundUs").value;
     
-    // Validações
-    if (!name || !email || !password || !confirmPassword) {
-        showError("Por favor, preencha todos os campos obrigatórios");
-        return;
-    }
-    
-    if (!validateEmail(email)) {
-        showError("Por favor, insira um e-mail válido");
-        return;
-    }
-    
-    if (!validatePassword(password)) {
-        showError("A senha deve ter pelo menos 6 caracteres");
-        return;
-    }
-    
-    if (password !== confirmPassword) {
-        showError("As senhas não conferem");
-        return;
-    }
+    if (!name || !email || !password || !confirmPassword) return showError("Por favor, preencha todos os campos obrigatórios");
+    if (!validateEmail(email)) return showError("Por favor, insira um e-mail válido");
+    if (!validatePassword(password)) return showError("A senha deve ter pelo menos 6 caracteres");
+    if (password !== confirmPassword) return showError("As senhas não conferem");
     
     setLoading(true);
     
     try {
         const { data, error } = await supabaseClient.auth.signUp({
-            email: email,
-            password: password,
+            email,
+            password,
             options: {
-                data: {
-                    name: name,
-                    phone: phone,
-                    how_found_us: howFoundUs
-                },
-                emailRedirectTo: "./"
+                data: { name, phone, how_found_us: howFoundUs },
+                // ⚠️ Importante: substitua pelo domínio real do seu site em produção
+                emailRedirectTo: "https://seudominio.com/"
             }
         });
-        
-        if (error) {
-            throw error;
-        }
+        if (error) throw error;
         
         if (data.user && !data.user.email_confirmed_at) {
             showSuccess("Cadastro realizado! Verifique seu e-mail para confirmar a conta.");
-            
-            setTimeout(() => {
-                window.location.href = "./login.html";
-            }, 3000);
+            setTimeout(() => window.location.href = "./login.html", 3000);
         } else {
             showSuccess("Cadastro realizado com sucesso!");
-            
-        setTimeout(() => {
-            window.location.href = "./index.html";
-            // Verificar status da assinatura após o login
-            if (typeof checkUserSubscriptionStatus === 'function') {
-                checkUserSubscriptionStatus();
-            }
-        }, 1000);
+            setTimeout(() => {
+                window.location.href = "./index.html";
+                if (typeof checkUserSubscriptionStatus === 'function') {
+                    checkUserSubscriptionStatus();
+                }
+            }, 1000);
         }
-        
     } catch (error) {
         console.error("Erro no cadastro:", error);
-        
         let errorMessage = "Erro no cadastro. Tente novamente.";
         if (error.message.includes("User already registered")) {
             errorMessage = "Este e-mail já está cadastrado";
         } else if (error.message.includes("Password should be at least")) {
             errorMessage = "A senha deve ter pelo menos 6 caracteres";
         }
-        
         showError(errorMessage);
     } finally {
         setLoading(false);
@@ -335,21 +266,15 @@ async function handleRegister(e) {
 // Handler para login com Google
 async function handleGoogleLogin() {
     setLoading(true);
-    
     try {
-        const { data, error } = await supabaseClient.auth.signInWithOAuth({
+        const { error } = await supabaseClient.auth.signInWithOAuth({
             provider: "google",
             options: {
-                redirectTo: "./"
+                // ⚠️ Coloque aqui o domínio real do seu site
+                redirectTo: "https://seudominio.com/"
             }
         });
-        
-        if (error) {
-            throw error;
-        }
-        
-        // O redirecionamento será automático
-        
+        if (error) throw error;
     } catch (error) {
         console.error("Erro no login com Google:", error);
         showError("Erro ao fazer login com Google. Tente novamente.");
@@ -361,16 +286,10 @@ async function handleGoogleLogin() {
 async function logout() {
     try {
         const { error } = await supabaseClient.auth.signOut();
-        
-        if (error) {
-            throw error;
-        }
-        
+        if (error) throw error;
         window.location.href = "./login.html";
-        
     } catch (error) {
         console.error("Erro no logout:", error);
-        // Mesmo com erro, redirecionar para login
         window.location.href = "./login.html";
     }
 }
@@ -380,7 +299,6 @@ function checkAuth() {
     return new Promise(async (resolve) => {
         try {
             const { data: { user } } = await supabaseClient.auth.getUser();
-            
             if (user) {
                 updateUserInterface(user);
                 resolve(true);
@@ -401,7 +319,6 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
     if (event === "SIGNED_IN") {
         console.log("Usuário logado:", session.user);
         updateUserInterface(session.user);
-        // Verificar status da assinatura após o login
         setTimeout(() => {
             if (typeof checkUserSubscriptionStatus === 'function') {
                 checkUserSubscriptionStatus();
@@ -414,5 +331,3 @@ supabaseClient.auth.onAuthStateChange((event, session) => {
         }
     }
 });
-
-
