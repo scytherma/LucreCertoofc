@@ -47,7 +47,7 @@
 .search-form {
     display: flex;
     gap: 15px;
-    align-items: flex-start;
+    align-items: flex-end;
     max-width: 800px;
     margin: 0 auto;
 }
@@ -370,13 +370,13 @@ body.dark-theme .market-research-header p {
 body.dark-theme .market-search-container,
 body.dark-theme .features-section,
 body.dark-theme .history-section {
-    background: #333;
-    border: 1px solid #333;
+    background: #2d3748;
+    border: 1px solid #4a5568;
 }
 
 body.dark-theme #marketSearchInput {
-    background: #3a3a3a;
-    border-color: rgb(255, 60, 0);
+    background: #4a5568;
+    border-color: #4a5568;
     color: #e9ecef;
 }
 
