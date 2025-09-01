@@ -10,8 +10,8 @@ const MP_PUBLIC_KEY = 'APP_USR-851d3932-1b61-4a60-9b44-257d18cba073';
 const SUBSCRIPTION_PLANS = {
     free: {
         id: 'free',
-        name: 'Gratuito',
-        price: 0.00,
+        name: 'Teste',
+        price: 1.00,
         period: 'month',
         description: 'Plano de teste gratuito',
         mercadopago_plan_id: '8d09d95157594e039c232b3176cce78d',
