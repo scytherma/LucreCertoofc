@@ -778,7 +778,7 @@ body.dark-theme .margin-section {
     top: 100%;
     right: 0;
     background-color: white;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 16px rgb(0 0 0);
     z-index: 1;
     min-width: 200px;
     border-radius: 8px;
