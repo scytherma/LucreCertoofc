@@ -264,7 +264,7 @@ body.dark-theme .dre-section {
 }
 
 body.dark-theme .dre-table {
-    background-color: #4a5568;
+    background-color: #3a3a3a;
 }
 
 body.dark-theme .dre-input {
@@ -278,7 +278,7 @@ body.dark-theme .dre-input:focus {
 }
 
 body.dark-theme .chart-wrapper {
-    background-color: #4a5568;
+    background-color: #3a3a3a;
 }
 
 body.dark-theme .dre-label {
@@ -286,9 +286,9 @@ body.dark-theme .dre-label {
 }
 
 body.dark-theme .dre-row.subtotal {
-    background: rgba(255, 107, 53, 0.2);
+    background: rgb(0 0 0 / 20%);
 }
 
 body.dark-theme .dre-row.final-result {
-    background: rgba(255, 107, 53, 0.3);
+    background: rgb(0 0 0 / 30%);
 }
