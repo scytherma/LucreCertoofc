@@ -35,7 +35,7 @@
     padding: 20px;
     background: #f8f9fa;
     border-radius: 8px;
-    border-left: 4px solid #ff6b35;
+    border-left: 4px solid rgb(255, 60, 0);
 }
 
 .dre-section h3 {
@@ -255,12 +255,12 @@
 /* Tema escuro */
 body.dark-theme .dre-input-section,
 body.dark-theme .dre-results-section {
-    background-color: #2d3748;
+    background-color: #333;
     color: #e2e8f0;
 }
 
 body.dark-theme .dre-section {
-    background-color: #4a5568;
+    background-color: #3a3a3a;
 }
 
 body.dark-theme .dre-table {
@@ -268,8 +268,8 @@ body.dark-theme .dre-table {
 }
 
 body.dark-theme .dre-input {
-    background-color: #4a5568;
-    border-color: #4a5568;
+    background-color: #3a3a3a;
+    border-color: #3a3a3a;
     color: #e2e8f0;
 }
 
