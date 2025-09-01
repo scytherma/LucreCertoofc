@@ -810,7 +810,7 @@ body.dark-theme .plan-features li {
 
 .plan-card-page {
     background: white;
-    border: 2px solid #e0e0e0;
+    border: 2px solid rgb(255 255 255);
     border-radius: 16px;
     padding: 30px;
     text-align: center;
@@ -825,7 +825,7 @@ body.dark-theme .plan-features li {
 }
 
 .plan-card-page.popular {
-    border-color: #ff6b35;
+    border-color: rgb(255, 60, 0);
     transform: scale(1.05);
 }
 
@@ -1073,7 +1073,7 @@ body.dark-theme .plan-features li {
 body.dark-theme .plan-card-page,
 body.dark-theme .plans-benefits,
 body.dark-theme .faq-plans {
-    background-color: #2d3748;
+    background-color: #3a3a3a;
     color: #e2e8f0;
 }
 
