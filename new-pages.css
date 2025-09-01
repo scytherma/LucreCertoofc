@@ -325,7 +325,7 @@
 .page-header p {
     margin: 0;
     font-size: 1.1rem;
-    opacity: 0.9;
+    opacity: 1.0;
 }
 
 .page-header i {
@@ -1073,7 +1073,7 @@ body.dark-theme .plan-features li {
 body.dark-theme .plan-card-page,
 body.dark-theme .plans-benefits,
 body.dark-theme .faq-plans {
-    background-color: #2d3748;
+    background-color: #3a3a3a;
     color: #e2e8f0;
 }
 
