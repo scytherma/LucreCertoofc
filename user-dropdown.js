@@ -513,3 +513,4 @@ function loadUserSettings() {
     if (autoSaveEl) autoSaveEl.checked = autoSave;
     if (userNameEl) userNameEl.value = userName;
 }
+
