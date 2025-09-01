@@ -325,7 +325,7 @@
 .page-header p {
     margin: 0;
     font-size: 1.1rem;
-    opacity: 1.0;
+    opacity: 0.9;
 }
 
 .page-header i {
@@ -1073,7 +1073,7 @@ body.dark-theme .plan-features li {
 body.dark-theme .plan-card-page,
 body.dark-theme .plans-benefits,
 body.dark-theme .faq-plans {
-    background-color: #3a3a3a;
+    background-color: #2d3748;
     color: #e2e8f0;
 }
 
@@ -1536,5 +1536,401 @@ body.dark-theme .pix-code label {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+
+
+/* ===== CORREÇÕES PARA O MODAL DE CONFIRMAÇÃO DE ASSINATURA NO TEMA ESCURO ===== */
+
+/* Modal de confirmação de assinatura */
+.subscription-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+}
+
+.subscription-modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+.subscription-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.subscription-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.plan-features {
+    padding: 20px 30px;
+}
+
+.plan-features h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.plan-features ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.plan-features li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.plan-features li i {
+    color: #28a745;
+    font-size: 14px;
+}
+
+.subscription-info {
+    padding: 20px 30px;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+}
+
+.info-item i {
+    color: #ff6b35;
+    margin-top: 2px;
+    font-size: 16px;
+}
+
+.info-item p {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.subscription-actions {
+    padding: 25px 30px;
+    display: flex;
+    gap: 15px;
+}
+
+.cancel-button {
+    flex: 1;
+    padding: 12px 20px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-button:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+
+.subscribe-button {
+    flex: 2;
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.subscribe-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.3);
+}
+
+/* Tema escuro para modal de confirmação de assinatura */
+body.dark-theme .subscription-modal-content {
+    background: #2d3748 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .subscription-header {
+    border-bottom-color: #4a5568 !important;
+}
+
+body.dark-theme .subscription-header h2 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .close-modal {
+    color: #a0aec0 !important;
+}
+
+body.dark-theme .close-modal:hover {
+    background: #4a5568 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .plan-summary {
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%) !important;
+    color: white !important;
+}
+
+body.dark-theme .plan-features {
+    background: transparent !important;
+}
+
+body.dark-theme .plan-features h4 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .plan-features li {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .plan-features li i {
+    color: #28a745 !important;
+}
+
+body.dark-theme .subscription-info {
+    background: #4a5568 !important;
+    border-top-color: #4a5568 !important;
+    border-bottom-color: #4a5568 !important;
+}
+
+body.dark-theme .info-item i {
+    color: #ff6b35 !important;
+}
+
+body.dark-theme .info-item p {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .cancel-button {
+    background: #4a5568 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .cancel-button:hover {
+    background: #5a6578 !important;
+}
+
+/* Modal de acompanhamento */
+.follow-up-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    animation: fadeIn 0.3s ease;
+}
+
+.follow-up-modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 450px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+.follow-up-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.follow-up-header h2 {
+    margin: 0;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.follow-up-content {
+    padding: 30px;
+    text-align: center;
+}
+
+.follow-up-icon {
+    margin-bottom: 20px;
+}
+
+.follow-up-icon i {
+    font-size: 48px;
+    color: #ff6b35;
+}
+
+.follow-up-content h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.3rem;
+}
+
+.follow-up-content p {
+    margin: 0 0 25px 0;
+    color: #666;
+    line-height: 1.6;
+}
+
+.follow-up-steps {
+    text-align: left;
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+}
+
+.follow-up-steps h4 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1rem;
+}
+
+.follow-up-steps ol {
+    margin: 0;
+    padding-left: 20px;
+    color: #666;
+}
+
+.follow-up-steps li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.follow-up-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.follow-up-button {
+    flex: 1;
+    padding: 12px 20px;
+    background: #ff6b35;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.follow-up-button:hover {
+    background: #e55a2b;
+    transform: translateY(-1px);
+}
+
+/* Tema escuro para modal de acompanhamento */
+body.dark-theme .follow-up-modal-content {
+    background: #2d3748 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .follow-up-header {
+    border-bottom-color: #4a5568 !important;
+}
+
+body.dark-theme .follow-up-header h2 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .follow-up-content h3 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .follow-up-content p {
+    color: #a0aec0 !important;
+}
+
+body.dark-theme .follow-up-steps {
+    background: #4a5568 !important;
+}
+
+body.dark-theme .follow-up-steps h4 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .follow-up-steps ol {
+    color: #e2e8f0 !important;
+}
+
+body.dark-theme .follow-up-steps li {
+    color: #e2e8f0 !important;
+}
+
+/* Responsividade dos modais */
+@media (max-width: 768px) {
+    .subscription-modal-content,
+    .follow-up-modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    .subscription-header,
+    .plan-features,
+    .subscription-info,
+    .subscription-actions,
+    .follow-up-header,
+    .follow-up-content {
+        padding: 20px;
+    }
+    
+    .subscription-actions,
+    .follow-up-actions {
+        flex-direction: column;
+    }
+    
+    .cancel-button,
+    .subscribe-button,
+    .follow-up-button {
+        width: 100%;
+    }
 }
 
