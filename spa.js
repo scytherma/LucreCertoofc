@@ -169,15 +169,13 @@ function getHomeContent() {
                         <span class="status coming-soon">Em breve</span>
                     </div>
                     <div class="feature-card">
-                        <i class="fas fa-trending-up"></i>
-                        <h3>Tendências de Mercado</h3>
-                        <p>Análise de tendências para o seu nicho</p>
+                        <i class="fas fa-search"></i>
+                        <h3>Pesquisa de Mercado</h3>
+                        <p>Análise competitiva e tendências de mercado</p>
                         <span class="status coming-soon">Em breve</span>
                     </div>
                     <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-chart-line"></i>
-                        </div>
+                        <i class="fas fa-chart-line"></i>
                         <h3>Tendências de Mercado</h3>
                         <p>Análise de tendências para o seu nicho</p>
                         <span class="status coming-soon">Em breve</span>
