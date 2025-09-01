@@ -1798,11 +1798,11 @@ body.dark-theme .content-container {
 
 /* Melhorar a visibilidade dos links no tema escuro */
 body.dark-theme a {
-    color: #ff6b35 !important;
+    color: rgb(0 0 0) !important;
 }
 
 body.dark-theme a:hover {
-    color: #e55a2b !important;
+    color: rgb(255 255 255) !important;
 }
 
 /* Tema escuro para elementos de lista */
