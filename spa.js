@@ -670,7 +670,7 @@ function getPesquisaContent() {
                     
                     <div class="feature-card">
                         <div class="feature-icon">
-                            <i class="fas fa-trending-up"></i>
+                            <i class="fas fa-search"></i>
                         </div>
                         <h3>Tendências de Mercado</h3>
                         <p>Dados do Google Trends e análise de sazonalidade para identificar os melhores momentos para vender.</p>
