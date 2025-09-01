@@ -1669,7 +1669,7 @@ body.dark-theme .pix-code label {
 .subscribe-button {
     flex: 2;
     padding: 12px 20px;
-    background: linear-gradient(135deg, rgb(255, 60, 0);
+    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
     color: white;
     border: none;
     border-radius: 8px;
