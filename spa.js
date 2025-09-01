@@ -169,9 +169,17 @@ function getHomeContent() {
                         <span class="status coming-soon">Em breve</span>
                     </div>
                     <div class="feature-card">
-                        <i class="fas fa-search"></i>
-                        <h3>Pesquisa de Mercado</h3>
-                        <p>Análise competitiva e tendências de mercado</p>
+                        <i class="fas fa-trending-up"></i>
+                        <h3>Tendências de Mercado</h3>
+                        <p>Análise de tendências para o seu nicho</p>
+                        <span class="status coming-soon">Em breve</span>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Tendências de Mercado</h3>
+                        <p>Análise de tendências para o seu nicho</p>
                         <span class="status coming-soon">Em breve</span>
                     </div>
                     <div class="feature-card">
@@ -1413,8 +1421,8 @@ function getPlanosContent() {
                 <div class="plans-grid-page">
                     <div class="plan-card-page">
                         <div class="plan-header">
-                            <div class="plan-name">Teste</div>
-                            <div class="plan-price">R$ 1,00</div>
+                            <div class="plan-name">Gratuito</div>
+                            <div class="plan-price">R$ 0</div>
                             <div class="plan-period">3 dias de teste</div>
                         </div>
                         <div class="plan-features">
