@@ -1784,11 +1784,11 @@ body.dark-theme h3,
 body.dark-theme h4,
 body.dark-theme h5,
 body.dark-theme h6 {
-    color: rgb(255, 60, 0) !important;
+    color: rgb(255 255 255) !important;
 }
 
 body.dark-theme p {
-    color: #a0aec0 !important;
+    color: rgb(255 255 255) !important;
 }
 
 /* Tema escuro para elementos específicos que podem ter sido perdidos */
