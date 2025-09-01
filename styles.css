@@ -1732,7 +1732,7 @@ body.dark-theme .status.coming-soon {
 
 /* Tema escuro para o container da página */
 body.dark-theme .page-container {
-    background-color: #2d3748 !important;
+    background-color: #333 !important;
     color: #e2e8f0 !important;
 }
 
