@@ -1431,11 +1431,11 @@ body.dark-theme .payment-header h2 {
 }
 
 body.dark-theme .close-modal {
-    color: #a0aec0;
+    color: rgb(255 255 255);
 }
 
 body.dark-theme .close-modal:hover {
-    background: #4a5568;
+    background: #333;
     color: #e2e8f0;
 }
 
@@ -1690,7 +1690,7 @@ body.dark-theme .pix-code label {
 
 /* Tema escuro para modal de confirmação de assinatura */
 body.dark-theme .subscription-modal-content {
-    background: #2d3748 !important;
+    background: rgb(255 255 255) !important;
     color: #e2e8f0 !important;
 }
 
@@ -1712,7 +1712,7 @@ body.dark-theme .close-modal:hover {
 }
 
 body.dark-theme .plan-summary {
-    background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%) !important;
+    background: linear-gradient(135deg, #3a3a3a 0%, #3a3a3a 100%) !important;
     color: white !important;
 }
 
@@ -1733,13 +1733,13 @@ body.dark-theme .plan-features li i {
 }
 
 body.dark-theme .subscription-info {
-    background: #4a5568 !important;
-    border-top-color: #4a5568 !important;
-    border-bottom-color: #4a5568 !important;
+    background: #3a3a3a !important;
+    border-top-color: #3a3a3a !important;
+    border-bottom-color: #3a3a3a !important;
 }
 
 body.dark-theme .info-item i {
-    color: #ff6b35 !important;
+    color: rgb(255, 60, 0) !important;
 }
 
 body.dark-theme .info-item p {
