@@ -39,7 +39,7 @@ body {
 .auth-card {
     background: white;
     border-radius: 20px;
-    box-shadow: 0 25px 50px rgb(0 0 0);
+    box-shadow: 0 1px 30px rgb(0 0 0);
     overflow: hidden;
     animation: slideUp 0.6s ease-out;
     width: 100%;
