@@ -1659,7 +1659,7 @@ body.dark-theme .welcome-section p {
 
 /* Tema escuro para a seção de atualizações */
 body.dark-theme .updates-section {
-    background-color: #2d3748 !important;
+    background-color: #333 !important;
     color: #e2e8f0 !important;
 }
 
@@ -1694,7 +1694,7 @@ body.dark-theme .update-content li::before {
 
 /* Tema escuro para a seção de funcionalidades futuras */
 body.dark-theme .future-features-section {
-    background-color: #2d3748 !important;
+    background-color: #333 !important;
     color: #e2e8f0 !important;
 }
 
@@ -1703,9 +1703,9 @@ body.dark-theme .future-features-section h2 {
 }
 
 body.dark-theme .feature-card {
-    background-color: #4a5568 !important;
+    background-color: #3a3a3a !important;
     color: #e2e8f0 !important;
-    border: 1px solid #4a5568 !important;
+    border: 1px solid rgb(255, 60, 0) !important;
 }
 
 body.dark-theme .feature-card:hover {
@@ -1732,7 +1732,7 @@ body.dark-theme .status.coming-soon {
 
 /* Tema escuro para o container da página */
 body.dark-theme .page-container {
-    background-color: #2d3748 !important;
+    background-color: #333 !important;
     color: #e2e8f0 !important;
 }
 
