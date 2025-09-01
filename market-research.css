@@ -138,7 +138,7 @@
 }
 
 #marketSearchButton {
-    background: linear-gradient(135deg, #ff6b35, #ff8c42);
+    background: linear-gradient(135deg, rgb(255, 60, 0), rgb(255 139 0);
     color: white;
     border: none;
     padding: 15px 25px;
@@ -155,7 +155,7 @@
 }
 
 #marketSearchButton:hover:not(:disabled) {
-    background: linear-gradient(135deg, #e55a2b, #e67a35);
+    background: linear-gradient(135deg, rgb(255 139 0), rgb(255, 60, 0);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
 }
@@ -376,7 +376,7 @@ body.dark-theme .history-section {
 
 body.dark-theme #marketSearchInput {
     background: #333;
-    border-color: #333;
+    border-color: rgb(255, 60, 0);
     color: #e9ecef;
 }
 
