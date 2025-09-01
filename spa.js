@@ -1413,8 +1413,8 @@ function getPlanosContent() {
                 <div class="plans-grid-page">
                     <div class="plan-card-page">
                         <div class="plan-header">
-                            <div class="plan-name">Gratuito</div>
-                            <div class="plan-price">R$ 0</div>
+                            <div class="plan-name">Teste</div>
+                            <div class="plan-price">R$ 1,00</div>
                             <div class="plan-period">3 dias de teste</div>
                         </div>
                         <div class="plan-features">
