@@ -1738,7 +1738,7 @@ body.dark-theme .page-container {
 
 /* Tema escuro para páginas "Em breve" */
 body.dark-theme .coming-soon-page {
-    background-color: #2d3748 !important;
+    background-color: #333 !important;
     color: #e2e8f0 !important;
 }
 
@@ -1751,20 +1751,20 @@ body.dark-theme .coming-soon-content h1 {
 }
 
 body.dark-theme .coming-soon-content p {
-    color: #a0aec0 !important;
+    color: rgb(255 255 255) !important;
 }
 
 body.dark-theme .coming-soon-content i {
-    color: #ff6b35 !important;
+    color: rgb(255, 60, 0) !important;
 }
 
 body.dark-theme .features-preview {
-    background-color: #4a5568 !important;
+    background-color: #3a3a3a !important;
     color: #e2e8f0 !important;
 }
 
 body.dark-theme .features-preview h3 {
-    color: #ff6b35 !important;
+    color: rgb(255, 60, 0) !important;
 }
 
 body.dark-theme .features-preview li {
