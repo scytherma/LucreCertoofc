@@ -1690,7 +1690,7 @@ body.dark-theme .pix-code label {
 
 /* Tema escuro para modal de confirmação de assinatura */
 body.dark-theme .subscription-modal-content {
-    background: rgb(255 255 255) !important;
+    background: #3a3a3a !important;
     color: #e2e8f0 !important;
 }
 
