@@ -461,7 +461,7 @@ body.dark-theme .margin-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgb(255, 60, 0);
+    border-bottom: 1px solid #e9ecef;
     position: fixed;
     top: 0;
     left: 0; /* Começar do início da tela */
@@ -1639,7 +1639,7 @@ body.dark-theme select option {
 
 /* Tema escuro para o conteúdo principal */
 body.dark-theme .main-content {
-    background-color: #3a3a3a !important;
+    background-color: #1a1a1a !important;
 }
 
 /* Tema escuro para a seção de boas-vindas */
@@ -1659,7 +1659,7 @@ body.dark-theme .welcome-section p {
 
 /* Tema escuro para a seção de atualizações */
 body.dark-theme .updates-section {
-    background-color: #333 !important;
+    background-color: #2d3748 !important;
     color: #e2e8f0 !important;
 }
 
@@ -1694,7 +1694,7 @@ body.dark-theme .update-content li::before {
 
 /* Tema escuro para a seção de funcionalidades futuras */
 body.dark-theme .future-features-section {
-    background-color: #333 !important;
+    background-color: #2d3748 !important;
     color: #e2e8f0 !important;
 }
 
@@ -1703,9 +1703,9 @@ body.dark-theme .future-features-section h2 {
 }
 
 body.dark-theme .feature-card {
-    background-color: #3a3a3a !important;
+    background-color: #4a5568 !important;
     color: #e2e8f0 !important;
-    border: 1px solid rgb(255, 60, 0) !important;
+    border: 1px solid #4a5568 !important;
 }
 
 body.dark-theme .feature-card:hover {
@@ -1714,7 +1714,7 @@ body.dark-theme .feature-card:hover {
 }
 
 body.dark-theme .feature-card i {
-    color: rgb(255, 60, 0) !important;
+    color: #ff6b35 !important;
 }
 
 body.dark-theme .feature-card h3 {
@@ -1732,13 +1732,13 @@ body.dark-theme .status.coming-soon {
 
 /* Tema escuro para o container da página */
 body.dark-theme .page-container {
-    background-color: #333 !important;
-    color: #3a3a3a !important;
+    background-color: #2d3748 !important;
+    color: #e2e8f0 !important;
 }
 
 /* Tema escuro para páginas "Em breve" */
 body.dark-theme .coming-soon-page {
-    background-color: #333 !important;
+    background-color: #2d3748 !important;
     color: #e2e8f0 !important;
 }
 
@@ -1759,7 +1759,7 @@ body.dark-theme .coming-soon-content i {
 }
 
 body.dark-theme .features-preview {
-    background-color: #3a3a3a !important;
+    background-color: #4a5568 !important;
     color: #e2e8f0 !important;
 }
 
@@ -1788,7 +1788,7 @@ body.dark-theme h6 {
 }
 
 body.dark-theme p {
-    color: rgb(255 255 255) !important;
+    color: #a0aec0 !important;
 }
 
 /* Tema escuro para elementos específicos que podem ter sido perdidos */
@@ -1798,11 +1798,11 @@ body.dark-theme .content-container {
 
 /* Melhorar a visibilidade dos links no tema escuro */
 body.dark-theme a {
-    color: rgb(0 0 0) !important;
+    color: #ff6b35 !important;
 }
 
 body.dark-theme a:hover {
-    color: rgb(255 255 255) !important;
+    color: #e55a2b !important;
 }
 
 /* Tema escuro para elementos de lista */
@@ -1912,3 +1912,4 @@ body.dark-theme .alert-info {
     color: #85c1e9 !important;
     border-color: #2d4a5d !important;
 }
+
