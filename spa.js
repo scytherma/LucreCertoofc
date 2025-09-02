@@ -81,9 +81,19 @@ document.addEventListener('DOMContentLoaded', () => {
     navLinks.forEach(link => {
         link.addEventListener('click', (event) => {
             event.preventDefault();
-            const route = link.getAttribute('data-route');
-            loadPage(route);
-            updateActiveClass(route);
+            const currentRoute = getCurrentRoute();
+            const newRoute = link.getAttribute('data-route');
+            
+            // Se estiver saindo da calculadora ou DRE, resetar os cálculos
+            if (currentRoute === 'calculadora' && newRoute !== 'calculadora') {
+                resetAllCalculators();
+            }
+            if (currentRoute === 'dre' && newRoute !== 'dre') {
+                resetDRECalculator();
+            }
+            
+            loadPage(newRoute);
+            updateActiveClass(newRoute);
         });
     });
 
@@ -91,6 +101,32 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPage('home');
     updateActiveClass('home');
 });
+
+// Função para obter a rota atual
+function getCurrentRoute() {
+    const activeLink = document.querySelector('.nav__item.active');
+    return activeLink ? activeLink.getAttribute('data-route') : 'home';
+}
+
+// Função para resetar todas as calculadoras
+function resetAllCalculators() {
+    // Resetar calculadora Shopee
+    if (typeof resetarCalculadoraShopee === 'function') {
+        resetarCalculadoraShopee();
+    }
+    
+    // Resetar calculadora Mercado Livre
+    if (typeof resetarCalculadoraMercadoLivre === 'function') {
+        resetarCalculadoraMercadoLivre();
+    }
+}
+
+// Função para resetar a calculadora DRE
+function resetDRECalculator() {
+    if (typeof dreCalculator !== 'undefined' && dreCalculator && typeof dreCalculator.clearAll === 'function') {
+        dreCalculator.clearAll();
+    }
+}
 
 // Conteúdo da página Home
 function getHomeContent() {
