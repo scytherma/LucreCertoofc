@@ -280,6 +280,21 @@ function getCalculadoraContent() {
 
                     <!-- Seção de Resultados -->
                     <div class="results-section">
+                        <!-- Seção de Salvamento no Topo -->
+                        <div class="save-section-enhanced">
+                            <div class="save-header">
+                                <div class="save-title-container">
+                                    <input type="text" id="nomeAnuncioShopee" placeholder="Nome do Anúncio..." class="save-title-input">
+                                    <button type="button" class="photo-upload-btn" id="photoUploadBtnShopee">
+                                        <i class="fas fa-camera"></i>
+                                        Foto
+                                    </button>
+                                </div>
+                                <input type="file" id="photoFileInputShopee" accept="image/*" style="display: none;">
+                                <input type="text" id="fotoAnuncioShopee" placeholder="URL da foto (opcional)" class="photo-url-input" style="display: none;">
+                            </div>
+                        </div>
+
                         <!-- Resultados Principais -->
                         <div class="main-results">
                             <div class="result-item">
@@ -329,6 +344,37 @@ function getCalculadoraContent() {
                             </div>
                         </div>
                         <button type="button" id="limparCamposBtn" class="limpar-campos-btn">Limpar Campos</button>
+                        
+                        <!-- Campos de Salvamento Restantes -->
+                        <div class="save-body">
+                            <div class="save-field">
+                                <label>Comentário</label>
+                                <textarea id="comentarioShopee" placeholder="Adicione um comentário sobre este anúncio (opcional)"></textarea>
+                            </div>
+                            
+                            <div class="save-field">
+                                <label>Tags</label>
+                                <input type="text" id="tagsShopee" placeholder="Digite e pressione Enter para adicionar">
+                            </div>
+                            
+                            <button type="button" id="salvarCalculoShopeeBtn" class="save-btn-enhanced">
+                                Apenas assinantes podem salvar
+                            </button>
+                        </div>
+
+                        <!-- Lista de Cálculos Salvos -->
+                        <div class="saved-calculations-section" id="savedCalculationsShopee">
+                            <div class="saved-calculations-header">
+                                <span>Anúncios Salvos (0)</span>
+                                <i class="fas fa-list"></i>
+                            </div>
+                            <div class="saved-calculations-list" id="savedCalculationsListShopee">
+                                <div class="no-calculations">
+                                    <i class="fas fa-calculator"></i>
+                                    <p>Nenhum cálculo salvo ainda</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -487,6 +533,21 @@ function getCalculadoraContent() {
 
                     <!-- Seção de Resultados -->
                     <div class="results-section">
+                        <!-- Seção de Salvamento no Topo -->
+                        <div class="save-section-enhanced">
+                            <div class="save-header">
+                                <div class="save-title-container">
+                                    <input type="text" id="nomeAnuncioML" placeholder="Nome do Anúncio..." class="save-title-input">
+                                    <button type="button" class="photo-upload-btn" id="photoUploadBtnML">
+                                        <i class="fas fa-camera"></i>
+                                        Foto
+                                    </button>
+                                </div>
+                                <input type="file" id="photoFileInputML" accept="image/*" style="display: none;">
+                                <input type="text" id="fotoAnuncioML" placeholder="URL da foto (opcional)" class="photo-url-input" style="display: none;">
+                            </div>
+                        </div>
+
                         <!-- Resultados Principais -->
                         <div class="main-results">
                             <div class="result-item">
@@ -537,6 +598,37 @@ function getCalculadoraContent() {
                             </div>
                         </div>
                         <button type="button" id="limparCamposBtnML" class="limpar-campos-btn">Limpar Campos</button>
+                        
+                        <!-- Campos de Salvamento Restantes -->
+                        <div class="save-body">
+                            <div class="save-field">
+                                <label>Comentário</label>
+                                <textarea id="comentarioML" placeholder="Adicione um comentário sobre este anúncio (opcional)"></textarea>
+                            </div>
+                            
+                            <div class="save-field">
+                                <label>Tags</label>
+                                <input type="text" id="tagsML" placeholder="Digite e pressione Enter para adicionar">
+                            </div>
+                            
+                            <button type="button" id="salvarCalculoMLBtn" class="save-btn-enhanced">
+                                Apenas assinantes podem salvar
+                            </button>
+                        </div>
+
+                        <!-- Lista de Cálculos Salvos -->
+                        <div class="saved-calculations-section" id="savedCalculationsML">
+                            <div class="saved-calculations-header">
+                                <span>Anúncios Salvos (0)</span>
+                                <i class="fas fa-list"></i>
+                            </div>
+                            <div class="saved-calculations-list" id="savedCalculationsListML">
+                                <div class="no-calculations">
+                                    <i class="fas fa-calculator"></i>
+                                    <p>Nenhum cálculo salvo ainda</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -781,8 +873,69 @@ function initCalculatorEvents() {
     });
 
     // Inicializar calculadoras
+    // Botão salvar cálculo Shopee
+    const salvarCalculoShopeeBtn = document.getElementById("salvarCalculoShopeeBtn");
+    if (salvarCalculoShopeeBtn) {
+        salvarCalculoShopeeBtn.addEventListener("click", () => saveCalculation("shopee"));
+    }
+
+    // Botão salvar cálculo Mercado Livre
+    const salvarCalculoMLBtn = document.getElementById("salvarCalculoMLBtn");
+    if (salvarCalculoMLBtn) {
+        salvarCalculoMLBtn.addEventListener("click", () => saveCalculation("mercadolivre"));
+    }
+
+    // Event listeners para upload de foto
+    const photoUploadBtnShopee = document.getElementById("photoUploadBtnShopee");
+    const photoFileInputShopee = document.getElementById("photoFileInputShopee");
+    const photoUrlInputShopee = document.getElementById("fotoAnuncioShopee");
+
+    if (photoUploadBtnShopee && photoFileInputShopee) {
+        photoUploadBtnShopee.addEventListener("click", () => {
+            photoFileInputShopee.click();
+        });
+
+        photoFileInputShopee.addEventListener("change", (e) => {
+            if (e.target.files[0]) {
+                photoUrlInputShopee.style.display = "none";
+                photoUploadBtnShopee.innerHTML = '<i class="fas fa-check"></i> Foto Selecionada';
+                photoUploadBtnShopee.style.background = '#28a745';
+            } else {
+                photoUrlInputShopee.style.display = "block";
+                photoUploadBtnShopee.innerHTML = '<i class="fas fa-camera"></i> Foto';
+                photoUploadBtnShopee.style.background = '#ff6b35';
+            }
+        });
+    }
+
+    const photoUploadBtnML = document.getElementById("photoUploadBtnML");
+    const photoFileInputML = document.getElementById("photoFileInputML");
+    const photoUrlInputML = document.getElementById("fotoAnuncioML");
+
+    if (photoUploadBtnML && photoFileInputML) {
+        photoUploadBtnML.addEventListener("click", () => {
+            photoFileInputML.click();
+        });
+
+        photoFileInputML.addEventListener("change", (e) => {
+            if (e.target.files[0]) {
+                photoUrlInputML.style.display = "none";
+                photoUploadBtnML.innerHTML = '<i class="fas fa-check"></i> Foto Selecionada';
+                photoUploadBtnML.style.background = '#28a745';
+            } else {
+                photoUrlInputML.style.display = "block";
+                photoUploadBtnML.innerHTML = '<i class="fas fa-camera"></i> Foto';
+                photoUploadBtnML.style.background = '#ff6b35';
+            }
+        });
+    }
+
     initializeShopeeCalculator();
     initializeMercadoLivreCalculator();
+    
+    // Carregar cálculos salvos ao inicializar
+    loadSavedCalculations('shopee');
+    loadSavedCalculations('mercadolivre');
 }
 
 // ===== CALCULADORA SHOPEE =====
@@ -1799,5 +1952,444 @@ function getDreContent() {
             </div>
         </div>
     `;
+}
+
+
+
+
+// Função para fazer upload de imagem para o Supabase Storage
+async function uploadImage(file, userId) {
+    try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${userId}/${Date.now()}.${fileExt}`;
+        
+        const { data, error } = await supabaseClient.storage
+            .from('ad-photos')
+            .upload(fileName, file);
+
+        if (error) {
+            throw error;
+        }
+
+        // Obter URL pública da imagem
+        const { data: { publicUrl } } = supabaseClient.storage
+            .from('ad-photos')
+            .getPublicUrl(fileName);
+
+        return publicUrl;
+    } catch (error) {
+        console.error('Erro ao fazer upload da imagem:', error);
+        throw error;
+    }
+}
+
+// Função para salvar cálculo no Supabase (versão aprimorada)
+async function saveCalculation(platform) {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) {
+        showError("Você precisa estar logado para salvar cálculos.");
+        return;
+    }
+
+    let adName, adPhotoUrl, comment, tags, calculationData;
+    let photoFile = null;
+
+    if (platform === 'shopee') {
+        adName = document.getElementById("nomeAnuncioShopee")?.value;
+        photoFile = document.getElementById("photoFileInputShopee")?.files[0];
+        adPhotoUrl = document.getElementById("fotoAnuncioShopee")?.value;
+        comment = document.getElementById("comentarioShopee")?.value;
+        tags = document.getElementById("tagsShopee")?.value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+
+        // Coletar dados da calculadora Shopee
+        const custoProduto = parseFloat(document.getElementById("custoProduto")?.value.replace(',', '.')) || 0;
+        const impostos = parseFloat(document.getElementById("impostos")?.value.replace(',', '.')) || 0;
+        const despesasVariaveis = parseFloat(document.getElementById("despesasVariaveis")?.value.replace(',', '.')) || 0;
+        const freteGratis = document.getElementById("freteGratis")?.checked;
+        const margemLucro = parseFloat(document.getElementById("margemLucro")?.value) || 0;
+        const precoVenda = document.getElementById("precoVenda")?.textContent;
+        const lucroPorVenda = document.getElementById("lucroPorVenda")?.textContent;
+        const taxaShopee = document.getElementById("taxaShopee")?.textContent;
+        const valorImpostos = document.getElementById("valorImpostos")?.textContent;
+        const custoTotal = document.getElementById("custoTotal")?.textContent;
+        const retornoProduto = document.getElementById("retornoProduto")?.textContent;
+        const markupPercent = document.getElementById("markupPercent")?.textContent;
+        const markupX = document.getElementById("markupX")?.textContent;
+
+        const custosExtras = [];
+        document.querySelectorAll("#custosExtrasContainer .custo-extra-item").forEach(item => {
+            const valueInput = item.querySelector(".custo-extra-value");
+            const typeSelector = item.querySelector(".custo-extra-type-selector");
+            custosExtras.push({
+                value: parseFloat(valueInput.value.replace(',', '.')) || 0,
+                type: typeSelector.value
+            });
+        });
+
+        calculationData = {
+            inputs: {
+                custoProduto, impostos, despesasVariaveis, freteGratis, margemLucro, custosExtras
+            },
+            results: {
+                precoVenda, lucroPorVenda, taxaShopee, valorImpostos, custoTotal, retornoProduto, markupPercent, markupX
+            }
+        };
+
+    } else if (platform === 'mercadolivre') {
+        adName = document.getElementById("nomeAnuncioML")?.value;
+        photoFile = document.getElementById("photoFileInputML")?.files[0];
+        adPhotoUrl = document.getElementById("fotoAnuncioML")?.value;
+        comment = document.getElementById("comentarioML")?.value;
+        tags = document.getElementById("tagsML")?.value.split(',').map(tag => tag.trim()).filter(tag => tag !== '');
+
+        // Coletar dados da calculadora Mercado Livre
+        const custoProduto = parseFloat(document.getElementById("custoProdutoML")?.value.replace(',', '.')) || 0;
+        const impostos = parseFloat(document.getElementById("impostosML")?.value.replace(',', '.')) || 0;
+        const despesasVariaveis = parseFloat(document.getElementById("despesasVariaveisML")?.value.replace(',', '.')) || 0;
+        const taxaMercadoLivreSelect = document.getElementById("taxaMercadoLivreSelect")?.value;
+        const taxaFreteSelect = document.getElementById("taxaFreteSelect")?.value;
+        const margemLucro = parseFloat(document.getElementById("margemLucroML")?.value) || 0;
+        const precoVenda = document.getElementById("precoVendaML")?.textContent;
+        const lucroPorVenda = document.getElementById("lucroPorVendaML")?.textContent;
+        const taxaMercadoLivre = document.getElementById("taxaMercadoLivre")?.textContent;
+        const valorImpostos = document.getElementById("valorImpostosML")?.textContent;
+        const custoTotal = document.getElementById("custoTotalML")?.textContent;
+        const retornoProduto = document.getElementById("retornoProdutoML")?.textContent;
+        const markupPercent = document.getElementById("markupPercentML")?.textContent;
+        const markupX = document.getElementById("markupXML")?.textContent;
+
+        const custosExtras = [];
+        document.querySelectorAll("#custosExtrasContainerML .custo-extra-item").forEach(item => {
+            const valueInput = item.querySelector(".custo-extra-value");
+            const typeSelector = item.querySelector(".custo-extra-type-selector");
+            custosExtras.push({
+                value: parseFloat(valueInput.value.replace(',', '.')) || 0,
+                type: typeSelector.value
+            });
+        });
+
+        calculationData = {
+            inputs: {
+                custoProduto, impostos, despesasVariaveis, taxaMercadoLivreSelect, taxaFreteSelect, margemLucro, custosExtras
+            },
+            results: {
+                precoVenda, lucroPorVenda, taxaMercadoLivre, valorImpostos, custoTotal, retornoProduto, markupPercent, markupX
+            }
+        };
+    }
+
+    // Validar se o nome do anúncio foi preenchido
+    if (!adName || adName.trim() === '') {
+        showError("Por favor, preencha o nome do anúncio.");
+        return;
+    }
+
+    try {
+        // Fazer upload da imagem se foi selecionada
+        if (photoFile) {
+            adPhotoUrl = await uploadImage(photoFile, user.id);
+        }
+
+        const { data, error } = await supabaseClient
+            .from('saved_calculations')
+            .insert([
+                {
+                    user_id: user.id,
+                    platform: platform,
+                    ad_name: adName,
+                    ad_photo_url: adPhotoUrl,
+                    comment: comment,
+                    tags: tags,
+                    calculation_data: calculationData
+                }
+            ]);
+
+        if (error) {
+            throw error;
+        }
+
+        showSuccess("Cálculo salvo com sucesso!");
+        
+        // Limpar campos de salvamento
+        clearSaveFields(platform);
+        
+        // Recarregar lista de cálculos salvos
+        loadSavedCalculations(platform);
+        
+        console.log("Cálculo salvo:", data);
+    } catch (error) {
+        console.error("Erro ao salvar cálculo:", error);
+        showError("Erro ao salvar cálculo: " + error.message);
+    }
+}
+
+// Função para limpar campos de salvamento
+function clearSaveFields(platform) {
+    if (platform === 'shopee') {
+        document.getElementById("nomeAnuncioShopee").value = '';
+        document.getElementById("photoFileInputShopee").value = '';
+        document.getElementById("fotoAnuncioShopee").value = '';
+        document.getElementById("comentarioShopee").value = '';
+        document.getElementById("tagsShopee").value = '';
+    } else if (platform === 'mercadolivre') {
+        document.getElementById("nomeAnuncioML").value = '';
+        document.getElementById("photoFileInputML").value = '';
+        document.getElementById("fotoAnuncioML").value = '';
+        document.getElementById("comentarioML").value = '';
+        document.getElementById("tagsML").value = '';
+    }
+}
+
+
+
+// Função para carregar cálculos salvos
+async function loadSavedCalculations(platform) {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (!user) return;
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('saved_calculations')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('platform', platform)
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            throw error;
+        }
+
+        displaySavedCalculations(data, platform);
+    } catch (error) {
+        console.error('Erro ao carregar cálculos salvos:', error);
+    }
+}
+
+// Função para exibir cálculos salvos na interface
+function displaySavedCalculations(calculations, platform) {
+    const listId = platform === 'shopee' ? 'savedCalculationsListShopee' : 'savedCalculationsListML';
+    const headerId = platform === 'shopee' ? 'savedCalculationsShopee' : 'savedCalculationsML';
+    const listElement = document.getElementById(listId);
+    const headerElement = document.querySelector(`#${headerId} .saved-calculations-header span`);
+
+    if (!listElement || !headerElement) return;
+
+    // Atualizar contador no header
+    headerElement.textContent = `Anúncios Salvos (${calculations.length})`;
+
+    if (calculations.length === 0) {
+        listElement.innerHTML = `
+            <div class="no-calculations">
+                <i class="fas fa-calculator"></i>
+                <p>Nenhum cálculo salvo ainda</p>
+            </div>
+        `;
+        return;
+    }
+
+    listElement.innerHTML = calculations.map(calc => {
+        const createdDate = new Date(calc.created_at).toLocaleDateString('pt-BR');
+        const precoVenda = calc.calculation_data?.results?.precoVenda || 'N/A';
+        const lucro = calc.calculation_data?.results?.lucroPorVenda || 'N/A';
+        
+        return `
+            <div class="calculation-item" data-id="${calc.id}">
+                <div class="calculation-photo">
+                    ${calc.ad_photo_url ? 
+                        `<img src="${calc.ad_photo_url}" alt="${calc.ad_name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">` : 
+                        '<i class="fas fa-image"></i>'
+                    }
+                </div>
+                <div class="calculation-info">
+                    <div class="calculation-name">${calc.ad_name || 'Sem nome'}</div>
+                    <div class="calculation-meta">
+                        <span>Preço: ${precoVenda}</span>
+                        <span>Lucro: ${lucro}</span>
+                        <span>${createdDate}</span>
+                    </div>
+                </div>
+                <div class="calculation-actions">
+                    <button class="calculation-action-btn load" onclick="loadCalculation('${calc.id}', '${platform}')">
+                        Carregar
+                    </button>
+                    <button class="calculation-action-btn delete" onclick="deleteCalculation('${calc.id}', '${platform}')">
+                        Excluir
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Função para carregar um cálculo específico
+async function loadCalculation(calculationId, platform) {
+    try {
+        const { data, error } = await supabaseClient
+            .from('saved_calculations')
+            .select('*')
+            .eq('id', calculationId)
+            .single();
+
+        if (error) {
+            throw error;
+        }
+
+        // Preencher campos da calculadora com os dados salvos
+        fillCalculatorFields(data, platform);
+        
+        showSuccess("Cálculo carregado com sucesso!");
+    } catch (error) {
+        console.error('Erro ao carregar cálculo:', error);
+        showError("Erro ao carregar cálculo: " + error.message);
+    }
+}
+
+// Função para preencher campos da calculadora
+function fillCalculatorFields(calculation, platform) {
+    const inputs = calculation.calculation_data.inputs;
+    
+    if (platform === 'shopee') {
+        // Preencher campos Shopee
+        if (inputs.custoProduto) document.getElementById("custoProduto").value = inputs.custoProduto.toString().replace('.', ',');
+        if (inputs.impostos) document.getElementById("impostos").value = inputs.impostos.toString().replace('.', ',');
+        if (inputs.despesasVariaveis) document.getElementById("despesasVariaveis").value = inputs.despesasVariaveis.toString().replace('.', ',');
+        if (inputs.freteGratis !== undefined) document.getElementById("freteGratis").checked = inputs.freteGratis;
+        if (inputs.margemLucro) document.getElementById("margemLucro").value = inputs.margemLucro;
+        
+        // Preencher campos de salvamento
+        document.getElementById("nomeAnuncioShopee").value = calculation.ad_name || '';
+        document.getElementById("fotoAnuncioShopee").value = calculation.ad_photo_url || '';
+        document.getElementById("comentarioShopee").value = calculation.comment || '';
+        document.getElementById("tagsShopee").value = calculation.tags ? calculation.tags.join(', ') : '';
+        
+        // Recalcular
+        calcularPrecoVendaShopee();
+        
+    } else if (platform === 'mercadolivre') {
+        // Preencher campos Mercado Livre
+        if (inputs.custoProduto) document.getElementById("custoProdutoML").value = inputs.custoProduto.toString().replace('.', ',');
+        if (inputs.impostos) document.getElementById("impostosML").value = inputs.impostos.toString().replace('.', ',');
+        if (inputs.despesasVariaveis) document.getElementById("despesasVariaveisML").value = inputs.despesasVariaveis.toString().replace('.', ',');
+        if (inputs.taxaMercadoLivreSelect) document.getElementById("taxaMercadoLivreSelect").value = inputs.taxaMercadoLivreSelect;
+        if (inputs.taxaFreteSelect) document.getElementById("taxaFreteSelect").value = inputs.taxaFreteSelect;
+        if (inputs.margemLucro) document.getElementById("margemLucroML").value = inputs.margemLucro;
+        
+        // Preencher campos de salvamento
+        document.getElementById("nomeAnuncioML").value = calculation.ad_name || '';
+        document.getElementById("fotoAnuncioML").value = calculation.ad_photo_url || '';
+        document.getElementById("comentarioML").value = calculation.comment || '';
+        document.getElementById("tagsML").value = calculation.tags ? calculation.tags.join(', ') : '';
+        
+        // Recalcular
+        calcularPrecoVendaML();
+    }
+}
+
+// Função para excluir um cálculo
+async function deleteCalculation(calculationId, platform) {
+    if (!confirm('Tem certeza que deseja excluir este cálculo?')) {
+        return;
+    }
+
+    try {
+        const { error } = await supabaseClient
+            .from('saved_calculations')
+            .delete()
+            .eq('id', calculationId);
+
+        if (error) {
+            throw error;
+        }
+
+        showSuccess("Cálculo excluído com sucesso!");
+        loadSavedCalculations(platform);
+    } catch (error) {
+        console.error('Erro ao excluir cálculo:', error);
+        showError("Erro ao excluir cálculo: " + error.message);
+    }
+}
+
+// Função para mostrar mensagem de sucesso
+function showSuccess(message) {
+    const successDiv = document.createElement('div');
+    successDiv.className = 'success-message';
+    successDiv.innerHTML = `
+        <div class="success-content">
+            <i class="fas fa-check-circle"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    // Adicionar estilos se não existirem
+    if (!document.getElementById('message-styles')) {
+        const styles = document.createElement('style');
+        styles.id = 'message-styles';
+        styles.textContent = `
+            .success-message, .error-message {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 1000;
+                padding: 12px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                animation: slideIn 0.3s ease-out;
+            }
+            
+            .success-message {
+                background: #28a745;
+            }
+            
+            .error-message {
+                background: #dc3545;
+            }
+            
+            .success-content, .error-content {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(styles);
+    }
+    
+    document.body.appendChild(successDiv);
+    
+    // Auto-remover após 3 segundos
+    setTimeout(() => {
+        successDiv.remove();
+    }, 3000);
+}
+
+// Função para mostrar mensagem de erro
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.innerHTML = `
+        <div class="error-content">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>${message}</span>
+        </div>
+    `;
+    
+    document.body.appendChild(errorDiv);
+    
+    // Auto-remover após 5 segundos
+    setTimeout(() => {
+        errorDiv.remove();
+    }, 5000);
 }
 
