@@ -2319,9 +2319,9 @@ body.dark-theme .no-calculations i {
 
 /* Ajustes específicos para garantir largura total */
 .results-section .saved-calculations-section {
-    margin-left: -30px; /* Compensa o padding da seção de resultados */
+    margin-left: -605px; /* Compensa o padding da seção de resultados */
     margin-right: -30px;
-    width: calc(100% + 60px); /* Adiciona o padding de volta */
+    width: calc(100% + 620px); /* Adiciona o padding de volta */
 }
 
 /* Para dispositivos móveis, ajustar o comportamento */
