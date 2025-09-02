@@ -2674,7 +2674,7 @@ body.dark-theme .plan-tooltip::after {
 
 /* Estados do relógio baseados no status do plano */
 .plan-clock.clock-active {
-    background: linear-gradient(135deg, #28a745, #20c997);
+    background: linear-gradient(135deg, rgb(255, 60, 0), rgb(255 233 0));
 }
 
 .plan-clock.clock-warning {
