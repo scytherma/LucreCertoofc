@@ -235,13 +235,17 @@ function closeUpgradeModal() {
 function goToPlansPage() {
     closeUpgradeModal();
     
-    // Se estiver usando SPA, navegar para planos
-    if (typeof loadPage === 'function') {
-        loadPage('planos');
-        updateActiveClass('planos');
+    // Simular clique no link de planos da sidebar
+    const planosLink = document.querySelector('a[data-route="planos"]');
+    
+    if (planosLink) {
+        planosLink.click();
     } else {
-        // Caso contrário, redirecionar
-        window.location.href = '/planos';
+        // Fallback para hash routing
+        window.location.hash = '#planos';
+        
+        // Disparar evento de mudança de hash se necessário
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
     }
 }
 
