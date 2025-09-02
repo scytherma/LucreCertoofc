@@ -1992,7 +1992,7 @@ body.dark-theme .alert-info {
 }
 
 .save-field {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 .save-field:last-of-type {
@@ -2397,7 +2397,7 @@ body.dark-theme .no-calculations i {
 
 .save-body {
     display: grid;
-    gap: 15px;
+    gap: 1px;
 }
 
 .save-field label {
