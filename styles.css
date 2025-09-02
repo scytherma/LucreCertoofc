@@ -1925,9 +1925,9 @@ body.dark-theme .alert-info {
 }
 
 .save-header {
-    background: white;
+    background: rgb(222, 222, 222);
     padding: 0;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid rgb(255 255 255);
 }
 
 .save-title-container {
@@ -2337,11 +2337,11 @@ body.dark-theme .no-calculations i {
 
 /* Estilos para a seção de salvamento aprimorada */
 .save-section-enhanced {
-    background: #f8f9fa;
+    background: rgb(255 255 255);
     border-radius: 12px;
     padding: 20px;
     margin-top: 20px;
-    border: 1px solid #e9ecef;
+    border: 1px solid rgb(255 255 255);
 }
 
 .save-header {
