@@ -2112,7 +2112,7 @@ body.dark-theme .save-field input[type="text"]:focus {
 }
 
 .saved-calculations-header {
-    background: #ff6b35;
+    background: linear-gradient(135deg, rgb(255, 60, 0), rgb(255 158 0));
     color: white;
     padding: 16px 20px;
     font-size: 16px;
