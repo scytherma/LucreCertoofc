@@ -1927,7 +1927,7 @@ body.dark-theme .alert-info {
 .save-header {
     background: white;
     padding: 0;
-    border-bottom: 1px solid rgb(255 255 255);
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .save-title-container {
@@ -1942,8 +1942,8 @@ body.dark-theme .alert-info {
     border: none;
     padding: 0 16px;
     font-size: 16px;
-    color: rgb(255, 60, 0);
-    background: rgb(222, 222, 222);
+    color: #ff6b35;
+    background: transparent;
     outline: none;
     font-weight: 500;
 }
@@ -2319,9 +2319,9 @@ body.dark-theme .no-calculations i {
 
 /* Ajustes específicos para garantir largura total */
 .results-section .saved-calculations-section {
-    margin-left: -605px; /* Compensa o padding da seção de resultados */
+    margin-left: -30px; /* Compensa o padding da seção de resultados */
     margin-right: -30px;
-    width: calc(100% + 620px); /* Adiciona o padding de volta */
+    width: calc(100% + 60px); /* Adiciona o padding de volta */
 }
 
 /* Para dispositivos móveis, ajustar o comportamento */
@@ -2337,11 +2337,11 @@ body.dark-theme .no-calculations i {
 
 /* Estilos para a seção de salvamento aprimorada */
 .save-section-enhanced {
-    background: rgb(255 255 255);
+    background: #f8f9fa;
     border-radius: 12px;
     padding: 20px;
     margin-top: 20px;
-    border: 1px solid rgb(255 255 255);
+    border: 1px solid #e9ecef;
 }
 
 .save-header {
@@ -2502,5 +2502,234 @@ body.dark-theme .no-calculations i {
     text-align: center;
     padding: 20px;
     color: #999;
+}
+
+
+
+/* Estilos para o relógio do plano */
+.plan-clock-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.plan-clock {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #ff6b35, #f7931e);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.3);
+}
+
+.plan-clock:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.5);
+}
+
+.plan-clock i {
+    color: white;
+    font-size: 18px;
+    animation: clockTick 2s infinite;
+}
+
+@keyframes clockTick {
+    0%, 50%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(6deg); }
+    75% { transform: rotate(-6deg); }
+}
+
+.plan-tooltip {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background: white;
+    border-radius: 12px;
+    padding: 0;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    min-width: 220px;
+    border: 1px solid #e0e0e0;
+}
+
+.plan-clock-container:hover .plan-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.tooltip-content {
+    padding: 16px;
+}
+
+.tooltip-content h4 {
+    margin: 0 0 8px 0;
+    color: #ff6b35;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.tooltip-content p {
+    margin: 4px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.tooltip-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Seta do tooltip */
+.plan-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid white;
+}
+
+.plan-tooltip::after {
+    content: '';
+    position: absolute;
+    top: -9px;
+    right: 20px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #e0e0e0;
+}
+
+/* Tema escuro para o relógio do plano */
+body.dark-theme .plan-tooltip {
+    background: #3a3a3a;
+    border-color: #555;
+}
+
+body.dark-theme .tooltip-content h4 {
+    color: #ff6b35;
+}
+
+body.dark-theme .tooltip-content p {
+    color: #ccc;
+}
+
+body.dark-theme .plan-tooltip::before {
+    border-bottom-color: #3a3a3a;
+}
+
+body.dark-theme .plan-tooltip::after {
+    border-bottom-color: #555;
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 768px) {
+    .plan-clock {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .plan-clock i {
+        font-size: 16px;
+    }
+    
+    .plan-tooltip {
+        right: -10px;
+        min-width: 200px;
+    }
+    
+    .tooltip-content {
+        padding: 12px;
+    }
+    
+    .tooltip-content h4 {
+        font-size: 14px;
+    }
+    
+    .tooltip-content p {
+        font-size: 12px;
+    }
+}
+
+/* Ajuste no user-info para acomodar o relógio */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* Estados do relógio baseados no status do plano */
+.plan-clock.clock-active {
+    background: linear-gradient(135deg, #28a745, #20c997);
+}
+
+.plan-clock.clock-warning {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+}
+
+.plan-clock.clock-expired {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+/* Estilos para o status no tooltip */
+.status-active {
+    color: #28a745 !important;
+    font-weight: 600;
+}
+
+.status-warning {
+    color: #ffc107 !important;
+    font-weight: 600;
+}
+
+.status-expired {
+    color: #dc3545 !important;
+    font-weight: 600;
+}
+
+/* Animação pulsante para planos próximos do vencimento */
+.plan-clock.clock-warning {
+    animation: clockTick 2s infinite, warningPulse 3s infinite;
+}
+
+.plan-clock.clock-expired {
+    animation: clockTick 2s infinite, expiredPulse 2s infinite;
+}
+
+@keyframes warningPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3); }
+    50% { box-shadow: 0 4px 20px rgba(255, 193, 7, 0.6); }
+}
+
+@keyframes expiredPulse {
+    0%, 100% { box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3); }
+    50% { box-shadow: 0 4px 20px rgba(220, 53, 69, 0.8); }
+}
+
+/* Tema escuro para os estados do relógio */
+body.dark-theme .status-active {
+    color: #4caf50 !important;
+}
+
+body.dark-theme .status-warning {
+    color: #ff9800 !important;
+}
+
+body.dark-theme .status-expired {
+    color: #f44336 !important;
 }
 
