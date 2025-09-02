@@ -2057,12 +2057,12 @@ body.dark-theme .alert-info {
 /* Tema escuro para a seção de salvar cálculo aprimorada */
 body.dark-theme .save-section-enhanced {
     background: #3a3a3a;
-    border-color: #444;
+    border-color: #3a3a3a;
 }
 
 body.dark-theme .save-header {
-    background: #2c2c2c;
-    border-bottom-color: #444;
+    background: #3a3a3a;
+    border-bottom-color: #3a3a3a;
 }
 
 body.dark-theme .save-title-input {
