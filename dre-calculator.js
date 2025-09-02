@@ -19,12 +19,10 @@ function formatPercentage(value) {
 
 // Função para converter string monetária em número
 function parseCurrency(value) {
-    if (!value) return 0;
-    // Remove todos os caracteres não numéricos exceto vírgula e ponto
-    const cleanValue = value.toString().replace(/[^\d,.-]/g, '');
-    // Substitui vírgula por ponto para conversão
-    const numericValue = cleanValue.replace(',', '.');
-    return parseFloat(numericValue) || 0;
+    if (typeof value !== 'string' || !value) return 0;
+    // Remove pontos (separadores de milhares) e substitui vírgula por ponto (decimal)
+    const cleanValue = value.replace(/\./g, "").replace(",", ".");
+    return parseFloat(cleanValue) || 0;
 }
 
 // Função para aplicar máscara monetária
