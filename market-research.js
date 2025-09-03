@@ -19,6 +19,218 @@ let currentSearchState = {
     currentAnalysisId: null
 };
 
+// Variável global para o URL da Edge Function, para evitar redeclaração
+// Certifique-se de que esta variável seja definida apenas UMA VEZ em seu projeto, 
+// idealmente em um arquivo de configuração global ou injetada pelo ambiente.
+// Se 'SUPABASE_FUNCTIONS_BASE_URL' já estiver definida em 'plans.js' ou 'auth-supabase.js', remova a declaração de lá.
+// Por exemplo, se 'SUPABASE_FUNCTIONS_BASE_URL' já existe, apenas use-a.
+// Caso contrário, defina-a aqui ou em um arquivo de configuração global.
+// Exemplo de definição (se não estiver definida em outro lugar):
+// const SUPABASE_FUNCTIONS_BASE_URL = 'https://<your-project-ref>.supabase.co/functions/v1';
+
+// Funções auxiliares que estavam faltando ou mal declaradas
+function closeMarketResearchModal() {
+    const modal = document.getElementById('marketResearchModal');
+    if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.remove();
+        }, 300); // Tempo para a transição CSS
+    }
+}
+
+function clearSearch() {
+    const searchInput = document.getElementById('marketSearchInput');
+    if (searchInput) {
+        searchInput.value = '';
+        validateSearchInput(); // Revalidar para desabilitar o botão se necessário
+        const clearButton = document.getElementById('clearSearchButton');
+        if (clearButton) clearButton.style.display = 'none';
+    }
+}
+
+function showInputError(message) {
+    const errorElement = document.getElementById('searchInputError');
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+}
+
+function hideInputError() {
+    const errorElement = document.getElementById('searchInputError');
+    if (errorElement) {
+        errorElement.textContent = '';
+        errorElement.style.display = 'none';
+    }
+}
+
+function showSearchError(message) {
+    const resultsContainer = document.getElementById('marketResearchResults');
+    if (resultsContainer) {
+        resultsContainer.innerHTML = `<div class="error-message">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3>Erro na Pesquisa</h3>
+            <p>${message}</p>
+        </div>`;
+    }
+}
+
+function ensureAdvancedModalStyles() {
+    // Esta função pode ser vazia se os estilos já estiverem carregados via CSS
+    // Ou pode adicionar dinamicamente estilos se necessário
+}
+
+function exportAdvancedResults() {
+    alert('Funcionalidade de exportar relatório em desenvolvimento!');
+}
+
+function shareAnalysis() {
+    alert('Funcionalidade de compartilhar análise em desenvolvimento!');
+}
+
+function initInteractiveComponents(results) {
+    // Adicionar event listeners para as abas
+    const tabButtons = document.querySelectorAll('.analysis-tabs .tab-btn');
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tab = button.dataset.tab;
+            // Remover active de todos os botões e painéis
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+            // Adicionar active ao botão e painel clicados
+            button.classList.add('active');
+            document.getElementById(`${tab}-panel`).classList.add('active');
+        });
+    });
+
+    // Renderizar gráficos (ex: Chart.js)
+    // Exemplo para o gráfico de tendências
+    if (results.data && results.data.google_trends && results.data.google_trends.data_points) {
+        const trendsCtx = document.getElementById('trendsChart');
+        if (trendsCtx) {
+            new Chart(trendsCtx, {
+                type: 'line',
+                data: {
+                    labels: results.data.google_trends.data_points.map(dp => new Date(dp.date).toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' })),
+                    datasets: [{
+                        label: 'Interesse ao longo do tempo',
+                        data: results.data.google_trends.data_points.map(dp => dp.value),
+                        borderColor: '#ff6b35',
+                        tension: 0.1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // Exemplo para o gráfico de demanda mensal
+    if (results.data && results.data.monthly_demand) {
+        const demandCtx = document.getElementById('demandChart');
+        if (demandCtx) {
+            new Chart(demandCtx, {
+                type: 'bar',
+                data: {
+                    labels: results.data.monthly_demand.map(md => md.month),
+                    datasets: [{
+                        label: 'Índice de Demanda Mensal',
+                        data: results.data.monthly_demand.map(md => md.value),
+                        backgroundColor: '#3498db',
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    // Exemplo para o gráfico de sazonalidade
+    if (results.data && results.data.seasonality && results.data.seasonality.seasonal_index) {
+        const seasonalityCtx = document.getElementById('seasonalityChart');
+        if (seasonalityCtx) {
+            new Chart(seasonalityCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Primavera', 'Verão', 'Outono', 'Inverno'],
+                    datasets: [{
+                        label: 'Índice Sazonal',
+                        data: [
+                            results.data.seasonality.seasonal_index * results.data.seasonality.spring,
+                            results.data.seasonality.seasonal_index * results.data.seasonality.summer,
+                            results.data.seasonality.seasonal_index * results.data.seasonality.autumn,
+                            results.data.seasonality.seasonal_index * results.data.seasonality.winter
+                        ],
+                        backgroundColor: ['#2ecc71', '#f1c40f', '#e67e22', '#3498db'],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                }
+            });
+        }
+    }
+}
+
+function loadSearchHistory() {
+    // Implementar carregamento do histórico do localStorage
+    try {
+        const history = JSON.parse(localStorage.getItem('marketResearchHistory') || '[]');
+        currentSearchState.searchHistory = history;
+        // Opcional: renderizar histórico na UI
+    } catch (e) {
+        console.error('Erro ao carregar histórico de pesquisa:', e);
+        currentSearchState.searchHistory = [];
+    }
+}
+
+function checkMarketResearchAccess() {
+    // Implementar lógica de verificação de acesso (ex: plano de assinatura)
+    // Por enquanto, sempre retorna true para permitir a pesquisa
+    return true;
+}
+
+function getCachedResult(query) {
+    // Implementar cache baseado em localStorage ou IndexedDB
+    const cached = localStorage.getItem(`marketResearchCache_${query}`);
+    if (cached) {
+        const { timestamp, data } = JSON.parse(cached);
+        if (Date.now() - timestamp < MARKET_RESEARCH_CONFIG.cacheTimeout) {
+            return data;
+        }
+    }
+    return null;
+}
+
+function setCachedResult(query, results) {
+    localStorage.setItem(`marketResearchCache_${query}`, JSON.stringify({ timestamp: Date.now(), data: results }));
+}
+
+function addToSearchHistory(query) {
+    let history = currentSearchState.searchHistory;
+    // Remover duplicatas e adicionar no início
+    history = history.filter(item => item !== query);
+    history.unshift(query);
+    // Limitar tamanho do histórico
+    history = history.slice(0, 10); 
+    currentSearchState.searchHistory = history;
+    localStorage.setItem('marketResearchHistory', JSON.stringify(history));
+}
+
 // Função para inicializar a pesquisa de mercado
 function initMarketResearch() {
     console.log('Inicializando sistema de pesquisa de mercado aprimorado...');
@@ -57,6 +269,31 @@ function initAdvancedComponents() {
     
     // Configurar auto-complete inteligente
     setupIntelligentAutoComplete();
+
+    // Adicionar elemento para mensagens de erro de input
+    const searchInputGroup = document.querySelector('.search-input-group');
+    if (searchInputGroup && !document.getElementById('searchInputError')) {
+        const errorDiv = document.createElement('div');
+        errorDiv.id = 'searchInputError';
+        errorDiv.className = 'input-error-message';
+        errorDiv.style.display = 'none';
+        searchInputGroup.appendChild(errorDiv);
+    }
+
+    // Adicionar link para Chart.js se não existir
+    if (!document.querySelector('script[src*="chart.js"]')) {
+        const chartJsScript = document.createElement('script');
+        chartJsScript.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+        document.head.appendChild(chartJsScript);
+    }
+
+    // Adicionar link para Font Awesome se não existir
+    if (!document.querySelector('link[href*="fontawesome"]')) {
+        const fontAwesomeLink = document.createElement('link');
+        fontAwesomeLink.rel = 'stylesheet';
+        fontAwesomeLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
+        document.head.appendChild(fontAwesomeLink);
+    }
 }
 
 // Configurar event listeners
@@ -97,14 +334,14 @@ function validateSearchInput() {
     if (query.length < MARKET_RESEARCH_CONFIG.minSearchLength) {
         searchButton.disabled = true;
         searchInput.classList.add('invalid');
-        showInputError('Digite pelo menos 3 caracteres');
+        showInputError(`Digite pelo menos ${MARKET_RESEARCH_CONFIG.minSearchLength} caracteres`);
         return false;
     }
     
     if (query.length > MARKET_RESEARCH_CONFIG.maxSearchLength) {
         searchButton.disabled = true;
         searchInput.classList.add('invalid');
-        showInputError('Máximo de 100 caracteres');
+        showInputError(`Máximo de ${MARKET_RESEARCH_CONFIG.maxSearchLength} caracteres`);
         return false;
     }
     
@@ -199,9 +436,14 @@ async function performAdvancedMarketResearch(query) {
     console.log(`Realizando pesquisa avançada para: "${query}"`);
     
     // Obter token de autenticação
+    // Assumindo que supabaseClient está disponível globalmente ou importado
+    if (typeof supabaseClient === 'undefined') {
+        throw new Error('supabaseClient não está definido. Certifique-se de que o Supabase JS SDK está carregado.');
+    }
+
     const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
     if (sessionError || !session || !session.access_token) {
-        throw new Error('Usuário não autenticado');
+        throw new Error('Usuário não autenticado ou sessão expirada.');
     }
     
     const accessToken = session.access_token;
@@ -210,6 +452,11 @@ async function performAdvancedMarketResearch(query) {
     updateRealTimeProgress('Iniciando análise...', 10);
     
     // Fazer requisição para Edge Function aprimorada
+    // Assumindo que SUPABASE_FUNCTIONS_BASE_URL está definido globalmente
+    if (typeof SUPABASE_FUNCTIONS_BASE_URL === 'undefined') {
+        throw new Error('SUPABASE_FUNCTIONS_BASE_URL não está definido. Verifique seu arquivo de configuração.');
+    }
+
     const response = await fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/market-research-advanced`, {
         method: 'POST',
         headers: {
@@ -565,26 +812,127 @@ function generatePriceAnalysisHTML(priceAnalysis) {
         <div class="price-grid">
             <div class="price-card">
                 <div class="price-label">Preço Médio</div>
-                <div class="price-value">R$ ${priceAnalysis.average_price || 'N/A'}</div>
+                <div class="price-value">R$ ${priceAnalysis.average_price?.toFixed(2) || 'N/A'}</div>
                 <div class="price-trend ${priceAnalysis.average_trend || 'stable'}">
                     <i class="fas fa-arrow-${priceAnalysis.average_trend === 'up' ? 'up' : priceAnalysis.average_trend === 'down' ? 'down' : 'right'}"></i>
                 </div>
             </div>
             <div class="price-card">
                 <div class="price-label">Preço Mínimo</div>
-                <div class="price-value">R$ ${priceAnalysis.min_price || 'N/A'}</div>
+                <div class="price-value">R$ ${priceAnalysis.min_price?.toFixed(2) || 'N/A'}</div>
             </div>
             <div class="price-card">
                 <div class="price-label">Preço Máximo</div>
-                <div class="price-value">R$ ${priceAnalysis.max_price || 'N/A'}</div>
+                <div class="price-value">R$ ${priceAnalysis.max_price?.toFixed(2) || 'N/A'}</div>
             </div>
             <div class="price-card suggested">
                 <div class="price-label">Preço Sugerido</div>
-                <div class="price-value">R$ ${priceAnalysis.suggested_price || 'N/A'}</div>
+                <div class="price-value">R$ ${priceAnalysis.suggested_price?.toFixed(2) || 'N/A'}</div>
                 <div class="confidence">Confiança: ${priceAnalysis.confidence || 85}%</div>
             </div>
         </div>
     `;
+}
+
+function generatePeaksHTML(peaks) {
+    if (!peaks || peaks.length === 0) {
+        return '<p class="no-data">Nenhum pico de interesse identificado.</p>';
+    }
+    return peaks.map(peak => `
+        <div class="peak-card">
+            <h4>${peak.month}</h4>
+            <p>${peak.reason}</p>
+        </div>
+    `).join('');
+}
+
+function generateMonthlyDemandTable(monthlyDemand) {
+    if (!monthlyDemand || monthlyDemand.length === 0) {
+        return '<p class="no-data">Dados de demanda mensal não disponíveis.</p>';
+    }
+    return `
+        <table>
+            <thead>
+                <tr>
+                    <th>Mês</th>
+                    <th>Índice</th>
+                    <th>Nível</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${monthlyDemand.map(item => `
+                    <tr>
+                        <td>${item.month}</td>
+                        <td>${item.value}</td>
+                        <td class="demand-${item.level}">${item.level.charAt(0).toUpperCase() + item.level.slice(1)}</td>
+                    </tr>
+                `).join('')}
+            </tbody>
+        </table>
+    `;
+}
+
+function generateDemandForecast(forecast) {
+    if (!forecast) {
+        return '<p class="no-data">Previsão de demanda não disponível.</p>';
+    }
+    return `
+        <div class="forecast-card">
+            <p>${forecast.description || 'Previsão de demanda para os próximos meses.'}</p>
+            <ul>
+                <li>**Próximo Mês:** ${forecast.next_month_trend || 'Estável'}</li>
+                <li>**Próximos 3 Meses:** ${forecast.three_month_trend || 'Crescimento Moderado'}</li>
+                <li>**Próximos 6 Meses:** ${forecast.six_month_trend || 'Potencial de Alta'}</li>
+            </ul>
+        </div>
+    `;
+}
+
+function generateCompetitorsHTML(competitors) {
+    if (!competitors || competitors.length === 0) {
+        return '<p class="no-data">Dados de concorrentes não disponíveis.</p>';
+    }
+    return competitors.map(comp => `
+        <div class="competitor-card">
+            <h4>${comp.name}</h4>
+            <p>Participação de Mercado: ${comp.market_share}</p>
+            <p>Faixa de Preço: ${comp.price_range}</p>
+            <p>Força: ${comp.strength}</p>
+        </div>
+    `).join('');
+}
+
+function generateOpportunitiesHTML(opportunities) {
+    if (!opportunities || opportunities.length === 0) {
+        return '<p class="no-data">Nenhuma oportunidade de mercado identificada.</p>';
+    }
+    return `<ul>${opportunities.map(opp => `<li>${opp}</li>`).join('')}</ul>`;
+}
+
+function generateStrategicInsightsHTML(insights) {
+    if (!insights || insights.length === 0) {
+        return '<p class="no-data">Nenhum insight estratégico disponível.</p>';
+    }
+    return insights.map(insight => `
+        <div class="insight-card ${insight.priority}">
+            <i class="fas fa-${insight.icon}"></i>
+            <h4>${insight.title}</h4>
+            <p>${insight.description}</p>
+        </div>
+    `).join('');
+}
+
+function generateRecommendationsHTML(recommendations) {
+    if (!recommendations || recommendations.length === 0) {
+        return '<p class="no-data">Nenhuma recomendação de ação disponível.</p>';
+    }
+    return recommendations.map(rec => `
+        <div class="recommendation-item">
+            <h4>${rec.title}</h4>
+            <p>${rec.description}</p>
+            <span class="timeline">${rec.timeline}</span>
+        </div>
+    `).join('');
 }
 
 // Funções utilitárias
@@ -724,4 +1072,712 @@ window.shareAnalysis = shareAnalysis;
 window.exportResults = exportAdvancedResults;
 
 console.log('Market Research Enhanced module loaded');
+
+// Chamar initMarketResearch quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', initMarketResearch);
+
+// Adicionar estilos para mensagens de erro de input
+const style = document.createElement('style');
+style.innerHTML = `
+    .input-error-message {
+        color: #e74c3c;
+        font-size: 0.85rem;
+        margin-top: 5px;
+        display: none;
+    }
+`;
+document.head.appendChild(style);
+
+// Adicionar estilos para o modal
+const modalStyle = document.createElement('style');
+modalStyle.innerHTML = `
+    .market-research-modal.advanced {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+    }
+    .market-research-modal.advanced.show {
+        opacity: 1;
+        visibility: visible;
+    }
+    .modal-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+    }
+    .modal-content.advanced {
+        position: relative;
+        background: white;
+        border-radius: 20px;
+        max-width: 95vw;
+        max-height: 95vh;
+        width: 1200px;
+        margin: 2.5vh auto;
+        overflow: hidden;
+        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+    }
+    .modal-header.advanced {
+        background: linear-gradient(135deg, #2c3e50, #34495e);
+        color: white;
+        padding: 25px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 3px solid #ff6b35;
+    }
+    .header-content h2 {
+        margin: 0 0 8px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 1.8rem;
+        font-weight: 700;
+    }
+    .analysis-meta {
+        display: flex;
+        gap: 20px;
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+    .product-name {
+        font-weight: 600;
+        color: #ff6b35;
+    }
+    .header-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    .btn-icon {
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+        color: white;
+        padding: 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .btn-icon:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+    .modal-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+    .modal-close:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    .modal-body.advanced {
+        flex: 1;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+    .analysis-tabs {
+        display: flex;
+        background: #f8f9fa;
+        border-bottom: 1px solid #dee2e6;
+        padding: 0 30px;
+    }
+    .tab-btn {
+        background: none;
+        border: none;
+        padding: 15px 25px;
+        cursor: pointer;
+        font-weight: 600;
+        color: #6c757d;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+    .tab-btn:hover {
+        color: #ff6b35;
+        background: rgba(255, 107, 53, 0.05);
+    }
+    .tab-btn.active {
+        color: #ff6b35;
+        border-bottom-color: #ff6b35;
+        background: white;
+    }
+    .tab-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 30px;
+    }
+    .tab-panel {
+        display: none;
+    }
+    .tab-panel.active {
+        display: block;
+    }
+    .overview-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+    .executive-summary h3 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.4rem;
+        font-weight: 700;
+    }
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    .summary-card {
+        background: white;
+        border: 2px solid #ecf0f1;
+        border-radius: 15px;
+        padding: 25px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    .summary-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #3498db, #2ecc71);
+    }
+    .summary-card.primary::before {
+        background: linear-gradient(90deg, #ff6b35, #f39c12);
+    }
+    .summary-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        border-color: #ff6b35;
+    }
+    .card-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #ff6b35, #f39c12);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+    }
+    .card-content h4 {
+        margin: 0 0 5px 0;
+        color: #2c3e50;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .card-content p {
+        margin: 0;
+        color: #34495e;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+    .demand-high { color: #27ae60; }
+    .demand-medium { color: #f39c12; }
+    .demand-low { color: #e67e22; }
+    .demand-very-low { color: #e74c3c; }
+    .potential-high { color: #27ae60; }
+    .potential-medium { color: #f39c12; }
+    .potential-low { color: #e74c3c; }
+    .context-section {
+        background: linear-gradient(135deg, #74b9ff, #0984e3);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin: 20px 0;
+    }
+    .context-section h3 {
+        color: white;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .context-content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    .context-text p {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        margin: 0;
+    }
+    .context-indicators {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    .indicator {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 12px 20px;
+        border-radius: 25px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+        backdrop-filter: blur(10px);
+    }
+    .price-section {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 15px;
+        border: 2px solid #ecf0f1;
+    }
+    .price-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+    .price-card {
+        background: white;
+        border: 2px solid #ecf0f1;
+        border-radius: 12px;
+        padding: 25px;
+        text-align: center;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    .price-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .price-card.suggested {
+        border-color: #ff6b35;
+        background: linear-gradient(135deg, #fff5f2, #ffffff);
+    }
+    .price-card.suggested::before {
+        content: '⭐ RECOMENDADO';
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #ff6b35;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 15px;
+        font-size: 0.7rem;
+        font-weight: 700;
+    }
+    .price-label {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        margin-bottom: 10px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .price-value {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 10px;
+    }
+    .price-value.suggested {
+        color: #ff6b35;
+    }
+    .price-trend {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    .price-trend.up { color: #27ae60; }
+    .price-trend.down { color: #e74c3c; }
+    .price-trend.stable { color: #95a5a6; }
+    .confidence {
+        font-size: 0.8rem;
+        color: #7f8c8d;
+        font-weight: 600;
+    }
+    .real-time-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        min-width: 300px;
+        transition: all 0.3s ease;
+    }
+    .real-time-container.hidden {
+        transform: translateX(350px);
+        opacity: 0;
+    }
+    .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .progress-header h4 {
+        margin: 0;
+        color: #2c3e50;
+        font-size: 1.1rem;
+    }
+    .close-progress {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        color: #95a5a6;
+        padding: 5px;
+    }
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: #ecf0f1;
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #ff6b35, #f39c12);
+        border-radius: 4px;
+        transition: width 0.3s ease;
+        width: 0%;
+    }
+    .progress-text {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        text-align: center;
+    }
+    .notification-container {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 10001;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    .notification {
+        background: white;
+        border-radius: 10px;
+        padding: 15px 20px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 300px;
+        border-left: 4px solid #3498db;
+        animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+        from {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    .notification.success {
+        border-left-color: #27ae60;
+    }
+    .notification.error {
+        border-left-color: #e74c3c;
+    }
+    .notification i {
+        font-size: 1.2rem;
+    }
+    .notification.success i { color: #27ae60; }
+    .notification.error i { color: #e74c3c; }
+    .notification.info i { color: #3498db; }
+    .close-notification {
+        background: none;
+        border: none;
+        font-size: 1.1rem;
+        cursor: pointer;
+        color: #95a5a6;
+        margin-left: auto;
+        padding: 5px;
+    }
+    .modal-footer.advanced {
+        padding: 25px 30px;
+        border-top: 1px solid #dee2e6;
+        background: #f8f9fa;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .footer-info {
+        display: flex;
+        gap: 20px;
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+    .analysis-id {
+        font-family: monospace;
+        background: #e9ecef;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+    .confidence-score {
+        font-weight: 600;
+    }
+    .footer-actions {
+        display: flex;
+        gap: 15px;
+    }
+    .btn-primary, .btn-secondary {
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #ff6b35, #f39c12);
+        color: white;
+        box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+    }
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+    }
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+    }
+    @media (max-width: 768px) {
+        .market-research-page {
+            padding: 15px;
+        }
+        .market-research-header {
+            padding: 25px;
+        }
+        .market-research-header h1 {
+            font-size: 2.2rem;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .market-search-container {
+            padding: 25px;
+        }
+        .search-form {
+            flex-direction: column;
+            gap: 20px;
+        }
+        .modal-content.advanced {
+            width: 95vw;
+            height: 95vh;
+            margin: 2.5vh auto;
+        }
+        .analysis-tabs {
+            overflow-x: auto;
+            padding: 0 15px;
+        }
+        .tab-btn {
+            white-space: nowrap;
+            padding: 12px 20px;
+        }
+        .tab-content {
+            padding: 20px;
+        }
+        .summary-grid {
+            grid-template-columns: 1fr;
+        }
+        .price-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .context-indicators {
+            justify-content: center;
+        }
+        .real-time-container {
+            right: 10px;
+            left: 10px;
+            min-width: auto;
+        }
+        .notification-container {
+            left: 10px;
+            right: 10px;
+        }
+        .notification {
+            min-width: auto;
+        }
+    }
+    @media (max-width: 480px) {
+        .price-grid {
+            grid-template-columns: 1fr;
+        }
+        .footer-actions {
+            flex-direction: column;
+            width: 100%;
+        }
+        .btn-primary, .btn-secondary {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+    body.dark-theme .market-research-page {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: #ecf0f1;
+    }
+    body.dark-theme .market-research-header,
+    body.dark-theme .market-search-container {
+        background: #34495e;
+        border: 1px solid #4a5568;
+    }
+    body.dark-theme .market-research-header h1,
+    body.dark-theme .search-input-group label {
+        color: #ecf0f1;
+    }
+    body.dark-theme #marketSearchInput {
+        background: #2c3e50;
+        border-color: #4a5568;
+        color: #ecf0f1;
+    }
+    body.dark-theme #marketSearchInput:focus {
+        background: #34495e;
+        border-color: #ff6b35;
+    }
+    body.dark-theme .modal-content.advanced {
+        background: #34495e;
+    }
+    body.dark-theme .analysis-tabs {
+        background: #2c3e50;
+        border-bottom-color: #4a5568;
+    }
+    body.dark-theme .tab-btn {
+        color: #a0aec0;
+    }
+    body.dark-theme .tab-btn.active,
+    body.dark-theme .tab-btn:hover {
+        color: #ff6b35;
+        background: #34495e;
+    }
+    body.dark-theme .summary-card {
+        background: #2c3e50;
+        border-color: #4a5568;
+    }
+    body.dark-theme .summary-card h4,
+    body.dark-theme .summary-card p {
+        color: #ecf0f1;
+    }
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    .market-research-page > * {
+        animation: fadeInUp 0.6s ease-out;
+    }
+    .market-research-page > *:nth-child(2) {
+        animation-delay: 0.1s;
+    }
+    .market-research-page > *:nth-child(3) {
+        animation-delay: 0.2s;
+    }
+    .loading-shimmer {
+        background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+    }
+    @keyframes shimmer {
+        0% {
+            background-position: -200% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
+    }
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+    }
+    button:focus,
+    input:focus {
+        outline: 2px solid #ff6b35;
+        outline-offset: 2px;
+    }
+    * {
+        transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    @media print {
+        .modal-overlay,
+        .modal-header,
+        .modal-footer,
+        .analysis-tabs,
+        .real-time-container,
+        .notification-container {
+            display: none !important;
+        }
+        .modal-content.advanced {
+            position: static;
+            width: 100%;
+            height: auto;
+            max-width: none;
+            max-height: none;
+            margin: 0;
+            box-shadow: none;
+            border: 1px solid #000;
+        }
+        .tab-panel {
+            display: block !important;
+            page-break-inside: avoid;
+        }
+    }
+`;
+document.head.appendChild(modalStyle);
+
+// Chamar initMarketResearch quando o DOM estiver pronto
+document.addEventListener('DOMContentLoaded', initMarketResearch);
 
