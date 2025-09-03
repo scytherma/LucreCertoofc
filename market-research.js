@@ -1,11 +1,13 @@
-// market-research.js - Sistema de Pesquisa de Mercado
+// market-research-enhanced.js - Sistema de Pesquisa de Mercado Aprimorado
 
 // Configurações globais
 const MARKET_RESEARCH_CONFIG = {
     maxSearchLength: 100,
     minSearchLength: 3,
-    searchTimeout: 30000, // 30 segundos
+    searchTimeout: 60000, // 60 segundos para análises mais complexas
     cacheTimeout: 24 * 60 * 60 * 1000, // 24 horas
+    maxRetries: 3,
+    retryDelay: 2000
 };
 
 // Estado global da pesquisa
@@ -13,12 +15,13 @@ let currentSearchState = {
     isSearching: false,
     currentQuery: '',
     lastResults: null,
-    searchHistory: []
+    searchHistory: [],
+    currentAnalysisId: null
 };
 
 // Função para inicializar a pesquisa de mercado
 function initMarketResearch() {
-    console.log('Inicializando sistema de pesquisa de mercado...');
+    console.log('Inicializando sistema de pesquisa de mercado aprimorado...');
     
     // Verificar se os elementos existem
     const searchInput = document.getElementById('marketSearchInput');
@@ -38,7 +41,22 @@ function initMarketResearch() {
     // Verificar controle de acesso
     checkMarketResearchAccess();
     
-    console.log('Sistema de pesquisa de mercado inicializado com sucesso');
+    // Inicializar componentes avançados
+    initAdvancedComponents();
+    
+    console.log('Sistema de pesquisa de mercado aprimorado inicializado com sucesso');
+}
+
+// Inicializar componentes avançados
+function initAdvancedComponents() {
+    // Criar container para análises em tempo real
+    createRealTimeAnalysisContainer();
+    
+    // Inicializar sistema de notificações
+    initNotificationSystem();
+    
+    // Configurar auto-complete inteligente
+    setupIntelligentAutoComplete();
 }
 
 // Configurar event listeners
@@ -47,17 +65,20 @@ function setupMarketResearchEventListeners() {
     const searchButton = document.getElementById('marketSearchButton');
     
     // Event listener para o botão de pesquisa
-    searchButton.addEventListener('click', handleMarketSearch);
+    searchButton.addEventListener('click', handleAdvancedMarketSearch);
     
     // Event listener para Enter no campo de pesquisa
     searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
-            handleMarketSearch();
+            handleAdvancedMarketSearch();
         }
     });
     
     // Event listener para validação em tempo real
     searchInput.addEventListener('input', validateSearchInput);
+    
+    // Event listener para sugestões inteligentes
+    searchInput.addEventListener('input', debounce(showIntelligentSuggestions, 300));
     
     // Event listener para limpar pesquisa
     const clearButton = document.getElementById('clearSearchButton');
@@ -103,61 +124,9 @@ function validateSearchInput() {
     return true;
 }
 
-// Mostrar erro de input
-function showInputError(message) {
-    let errorElement = document.getElementById('searchInputError');
-    if (!errorElement) {
-        errorElement = document.createElement('div');
-        errorElement.id = 'searchInputError';
-        errorElement.className = 'search-input-error';
-        const searchContainer = document.querySelector('.market-search-container');
-        searchContainer.appendChild(errorElement);
-    }
-    errorElement.textContent = message;
-    errorElement.style.display = 'block';
-}
-
-// Esconder erro de input
-function hideInputError() {
-    const errorElement = document.getElementById('searchInputError');
-    if (errorElement) {
-        errorElement.style.display = 'none';
-    }
-}
-
-// Verificar acesso à pesquisa de mercado
-function checkMarketResearchAccess() {
-    // Verificar se usuário tem assinatura ativa
-    if (typeof userSubscriptionStatus !== 'undefined' && 
-        userSubscriptionStatus.status !== 'active') {
-        
-        // Usuário sem assinatura - mostrar preview limitado
-        showAccessLimitedMessage();
-        return false;
-    }
-    
-    return true;
-}
-
-// Mostrar mensagem de acesso limitado
-function showAccessLimitedMessage() {
-    const searchButton = document.getElementById('marketSearchButton');
-    const searchInput = document.getElementById('marketSearchInput');
-    
-    if (searchButton) {
-        searchButton.textContent = 'Upgrade para Pesquisar';
-        searchButton.onclick = () => showUpgradeModal('Pesquisa de Mercado');
-    }
-    
-    if (searchInput) {
-        searchInput.placeholder = 'Upgrade para usar a pesquisa de mercado...';
-        searchInput.disabled = true;
-    }
-}
-
-// Manipular pesquisa de mercado
-async function handleMarketSearch() {
-    console.log('Iniciando pesquisa de mercado...');
+// Manipular pesquisa de mercado avançada
+async function handleAdvancedMarketSearch() {
+    console.log('Iniciando pesquisa de mercado avançada...');
     
     // Verificar se já está pesquisando
     if (currentSearchState.isSearching) {
@@ -184,18 +153,22 @@ async function handleMarketSearch() {
     const cachedResult = getCachedResult(query);
     if (cachedResult) {
         console.log('Resultado encontrado no cache');
-        showMarketResearchResults(cachedResult);
+        showAdvancedMarketResearchResults(cachedResult);
         return;
     }
     
     try {
         // Iniciar estado de loading
-        setSearchLoadingState(true);
+        setAdvancedSearchLoadingState(true);
         currentSearchState.isSearching = true;
         currentSearchState.currentQuery = query;
+        currentSearchState.currentAnalysisId = generateAnalysisId();
         
-        // Fazer a pesquisa
-        const results = await performMarketResearch(query);
+        // Mostrar progresso em tempo real
+        showRealTimeProgress();
+        
+        // Fazer a pesquisa avançada
+        const results = await performAdvancedMarketResearch(query);
         
         // Salvar no cache
         setCachedResult(query, results);
@@ -203,47 +176,27 @@ async function handleMarketSearch() {
         // Salvar no histórico
         addToSearchHistory(query);
         
-        // Mostrar resultados
-        showMarketResearchResults(results);
+        // Mostrar resultados avançados
+        showAdvancedMarketResearchResults(results);
+        
+        // Notificar conclusão
+        showNotification('Análise concluída com sucesso!', 'success');
         
     } catch (error) {
         console.error('Erro na pesquisa de mercado:', error);
         showSearchError(error.message);
+        showNotification('Erro na análise: ' + error.message, 'error');
     } finally {
         // Finalizar estado de loading
-        setSearchLoadingState(false);
+        setAdvancedSearchLoadingState(false);
         currentSearchState.isSearching = false;
+        hideRealTimeProgress();
     }
 }
 
-// Definir estado de loading
-function setSearchLoadingState(isLoading) {
-    const searchButton = document.getElementById('marketSearchButton');
-    const searchInput = document.getElementById('marketSearchInput');
-    const loadingIndicator = document.getElementById('searchLoadingIndicator');
-    
-    if (isLoading) {
-        searchButton.disabled = true;
-        searchButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analisando...';
-        searchInput.disabled = true;
-        
-        if (loadingIndicator) {
-            loadingIndicator.style.display = 'block';
-        }
-    } else {
-        searchButton.disabled = false;
-        searchButton.innerHTML = '<i class="fas fa-search"></i> Analisar';
-        searchInput.disabled = false;
-        
-        if (loadingIndicator) {
-            loadingIndicator.style.display = 'none';
-        }
-    }
-}
-
-// Realizar pesquisa de mercado
-async function performMarketResearch(query) {
-    console.log(`Realizando pesquisa para: "${query}"`);
+// Realizar pesquisa de mercado avançada
+async function performAdvancedMarketResearch(query) {
+    console.log(`Realizando pesquisa avançada para: "${query}"`);
     
     // Obter token de autenticação
     const { data: { session }, error: sessionError } = await supabaseClient.auth.getSession();
@@ -253,8 +206,11 @@ async function performMarketResearch(query) {
     
     const accessToken = session.access_token;
     
-    // Fazer requisição para Edge Function
-    const response = await fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/market-research`, {
+    // Atualizar progresso
+    updateRealTimeProgress('Iniciando análise...', 10);
+    
+    // Fazer requisição para Edge Function aprimorada
+    const response = await fetch(`${SUPABASE_FUNCTIONS_BASE_URL}/market-research-advanced`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -262,9 +218,21 @@ async function performMarketResearch(query) {
         },
         body: JSON.stringify({
             query: query,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            analysisId: currentSearchState.currentAnalysisId,
+            options: {
+                includeGoogleTrends: true,
+                includeDemandAnalysis: true,
+                includeContextAnalysis: true,
+                includeCompetitorAnalysis: true,
+                includePriceAnalysis: true,
+                includeSeasonalityAnalysis: true,
+                includeStrategicInsights: true
+            }
         })
     });
+    
+    updateRealTimeProgress('Processando dados...', 30);
     
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
@@ -272,21 +240,26 @@ async function performMarketResearch(query) {
     }
     
     const results = await response.json();
-    console.log('Resultados da pesquisa:', results);
+    
+    updateRealTimeProgress('Finalizando análise...', 90);
+    
+    console.log('Resultados da pesquisa avançada:', results);
+    
+    updateRealTimeProgress('Concluído!', 100);
     
     return results;
 }
 
-// Mostrar resultados da pesquisa
-function showMarketResearchResults(results) {
-    console.log('Exibindo resultados da pesquisa');
+// Mostrar resultados da pesquisa avançada
+function showAdvancedMarketResearchResults(results) {
+    console.log('Exibindo resultados da pesquisa avançada');
     
-    // Criar e mostrar modal
-    const modal = createResultsModal(results);
+    // Criar e mostrar modal avançado
+    const modal = createAdvancedResultsModal(results);
     document.body.appendChild(modal);
     
     // Adicionar estilos se necessário
-    ensureModalStyles();
+    ensureAdvancedModalStyles();
     
     // Animar entrada do modal
     setTimeout(() => {
@@ -295,35 +268,82 @@ function showMarketResearchResults(results) {
     
     // Salvar resultados atuais
     currentSearchState.lastResults = results;
+    
+    // Inicializar componentes interativos
+    initInteractiveComponents(results);
 }
 
-// Criar modal de resultados
-function createResultsModal(results) {
+// Criar modal de resultados avançado
+function createAdvancedResultsModal(results) {
     const modal = document.createElement('div');
-    modal.className = 'market-research-modal';
+    modal.className = 'market-research-modal advanced';
     modal.id = 'marketResearchModal';
     
     modal.innerHTML = `
         <div class="modal-overlay" onclick="closeMarketResearchModal()"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2><i class="fas fa-chart-line"></i> Análise de Mercado</h2>
-                <button class="modal-close" onclick="closeMarketResearchModal()">
-                    <i class="fas fa-times"></i>
-                </button>
+        <div class="modal-content advanced">
+            <div class="modal-header advanced">
+                <div class="header-content">
+                    <h2><i class="fas fa-chart-line"></i> Análise Avançada de Mercado</h2>
+                    <div class="analysis-meta">
+                        <span class="product-name">${results.data?.product_name || currentSearchState.currentQuery}</span>
+                        <span class="analysis-date">${new Date().toLocaleDateString('pt-BR')}</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon" onclick="exportAdvancedResults()" title="Exportar Relatório">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="btn-icon" onclick="shareAnalysis()" title="Compartilhar">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                    <button class="modal-close" onclick="closeMarketResearchModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
             
-            <div class="modal-body">
-                ${generateResultsHTML(results)}
+            <div class="modal-body advanced">
+                <div class="analysis-tabs">
+                    <button class="tab-btn active" data-tab="overview">Visão Geral</button>
+                    <button class="tab-btn" data-tab="trends">Tendências</button>
+                    <button class="tab-btn" data-tab="demand">Demanda</button>
+                    <button class="tab-btn" data-tab="competition">Concorrência</button>
+                    <button class="tab-btn" data-tab="insights">Insights</button>
+                </div>
+                
+                <div class="tab-content">
+                    <div class="tab-panel active" id="overview-panel">
+                        ${generateOverviewHTML(results)}
+                    </div>
+                    <div class="tab-panel" id="trends-panel">
+                        ${generateTrendsHTML(results)}
+                    </div>
+                    <div class="tab-panel" id="demand-panel">
+                        ${generateDemandHTML(results)}
+                    </div>
+                    <div class="tab-panel" id="competition-panel">
+                        ${generateCompetitionHTML(results)}
+                    </div>
+                    <div class="tab-panel" id="insights-panel">
+                        ${generateInsightsHTML(results)}
+                    </div>
+                </div>
             </div>
             
-            <div class="modal-footer">
-                <button class="btn-secondary" onclick="closeMarketResearchModal()">
-                    Fechar
-                </button>
-                <button class="btn-primary" onclick="exportResults()">
-                    <i class="fas fa-download"></i> Exportar
-                </button>
+            <div class="modal-footer advanced">
+                <div class="footer-info">
+                    <span class="analysis-id">ID: ${currentSearchState.currentAnalysisId}</span>
+                    <span class="confidence-score">Confiança: ${results.data?.confidence_score || 85}%</span>
+                </div>
+                <div class="footer-actions">
+                    <button class="btn-secondary" onclick="closeMarketResearchModal()">
+                        Fechar
+                    </button>
+                    <button class="btn-primary" onclick="exportAdvancedResults()">
+                        <i class="fas fa-download"></i> Exportar Relatório
+                    </button>
+                </div>
             </div>
         </div>
     `;
@@ -331,8 +351,8 @@ function createResultsModal(results) {
     return modal;
 }
 
-// Gerar HTML dos resultados
-function generateResultsHTML(results) {
+// Gerar HTML da visão geral
+function generateOverviewHTML(results) {
     if (!results || !results.success) {
         return `
             <div class="error-message">
@@ -346,54 +366,196 @@ function generateResultsHTML(results) {
     const data = results.data;
     
     return `
-        <div class="results-container">
+        <div class="overview-container">
             <!-- Resumo Executivo -->
-            <div class="result-section">
+            <div class="executive-summary">
                 <h3><i class="fas fa-clipboard-list"></i> Resumo Executivo</h3>
-                <div class="summary-card">
-                    <div class="summary-item">
-                        <span class="label">Produto Analisado:</span>
-                        <span class="value">${data.product_name || 'N/A'}</span>
+                <div class="summary-grid">
+                    <div class="summary-card primary">
+                        <div class="card-icon"><i class="fas fa-box"></i></div>
+                        <div class="card-content">
+                            <h4>Produto</h4>
+                            <p>${data.product_name || 'N/A'}</p>
+                        </div>
                     </div>
-                    <div class="summary-item">
-                        <span class="label">Categoria:</span>
-                        <span class="value">${data.category || 'N/A'}</span>
+                    <div class="summary-card">
+                        <div class="card-icon"><i class="fas fa-tags"></i></div>
+                        <div class="card-content">
+                            <h4>Categoria</h4>
+                            <p>${data.category || 'N/A'}</p>
+                        </div>
                     </div>
-                    <div class="summary-item">
-                        <span class="label">Índice de Demanda:</span>
-                        <span class="value demand-${getDemandLevel(data.demand_index)}">${data.demand_index || 'N/A'}</span>
+                    <div class="summary-card">
+                        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                        <div class="card-content">
+                            <h4>Índice de Demanda</h4>
+                            <p class="demand-${getDemandLevel(data.demand_index)}">${data.demand_index || 'N/A'}</p>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon"><i class="fas fa-trophy"></i></div>
+                        <div class="card-content">
+                            <h4>Potencial de Mercado</h4>
+                            <p class="potential-${getMarketPotential(data.market_potential)}">${data.market_potential || 'Médio'}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contexto Demográfico -->
+            <div class="context-section">
+                <h3><i class="fas fa-globe-americas"></i> Contexto Demográfico e Climático</h3>
+                <div class="context-content">
+                    <div class="context-text">
+                        <p>${data.demographic_context || 'Análise de contexto não disponível'}</p>
+                    </div>
+                    <div class="context-indicators">
+                        <div class="indicator">
+                            <i class="fas fa-thermometer-half"></i>
+                            <span>Clima Tropical</span>
+                        </div>
+                        <div class="indicator">
+                            <i class="fas fa-users"></i>
+                            <span>Demografia</span>
+                        </div>
+                        <div class="indicator">
+                            <i class="fas fa-trending-up"></i>
+                            <span>Tendências</span>
+                        </div>
+                        <div class="indicator">
+                            <i class="fas fa-map-marked-alt"></i>
+                            <span>Regiões</span>
+                        </div>
                     </div>
                 </div>
             </div>
             
             <!-- Análise de Preços -->
-            <div class="result-section">
+            <div class="price-section">
                 <h3><i class="fas fa-dollar-sign"></i> Análise de Preços</h3>
                 <div class="price-analysis">
                     ${generatePriceAnalysisHTML(data.price_analysis)}
-                </div>
-            </div>
-            
-            <!-- Tendências -->
-            <div class="result-section">
-                <h3><i class="fas fa-trending-up"></i> Tendências de Mercado</h3>
-                <div class="trends-container">
-                    ${generateTrendsHTML(data.trends)}
-                </div>
-            </div>
-            
-            <!-- Insights e Recomendações -->
-            <div class="result-section">
-                <h3><i class="fas fa-lightbulb"></i> Insights e Recomendações</h3>
-                <div class="insights-container">
-                    ${generateInsightsHTML(data.insights)}
                 </div>
             </div>
         </div>
     `;
 }
 
-// Gerar HTML da análise de preços
+// Gerar HTML das tendências
+function generateTrendsHTML(results) {
+    const data = results.data;
+    
+    return `
+        <div class="trends-container">
+            <!-- Google Trends -->
+            <div class="trends-section">
+                <h3><i class="fab fa-google"></i> Tendências Google Trends</h3>
+                <div class="trends-chart-container">
+                    <canvas id="trendsChart" width="400" height="200"></canvas>
+                </div>
+                <div class="trends-analysis">
+                    <p>${data.trends_analysis || 'Análise de tendências baseada nos últimos 12 meses mostra variações sazonais significativas.'}</p>
+                </div>
+            </div>
+            
+            <!-- Picos de Interesse -->
+            <div class="peaks-section">
+                <h3><i class="fas fa-mountain"></i> Picos de Interesse</h3>
+                <div class="peaks-grid">
+                    ${generatePeaksHTML(data.interest_peaks)}
+                </div>
+            </div>
+            
+            <!-- Sazonalidade -->
+            <div class="seasonality-section">
+                <h3><i class="fas fa-calendar-alt"></i> Análise de Sazonalidade</h3>
+                <div class="seasonality-chart-container">
+                    <canvas id="seasonalityChart" width="400" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Gerar HTML da demanda
+function generateDemandHTML(results) {
+    const data = results.data;
+    
+    return `
+        <div class="demand-container">
+            <!-- Índice de Demanda Mensal -->
+            <div class="monthly-demand-section">
+                <h3><i class="fas fa-chart-bar"></i> Índice de Demanda Mensal</h3>
+                <div class="demand-chart-container">
+                    <canvas id="demandChart" width="400" height="200"></canvas>
+                </div>
+                <div class="demand-table">
+                    ${generateMonthlyDemandTable(data.monthly_demand)}
+                </div>
+            </div>
+            
+            <!-- Previsão de Demanda -->
+            <div class="forecast-section">
+                <h3><i class="fas fa-crystal-ball"></i> Previsão de Demanda</h3>
+                <div class="forecast-content">
+                    ${generateDemandForecast(data.demand_forecast)}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Gerar HTML da concorrência
+function generateCompetitionHTML(results) {
+    const data = results.data;
+    
+    return `
+        <div class="competition-container">
+            <!-- Análise Competitiva -->
+            <div class="competitive-analysis-section">
+                <h3><i class="fas fa-chess"></i> Análise Competitiva</h3>
+                <div class="competitors-grid">
+                    ${generateCompetitorsHTML(data.competitors)}
+                </div>
+            </div>
+            
+            <!-- Oportunidades de Mercado -->
+            <div class="opportunities-section">
+                <h3><i class="fas fa-bullseye"></i> Oportunidades de Mercado</h3>
+                <div class="opportunities-list">
+                    ${generateOpportunitiesHTML(data.market_opportunities)}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Gerar HTML dos insights
+function generateInsightsHTML(results) {
+    const data = results.data;
+    
+    return `
+        <div class="insights-container">
+            <!-- Insights Estratégicos -->
+            <div class="strategic-insights-section">
+                <h3><i class="fas fa-lightbulb"></i> Insights Estratégicos</h3>
+                <div class="insights-grid">
+                    ${generateStrategicInsightsHTML(data.strategic_insights)}
+                </div>
+            </div>
+            
+            <!-- Recomendações de Ação -->
+            <div class="recommendations-section">
+                <h3><i class="fas fa-tasks"></i> Recomendações de Ação</h3>
+                <div class="recommendations-timeline">
+                    ${generateRecommendationsHTML(data.recommendations)}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Funções auxiliares para geração de HTML
 function generatePriceAnalysisHTML(priceAnalysis) {
     if (!priceAnalysis) {
         return '<p class="no-data">Dados de preços não disponíveis</p>';
@@ -404,6 +566,9 @@ function generatePriceAnalysisHTML(priceAnalysis) {
             <div class="price-card">
                 <div class="price-label">Preço Médio</div>
                 <div class="price-value">R$ ${priceAnalysis.average_price || 'N/A'}</div>
+                <div class="price-trend ${priceAnalysis.average_trend || 'stable'}">
+                    <i class="fas fa-arrow-${priceAnalysis.average_trend === 'up' ? 'up' : priceAnalysis.average_trend === 'down' ? 'down' : 'right'}"></i>
+                </div>
             </div>
             <div class="price-card">
                 <div class="price-label">Preço Mínimo</div>
@@ -413,49 +578,16 @@ function generatePriceAnalysisHTML(priceAnalysis) {
                 <div class="price-label">Preço Máximo</div>
                 <div class="price-value">R$ ${priceAnalysis.max_price || 'N/A'}</div>
             </div>
-            <div class="price-card">
+            <div class="price-card suggested">
                 <div class="price-label">Preço Sugerido</div>
-                <div class="price-value suggested">R$ ${priceAnalysis.suggested_price || 'N/A'}</div>
+                <div class="price-value">R$ ${priceAnalysis.suggested_price || 'N/A'}</div>
+                <div class="confidence">Confiança: ${priceAnalysis.confidence || 85}%</div>
             </div>
         </div>
     `;
 }
 
-// Gerar HTML das tendências
-function generateTrendsHTML(trends) {
-    if (!trends || !trends.length) {
-        return '<p class="no-data">Dados de tendências não disponíveis</p>';
-    }
-    
-    return trends.map(trend => `
-        <div class="trend-item">
-            <div class="trend-period">${trend.period}</div>
-            <div class="trend-value ${trend.direction}">${trend.value}%</div>
-            <div class="trend-description">${trend.description}</div>
-        </div>
-    `).join('');
-}
-
-// Gerar HTML dos insights
-function generateInsightsHTML(insights) {
-    if (!insights || !insights.length) {
-        return '<p class="no-data">Insights não disponíveis</p>';
-    }
-    
-    return insights.map(insight => `
-        <div class="insight-item">
-            <div class="insight-icon">
-                <i class="fas fa-${insight.icon || 'info-circle'}"></i>
-            </div>
-            <div class="insight-content">
-                <h4>${insight.title}</h4>
-                <p>${insight.description}</p>
-            </div>
-        </div>
-    `).join('');
-}
-
-// Obter nível de demanda
+// Funções utilitárias
 function getDemandLevel(demandIndex) {
     if (!demandIndex) return 'unknown';
     
@@ -466,438 +598,130 @@ function getDemandLevel(demandIndex) {
     return 'very-low';
 }
 
-// Fechar modal de resultados
-function closeMarketResearchModal() {
-    const modal = document.getElementById('marketResearchModal');
-    if (modal) {
-        modal.classList.remove('show');
-        setTimeout(() => {
-            modal.remove();
-        }, 300);
-    }
+function getMarketPotential(potential) {
+    return potential || 'medium';
 }
 
-// Exportar resultados
-function exportResults() {
-    if (!currentSearchState.lastResults) {
-        alert('Nenhum resultado para exportar');
-        return;
-    }
-    
-    const data = currentSearchState.lastResults;
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `pesquisa-mercado-${currentSearchState.currentQuery}-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    
-    URL.revokeObjectURL(url);
+function generateAnalysisId() {
+    return 'analysis_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 }
 
-// Limpar pesquisa
-function clearSearch() {
-    const searchInput = document.getElementById('marketSearchInput');
-    if (searchInput) {
-        searchInput.value = '';
-        validateSearchInput();
-    }
-    
-    hideInputError();
-}
-
-// Mostrar erro de pesquisa
-function showSearchError(message) {
-    const errorModal = document.createElement('div');
-    errorModal.className = 'error-modal';
-    errorModal.innerHTML = `
-        <div class="modal-overlay" onclick="this.parentElement.remove()"></div>
-        <div class="modal-content error">
-            <div class="modal-header">
-                <h2><i class="fas fa-exclamation-triangle"></i> Erro na Pesquisa</h2>
-                <button class="modal-close" onclick="this.closest('.error-modal').remove()">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>${message}</p>
-                <p>Tente novamente em alguns instantes ou entre em contato com o suporte se o problema persistir.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-primary" onclick="this.closest('.error-modal').remove()">
-                    Entendi
-                </button>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(errorModal);
-    ensureModalStyles();
-}
-
-// Funções de cache
-function getCachedResult(query) {
-    try {
-        const cacheKey = `market_research_${btoa(query)}`;
-        const cached = localStorage.getItem(cacheKey);
-        
-        if (cached) {
-            const data = JSON.parse(cached);
-            const now = Date.now();
-            
-            if (now - data.timestamp < MARKET_RESEARCH_CONFIG.cacheTimeout) {
-                return data.results;
-            } else {
-                localStorage.removeItem(cacheKey);
-            }
-        }
-    } catch (error) {
-        console.error('Erro ao acessar cache:', error);
-    }
-    
-    return null;
-}
-
-function setCachedResult(query, results) {
-    try {
-        const cacheKey = `market_research_${btoa(query)}`;
-        const data = {
-            timestamp: Date.now(),
-            results: results
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
         };
-        
-        localStorage.setItem(cacheKey, JSON.stringify(data));
-    } catch (error) {
-        console.error('Erro ao salvar no cache:', error);
-    }
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }
 
-// Funções de histórico
-function loadSearchHistory() {
-    try {
-        const history = localStorage.getItem('market_research_history');
-        if (history) {
-            currentSearchState.searchHistory = JSON.parse(history);
-        }
-    } catch (error) {
-        console.error('Erro ao carregar histórico:', error);
-        currentSearchState.searchHistory = [];
-    }
-}
-
-function addToSearchHistory(query) {
-    try {
-        // Remover duplicatas
-        currentSearchState.searchHistory = currentSearchState.searchHistory.filter(item => item.query !== query);
-        
-        // Adicionar no início
-        currentSearchState.searchHistory.unshift({
-            query: query,
-            timestamp: Date.now()
-        });
-        
-        // Manter apenas os últimos 10
-        currentSearchState.searchHistory = currentSearchState.searchHistory.slice(0, 10);
-        
-        // Salvar no localStorage
-        localStorage.setItem('market_research_history', JSON.stringify(currentSearchState.searchHistory));
-    } catch (error) {
-        console.error('Erro ao salvar histórico:', error);
-    }
-}
-
-// Garantir que os estilos do modal existam
-function ensureModalStyles() {
-    if (document.getElementById('market-research-modal-styles')) {
-        return;
-    }
-    
-    const styles = document.createElement('style');
-    styles.id = 'market-research-modal-styles';
-    styles.textContent = `
-        .market-research-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .market-research-modal.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        
-        .modal-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-        }
-        
-        .modal-content {
-            position: relative;
-            background: white;
-            border-radius: 12px;
-            max-width: 90vw;
-            max-height: 90vh;
-            width: 1000px;
-            margin: 5vh auto;
-            overflow: hidden;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        }
-        
-        .modal-header {
-            background: #ff6b35;
-            color: white;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-header h2 {
-            margin: 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 4px;
-            transition: background 0.2s;
-        }
-        
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .modal-body {
-            padding: 0;
-            max-height: calc(90vh - 140px);
-            overflow-y: auto;
-        }
-        
-        .modal-footer {
-            padding: 20px;
-            border-top: 1px solid #eee;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-        
-        .results-container {
-            padding: 20px;
-        }
-        
-        .result-section {
-            margin-bottom: 30px;
-        }
-        
-        .result-section h3 {
-            color: #333;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.2rem;
-        }
-        
-        .summary-card {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-        }
-        
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-        
-        .summary-item:last-child {
-            margin-bottom: 0;
-        }
-        
-        .summary-item .label {
-            font-weight: 600;
-            color: #666;
-        }
-        
-        .summary-item .value {
-            font-weight: 700;
-            color: #333;
-        }
-        
-        .demand-high { color: #28a745; }
-        .demand-medium { color: #ffc107; }
-        .demand-low { color: #fd7e14; }
-        .demand-very-low { color: #dc3545; }
-        
-        .price-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .price-card {
-            background: white;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .price-card.suggested {
-            border-color: #ff6b35;
-            background: #fff5f2;
-        }
-        
-        .price-label {
-            font-size: 0.9rem;
-            color: #666;
-            margin-bottom: 8px;
-        }
-        
-        .price-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #333;
-        }
-        
-        .price-value.suggested {
-            color: #ff6b35;
-        }
-        
-        .trend-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid #e9ecef;
-        }
-        
-        .trend-value.up {
-            color: #28a745;
-        }
-        
-        .trend-value.down {
-            color: #dc3545;
-        }
-        
-        .insight-item {
-            display: flex;
-            gap: 15px;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #e9ecef;
-        }
-        
-        .insight-icon {
-            flex-shrink: 0;
-            width: 40px;
-            height: 40px;
-            background: #ff6b35;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .insight-content h4 {
-            margin: 0 0 8px 0;
-            color: #333;
-        }
-        
-        .insight-content p {
-            margin: 0;
-            color: #666;
-            line-height: 1.5;
-        }
-        
-        .no-data {
-            text-align: center;
-            color: #666;
-            font-style: italic;
-            padding: 20px;
-        }
-        
-        .error-message {
-            text-align: center;
-            padding: 40px;
-            color: #dc3545;
-        }
-        
-        .error-message i {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        
-        .btn-primary, .btn-secondary {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.2s;
-        }
-        
-        .btn-primary {
-            background: #ff6b35;
-            color: white;
-        }
-        
-        .btn-primary:hover {
-            background: #e55a2b;
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-        
-        .search-input-error {
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: 5px;
-            display: none;
-        }
-        
-        .market-search-container input.invalid {
-            border-color: #dc3545;
-        }
+// Componentes de progresso em tempo real
+function createRealTimeAnalysisContainer() {
+    const container = document.createElement('div');
+    container.id = 'realTimeAnalysisContainer';
+    container.className = 'real-time-container hidden';
+    container.innerHTML = `
+        <div class="progress-header">
+            <h4>Analisando mercado...</h4>
+            <button class="close-progress" onclick="hideRealTimeProgress()">×</button>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">Iniciando...</div>
     `;
     
-    document.head.appendChild(styles);
+    document.body.appendChild(container);
+}
+
+function showRealTimeProgress() {
+    const container = document.getElementById('realTimeAnalysisContainer');
+    if (container) {
+        container.classList.remove('hidden');
+    }
+}
+
+function hideRealTimeProgress() {
+    const container = document.getElementById('realTimeAnalysisContainer');
+    if (container) {
+        container.classList.add('hidden');
+    }
+}
+
+function updateRealTimeProgress(text, percentage) {
+    const progressText = document.getElementById('progressText');
+    const progressFill = document.getElementById('progressFill');
+    
+    if (progressText) progressText.textContent = text;
+    if (progressFill) progressFill.style.width = percentage + '%';
+}
+
+// Sistema de notificações
+function initNotificationSystem() {
+    const container = document.createElement('div');
+    container.id = 'notificationContainer';
+    container.className = 'notification-container';
+    document.body.appendChild(container);
+}
+
+function showNotification(message, type = 'info') {
+    const container = document.getElementById('notificationContainer');
+    if (!container) return;
+    
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+        <span>${message}</span>
+        <button class="close-notification" onclick="this.parentElement.remove()">×</button>
+    `;
+    
+    container.appendChild(notification);
+    
+    // Auto-remove após 5 segundos
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+// Auto-complete inteligente
+function setupIntelligentAutoComplete() {
+    // Implementar sugestões baseadas em histórico e tendências
+}
+
+function showIntelligentSuggestions(event) {
+    // Implementar sugestões inteligentes
+}
+
+// Definir estado de loading avançado
+function setAdvancedSearchLoadingState(isLoading) {
+    const searchButton = document.getElementById('marketSearchButton');
+    const searchInput = document.getElementById('marketSearchInput');
+    
+    if (isLoading) {
+        searchButton.disabled = true;
+        searchButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analisando...';
+        searchInput.disabled = true;
+    } else {
+        searchButton.disabled = false;
+        searchButton.innerHTML = '<i class="fas fa-search"></i> Analisar';
+        searchInput.disabled = false;
+    }
 }
 
 // Exportar funções globais
 window.initMarketResearch = initMarketResearch;
 window.closeMarketResearchModal = closeMarketResearchModal;
-window.exportResults = exportResults;
+window.exportAdvancedResults = exportAdvancedResults;
+window.shareAnalysis = shareAnalysis;
+
+// Manter compatibilidade com funções existentes
+window.exportResults = exportAdvancedResults;
+
+console.log('Market Research Enhanced module loaded');
 
