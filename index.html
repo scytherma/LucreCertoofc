@@ -13,17 +13,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <script src="./supabase-config.js"></script>
-    <script src="./spa.js"></script>
-    <script src="./dre-calculator.js"></script>
-    <script src="./market-research.js"></script>
-    <script src="./auth-supabase.js"></script>
-    <script src="./subscription_control.js"></script>
-    <script src="./user-dropdown.js"></script>
-    <script src="./plan-clock.js"></script>
-    <!-- Carregando plans.js por último para garantir que todas as dependências estejam disponíveis -->
-    <script src="./plans.js"></script>
 </head>
 <body>
     <!-- Loading screen -->
@@ -61,6 +50,18 @@
             100% { transform: rotate(360deg); }
         }
     </style>
+
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="./supabase-config.js"></script>
+    <script src="./auth-supabase.js"></script>
+    <script src="./spa.js"></script>
+    <script src="./dre-calculator.js"></script>
+    <script src="./subscription_control.js"></script>
+    <script src="./user-dropdown.js"></script>
+    <script src="./plan-clock.js"></script>
+    <script src="./plans.js"></script>
+    <!-- market-research-enhanced.js deve vir depois de supabase-config.js e auth-supabase.js -->
+    <script src="./market-research-enhanced.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
@@ -218,5 +219,7 @@
             }, 1000); // Aguardar 1 segundo para garantir que todos os scripts foram carregados
         });
     </script>
+
+
 
 
