@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" class="brasil-map">
+  <defs>
+    <style>
+      .state {
+        fill: #E0E0E0;
+        stroke: #FFFFFF;
+        stroke-width: 1.5;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .state:hover {
+        stroke-width: 3;
+        filter: brightness(1.1);
+        transform-origin: center;
+      }
+      
+      .state.pessimo { fill: #E53935; }
+      .state.ruim { fill: #FB8C00; }
+      .state.fraco { fill: #FFEB3B; }
+      .state.mediano { fill: #43A047; }
+      .state.bom { fill: #29B6F6; }
+      .state.excelente { fill: #0D47A1; }
+      
+      .state-label {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        fill: #333;
+        text-anchor: middle;
+        pointer-events: none;
+      }
+    </style>
+  </defs>
+  
+  <!-- Roraima -->
+  <path id="RR" class="state" data-state="RR" data-name="Roraima" data-percentage="16" data-searches="650" data-trend="-1"
+        d="M 200 50 L 280 50 L 300 80 L 280 120 L 220 130 L 180 100 Z"
+        aria-label="Roraima - 16% de interesse"/>
+  
+  <!-- Amapá -->
+  <path id="AP" class="state" data-state="AP" data-name="Amapá" data-percentage="22" data-searches="890" data-trend="-3"
+        d="M 380 60 L 420 50 L 450 80 L 440 120 L 400 140 L 360 120 Z"
+        aria-label="Amapá - 22% de interesse"/>
+  
+  <!-- Amazonas -->
+  <path id="AM" class="state" data-state="AM" data-name="Amazonas" data-percentage="18" data-searches="4500" data-trend="+8"
+        d="M 80 150 L 200 140 L 280 160 L 320 200 L 300 280 L 250 320 L 180 300 L 120 250 Z"
+        aria-label="Amazonas - 18% de interesse"/>
+  
+  <!-- Pará -->
+  <path id="PA" class="state" data-state="PA" data-name="Pará" data-percentage="25" data-searches="6800" data-trend="+2"
+        d="M 320 160 L 440 150 L 480 180 L 500 220 L 480 280 L 440 300 L 380 320 L 320 300 Z"
+        aria-label="Pará - 25% de interesse"/>
+  
+  <!-- Acre -->
+  <path id="AC" class="state" data-state="AC" data-name="Acre" data-percentage="15" data-searches="1250" data-trend="+5"
+        d="M 80 320 L 150 310 L 180 340 L 160 380 L 120 400 L 80 380 Z"
+        aria-label="Acre - 15% de interesse"/>
+  
+  <!-- Rondônia -->
+  <path id="RO" class="state" data-state="RO" data-name="Rondônia" data-percentage="19" data-searches="1800" data-trend="+3"
+        d="M 180 320 L 250 310 L 280 340 L 260 380 L 220 400 L 180 380 Z"
+        aria-label="Rondônia - 19% de interesse"/>
+  
+  <!-- Mato Grosso -->
+  <path id="MT" class="state" data-state="MT" data-name="Mato Grosso" data-percentage="35" data-searches="5100" data-trend="+6"
+        d="M 280 320 L 380 310 L 420 340 L 440 380 L 420 420 L 380 440 L 320 430 L 280 400 Z"
+        aria-label="Mato Grosso - 35% de interesse"/>
+  
+  <!-- Maranhão -->
+  <path id="MA" class="state" data-state="MA" data-name="Maranhão" data-percentage="28" data-searches="4200" data-trend="+4"
+        d="M 480 220 L 560 210 L 580 240 L 570 280 L 540 300 L 500 290 L 480 260 Z"
+        aria-label="Maranhão - 28% de interesse"/>
+  
+  <!-- Piauí -->
+  <path id="PI" class="state" data-state="PI" data-name="Piauí" data-percentage="31" data-searches="2600" data-trend="+1"
+        d="M 540 280 L 580 270 L 600 300 L 590 340 L 560 360 L 530 350 L 520 320 Z"
+        aria-label="Piauí - 31% de interesse"/>
+  
+  <!-- Ceará -->
+  <path id="CE" class="state" data-state="CE" data-name="Ceará" data-percentage="38" data-searches="5600" data-trend="+7"
+        d="M 580 240 L 650 230 L 680 260 L 670 300 L 640 320 L 600 310 L 580 280 Z"
+        aria-label="Ceará - 38% de interesse"/>
+  
+  <!-- Rio Grande do Norte -->
+  <path id="RN" class="state" data-state="RN" data-name="Rio Grande do Norte" data-percentage="39" data-searches="2400" data-trend="+8"
+        d="M 670 280 L 720 270 L 740 300 L 730 320 L 700 330 L 670 320 Z"
+        aria-label="Rio Grande do Norte - 39% de interesse"/>
+  
+  <!-- Paraíba -->
+  <path id="PB" class="state" data-state="PB" data-name="Paraíba" data-percentage="41" data-searches="2900" data-trend="+11"
+        d="M 700 320 L 740 310 L 750 340 L 740 360 L 710 370 L 690 360 Z"
+        aria-label="Paraíba - 41% de interesse"/>
+  
+  <!-- Pernambuco -->
+  <path id="PE" class="state" data-state="PE" data-name="Pernambuco" data-percentage="46" data-searches="7100" data-trend="+13"
+        d="M 640 340 L 710 330 L 740 360 L 730 400 L 700 420 L 660 410 L 630 380 Z"
+        aria-label="Pernambuco - 46% de interesse"/>
+  
+  <!-- Alagoas -->
+  <path id="AL" class="state" data-state="AL" data-name="Alagoas" data-percentage="45" data-searches="3200" data-trend="+12"
+        d="M 700 400 L 730 390 L 750 420 L 740 440 L 710 450 L 690 440 Z"
+        aria-label="Alagoas - 45% de interesse"/>
+  
+  <!-- Sergipe -->
+  <path id="SE" class="state" data-state="SE" data-name="Sergipe" data-percentage="44" data-searches="1900" data-trend="+14"
+        d="M 680 440 L 710 430 L 720 460 L 710 480 L 680 490 L 660 480 Z"
+        aria-label="Sergipe - 44% de interesse"/>
+  
+  <!-- Bahia -->
+  <path id="BA" class="state" data-state="BA" data-name="Bahia" data-percentage="52" data-searches="8900" data-trend="+15"
+        d="M 560 360 L 660 350 L 680 380 L 670 440 L 640 480 L 580 500 L 520 490 L 500 450 L 520 400 Z"
+        aria-label="Bahia - 52% de interesse"/>
+  
+  <!-- Tocantins -->
+  <path id="TO" class="state" data-state="TO" data-name="Tocantins" data-percentage="33" data-searches="2100" data-trend="+5"
+        d="M 440 340 L 520 330 L 540 360 L 530 400 L 500 420 L 460 410 L 440 380 Z"
+        aria-label="Tocantins - 33% de interesse"/>
+  
+  <!-- Goiás -->
+  <path id="GO" class="state" data-state="GO" data-name="Goiás" data-percentage="48" data-searches="6700" data-trend="+10"
+        d="M 420 420 L 500 410 L 520 440 L 510 480 L 480 500 L 440 490 L 420 460 Z"
+        aria-label="Goiás - 48% de interesse"/>
+  
+  <!-- Distrito Federal -->
+  <path id="DF" class="state" data-state="DF" data-name="Distrito Federal" data-percentage="75" data-searches="2100" data-trend="+20"
+        d="M 480 460 L 490 450 L 500 460 L 490 470 Z"
+        aria-label="Distrito Federal - 75% de interesse"/>
+  
+  <!-- Mato Grosso do Sul -->
+  <path id="MS" class="state" data-state="MS" data-name="Mato Grosso do Sul" data-percentage="42" data-searches="3800" data-trend="+9"
+        d="M 320 440 L 420 430 L 440 460 L 430 500 L 400 520 L 360 510 L 320 480 Z"
+        aria-label="Mato Grosso do Sul - 42% de interesse"/>
+  
+  <!-- Minas Gerais -->
+  <path id="MG" class="state" data-state="MG" data-name="Minas Gerais" data-percentage="65" data-searches="12500" data-trend="+22"
+        d="M 480 480 L 580 470 L 600 500 L 590 540 L 560 560 L 520 550 L 480 530 Z"
+        aria-label="Minas Gerais - 65% de interesse"/>
+  
+  <!-- São Paulo -->
+  <path id="SP" class="state" data-state="SP" data-name="São Paulo" data-percentage="82" data-searches="25600" data-trend="+35"
+        d="M 480 530 L 560 520 L 580 550 L 570 580 L 540 600 L 500 590 L 480 560 Z"
+        aria-label="São Paulo - 82% de interesse"/>
+  
+  <!-- Rio de Janeiro -->
+  <path id="RJ" class="state" data-state="RJ" data-name="Rio de Janeiro" data-percentage="78" data-searches="11800" data-trend="+28"
+        d="M 580 540 L 620 530 L 640 560 L 630 580 L 600 590 L 580 570 Z"
+        aria-label="Rio de Janeiro - 78% de interesse"/>
+  
+  <!-- Espírito Santo -->
+  <path id="ES" class="state" data-state="ES" data-name="Espírito Santo" data-percentage="68" data-searches="3400" data-trend="+18"
+        d="M 600 500 L 630 490 L 640 520 L 630 540 L 600 550 L 590 530 Z"
+        aria-label="Espírito Santo - 68% de interesse"/>
+  
+  <!-- Paraná -->
+  <path id="PR" class="state" data-state="PR" data-name="Paraná" data-percentage="72" data-searches="9200" data-trend="+25"
+        d="M 430 520 L 500 510 L 520 540 L 510 570 L 480 590 L 450 580 L 430 550 Z"
+        aria-label="Paraná - 72% de interesse"/>
+  
+  <!-- Santa Catarina -->
+  <path id="SC" class="state" data-state="SC" data-name="Santa Catarina" data-percentage="74" data-searches="5900" data-trend="+24"
+        d="M 450 580 L 510 570 L 530 600 L 520 620 L 490 630 L 460 620 L 450 600 Z"
+        aria-label="Santa Catarina - 74% de interesse"/>
+  
+  <!-- Rio Grande do Sul -->
+  <path id="RS" class="state" data-state="RS" data-name="Rio Grande do Sul" data-percentage="69" data-searches="8700" data-trend="+19"
+        d="M 400 580 L 460 570 L 480 600 L 470 640 L 440 660 L 400 650 L 380 620 Z"
+        aria-label="Rio Grande do Sul - 69% de interesse"/>
+  
+  <!-- Legenda -->
+  <g id="legend" transform="translate(780, 80)">
+    <rect x="-10" y="-10" width="200" height="180" fill="rgba(255,255,255,0.9)" stroke="#ddd" stroke-width="1" rx="5"/>
+    <text x="0" y="10" class="legend-title" style="font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; fill: #333;">Interesse por Região</text>
+    
+    <rect x="0" y="25" width="15" height="15" fill="#E53935"/>
+    <text x="20" y="37" style="font-family: Arial, sans-serif; font-size: 11px; fill: #333;">Péssimo (&lt;10%)</text>
+    
+    <rect x="0" y="45" width="15" height="15" fill="#FB8C00"/>
+    <text x="20" y="57" style="font-family: Arial, sans-serif; font-size: 11px; fill: #333;">Ruim (10-24%)</text>
+    
+    <rect x="0" y="65" width="15" height="15" fill="#FFEB3B"/>
+    <text x="20" y="77" style="font-family: Arial, sans-serif; font-size: 11px; fill: #333;">Fraco (25-44%)</text>
+    
+    <rect x="0" y="85" width="15" height="15" fill="#43A047"/>
+    <text x="20" y="97" style="font-family: Arial, sans-serif; font-size: 11px; fill: #333;">Mediano (45-59%)</text>
+    
+    <rect x="0" y="105" width="15" height="15" fill="#29B6F6"/>
+    <text x="20" y="117" style="font-family: Arial, sans-serif; font-size: 11px; fill: #333;">Bom (60-79%)</text>
+    
+    <rect x="0" y="125" width="15" height="15" fill="#0D47A1"/>
+    <text x="20" y="137" style="font-family: Arial, sans-serif; font-size: 11px; fill: #333;">Excelente (≥80%)</text>
+  </g>
+  
+  <!-- Labels dos estados -->
+  <text x="240" y="90" class="state-label">RR</text>
+  <text x="410" y="100" class="state-label">AP</text>
+  <text x="200" y="230" class="state-label">AM</text>
+  <text x="400" y="240" class="state-label">PA</text>
+  <text x="130" y="360" class="state-label">AC</text>
+  <text x="230" y="360" class="state-label">RO</text>
+  <text x="350" y="380" class="state-label">MT</text>
+  <text x="520" y="250" class="state-label">MA</text>
+  <text x="565" y="320" class="state-label">PI</text>
+  <text x="630" y="270" class="state-label">CE</text>
+  <text x="705" y="300" class="state-label">RN</text>
+  <text x="720" y="350" class="state-label">PB</text>
+  <text x="685" y="380" class="state-label">PE</text>
+  <text x="720" y="420" class="state-label">AL</text>
+  <text x="690" y="465" class="state-label">SE</text>
+  <text x="590" y="420" class="state-label">BA</text>
+  <text x="480" y="370" class="state-label">TO</text>
+  <text x="470" y="450" class="state-label">GO</text>
+  <text x="485" y="465" class="state-label">DF</text>
+  <text x="370" y="470" class="state-label">MS</text>
+  <text x="530" y="510" class="state-label">MG</text>
+  <text x="520" y="560" class="state-label">SP</text>
+  <text x="605" y="565" class="state-label">RJ</text>
+  <text x="615" y="525" class="state-label">ES</text>
+  <text x="470" y="550" class="state-label">PR</text>
+  <text x="480" y="605" class="state-label">SC</text>
+  <text x="430" y="620" class="state-label">RS</text>
+</svg>
+
