@@ -1,20 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" class="brasil-map">
-  <defs>
-    <style>
-      .state {
-        fill: #E0E0E0;
-        stroke: #FFFFFF;
-        stroke-width: 1.5;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      
-      .state:hover {
-        stroke-width: 3;
-        filter: brightness(1.1);
-        transform-origin: center;
-      }
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+     width="100%" height="auto" viewBox="0 0 353.845 367.766" enable-background="new 0 0 353.845 367.766"
+     xml:space="preserve">
+
+    <style type="text/css">
+        .state {
+            cursor: pointer;
+            fill: #E0E0E0;
+            stroke: #FFFFFF;
+            stroke-width: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .state:hover {
+            fill: #FCAF17;
+            transition: 0.1s linear;
+            stroke-width: 3;
+            filter: brightness(1.1);
+        }
       
       .state.pessimo { fill: #E53935; }
       .state.ruim { fill: #FB8C00; }
