@@ -1,3 +1,17 @@
+// Função para atualizar a classe 'active' nos links da navegação
+function updateActiveClass(route) {
+    const navLinks = document.querySelectorAll('.nav__item');
+    navLinks.forEach(link => {
+        if (link.getAttribute('data-route') === route) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+}
+
+window.updateActiveClass = updateActiveClass;
+
 // spa.js - Sistema de Single Page Application
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,9 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
             case 'pesquisa':
                 pageContent = getPesquisaContentWithMapContent();
-                setTimeout(() => {
-                    initMarketResearch();
-                }, 0);
+
                 break;
             case 'dre':
                 pageContent = getDreContent();
@@ -67,15 +79,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Função para atualizar a classe 'active' nos links da navegação
-    function updateActiveClass(route) {
-        navLinks.forEach(link => {
-            if (link.getAttribute('data-route') === route) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-    }
+function updateActiveClass(route) {
+    const navLinks = document.querySelectorAll('.nav__item');
+    navLinks.forEach(link => {
+        if (link.getAttribute('data-route') === route) {
+            link.classList.add('active');
+        } else {
+            link.classList.remove('active');
+        }
+    });
+}
+
+window.updateActiveClass = updateActiveClass;
 
     // Manipulador de cliques para os links da navegação
     navLinks.forEach(link => {
@@ -2407,3 +2422,46 @@ function showError(message) {
     }, 5000);
 }
 
+
+
+
+// Função para inicializar a pesquisa de mercado
+function initMarketResearchIfNeeded() {
+    const route = getCurrentRoute();
+    if (route === 'pesquisa') {
+        initMarketResearch();
+    }
+}
+
+// Sobrescrever a função loadPage para incluir a inicialização da pesquisa de mercado
+const originalLoadPage = window.loadPage;
+window.loadPage = function(route) {
+    if (originalLoadPage) {
+        originalLoadPage(route);
+    }
+    initMarketResearchIfNeeded();
+};
+
+
+
+
+
+
+
+window.loadPage = loadPage;
+
+
+
+
+// Função para atualizar a classe 'active' nos links da navegação (global)
+
+
+
+
+
+
+
+// Função para atualizar a classe 'active' nos links da navegação (global)
+
+
+window.updateActiveClass = updateActiveClass;
