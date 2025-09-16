@@ -1,17 +1,3 @@
-// Função para atualizar a classe 'active' nos links da navegação
-function updateActiveClass(route) {
-    const navLinks = document.querySelectorAll('.nav__item');
-    navLinks.forEach(link => {
-        if (link.getAttribute('data-route') === route) {
-            link.classList.add('active');
-        } else {
-            link.classList.remove('active');
-        }
-    });
-}
-
-window.updateActiveClass = updateActiveClass;
-
 // spa.js - Sistema de Single Page Application
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -36,8 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 pageContent = getFechamentoContent();
                 break;
             case 'pesquisa':
-                pageContent = getPesquisaContentWithMapContent();
-
+                pageContent = getPesquisaContent();
+                setTimeout(() => {
+                    initMarketResearch();
+                }, 0);
                 break;
             case 'dre':
                 pageContent = getDreContent();
@@ -79,18 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Função para atualizar a classe 'active' nos links da navegação
-function updateActiveClass(route) {
-    const navLinks = document.querySelectorAll('.nav__item');
-    navLinks.forEach(link => {
-        if (link.getAttribute('data-route') === route) {
-            link.classList.add('active');
-        } else {
-            link.classList.remove('active');
-        }
-    });
-}
-
-window.updateActiveClass = updateActiveClass;
+    function updateActiveClass(route) {
+        navLinks.forEach(link => {
+            if (link.getAttribute('data-route') === route) {
+                link.classList.add('active');
+            } else {
+                link.classList.remove('active');
+            }
+        });
+    }
 
     // Manipulador de cliques para os links da navegação
     navLinks.forEach(link => {
@@ -752,7 +737,7 @@ function getFechamentoContent() {
     `;
 }
 
-function getPesquisaContentWithMapContent() {
+function getPesquisaContent() {
     return `
         <div class="market-research-page">
             <!-- Header da Pesquisa de Mercado -->
@@ -792,11 +777,7 @@ function getPesquisaContentWithMapContent() {
                     </div>
                     <div class="region-map-container">
                         <h2><i class="fas fa-map-marked-alt icon"></i> Regiões</h2>
-                        <div id="brasil-map-container" class="map-svg-container">
-                            <!-- O SVG do mapa será carregado aqui -->
-                        </div>
-                        <div id="tooltip" class="tooltip"></div>
-                        <div id="details-panel" class="details-panel"></div>
+                        <p>Mapa do Brasil aqui</p>
                     </div>
                 </div>
 
@@ -2422,46 +2403,3 @@ function showError(message) {
     }, 5000);
 }
 
-
-
-
-// Função para inicializar a pesquisa de mercado
-function initMarketResearchIfNeeded() {
-    const route = getCurrentRoute();
-    if (route === 'pesquisa') {
-        initMarketResearch();
-    }
-}
-
-// Sobrescrever a função loadPage para incluir a inicialização da pesquisa de mercado
-const originalLoadPage = window.loadPage;
-window.loadPage = function(route) {
-    if (originalLoadPage) {
-        originalLoadPage(route);
-    }
-    initMarketResearchIfNeeded();
-};
-
-
-
-
-
-
-
-window.loadPage = loadPage;
-
-
-
-
-// Função para atualizar a classe 'active' nos links da navegação (global)
-
-
-
-
-
-
-
-// Função para atualizar a classe 'active' nos links da navegação (global)
-
-
-window.updateActiveClass = updateActiveClass;
